@@ -50,8 +50,14 @@ Sign in as the GrowSpark account that should own the data.
 
 The script writes this header row automatically on first run:
 
-| Timestamp | Name | Email | Phone | Company | Service | Location | Message | Source | Submission ID |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Timestamp | Submission ID | Name | Email | Phone | Company | Service | Location | Message | Source | Status |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+
+`Status` is written as `New` and is yours to update by hand as enquiries are
+worked through — the script never overwrites it on existing rows.
+
+> **The column order must match `HEADERS` in the script.** If you change one,
+> change the other, or existing rows will misalign.
 
 ### 2. Add the Apps Script
 
@@ -62,9 +68,10 @@ In that spreadsheet: **Extensions → Apps Script**. Replace `Code.gs` with:
 
 const SHEET_NAME = 'Enquiries';
 const HEADERS = [
-  'Timestamp', 'Name', 'Email', 'Phone', 'Company',
-  'Service', 'Location', 'Message', 'Source', 'Submission ID',
+  'Timestamp', 'Submission ID', 'Name', 'Email', 'Phone', 'Company',
+  'Service', 'Location', 'Message', 'Source', 'Status',
 ];
+const ID_COLUMN = 2; // 'Submission ID', used for the duplicate check.
 
 /**
  * Health check. Open the /exec URL in a browser: if you see this JSON, the
@@ -95,6 +102,7 @@ function doPost(e) {
 
     sheet.appendRow([
       body.submittedAt || new Date().toISOString(),
+      id,
       body.name || '',
       body.email || '',
       body.phone || '',
@@ -103,11 +111,13 @@ function doPost(e) {
       body.location || '',
       body.message || '',
       body.source || '',
-      id,
+      'New',
     ]);
 
     notify(props.getProperty('NOTIFY_EMAIL'), body);
 
+    // MUST return a response. Without this the row is still written, but the
+    // website cannot confirm it and correctly reports the enquiry as failed.
     return json({ ok: true });
   } catch (err) {
     return json({ ok: false, error: String(err) });
@@ -131,7 +141,7 @@ function isDuplicate(sheet, id) {
   const last = sheet.getLastRow();
   if (last < 2) return false;
   const from = Math.max(2, last - 50);
-  const ids = sheet.getRange(from, HEADERS.length, last - from + 1, 1).getValues();
+  const ids = sheet.getRange(from, ID_COLUMN, last - from + 1, 1).getValues();
   return ids.some(function (row) { return String(row[0]) === id; });
 }
 

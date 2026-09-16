@@ -115,7 +115,18 @@ export async function POST(request: Request) {
     const text = await response.text();
 
     if (!response.ok) {
-      console.error('[enquiry] Webhook responded', response.status, text.slice(0, 500));
+      // A 404 on the googleusercontent echo URL means doPost ran but returned
+      // nothing. The row may well have been written while the caller is told
+      // it failed, so name this case explicitly rather than logging a bare 404.
+      const missingReturn = response.status === 404 && response.url.includes('googleusercontent');
+      console.error(
+        missingReturn
+          ? '[enquiry] The Apps Script ran but returned no response, so the result could not ' +
+              'be confirmed (the row may still have been written). doPost must end with: ' +
+              'return ContentService.createTextOutput(JSON.stringify({ok:true}))' +
+              '.setMimeType(ContentService.MimeType.JSON);'
+          : `[enquiry] Webhook responded ${response.status}: ${text.slice(0, 500)}`,
+      );
       return NextResponse.json(
         { ok: false, error: 'We could not record your enquiry. Please call or WhatsApp us.' },
         { status: 502 },

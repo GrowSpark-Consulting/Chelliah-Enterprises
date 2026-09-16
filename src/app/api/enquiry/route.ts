@@ -18,6 +18,18 @@ export const dynamic = 'force-dynamic';
 /** How long to wait on the Apps Script before giving up. */
 const WEBHOOK_TIMEOUT_MS = 15000;
 
+/**
+ * What the Apps Script sends back. `success` is what doPost returns and `ok`
+ * is what doGet returns; either counts as success.
+ */
+type WebhookResult = {
+  success?: boolean;
+  ok?: boolean;
+  duplicate?: boolean;
+  message?: string;
+  error?: string;
+};
+
 type RequestBody = Partial<Enquiry> & {
   /** Which page the enquiry was submitted from. */
   source?: string;
@@ -88,7 +100,9 @@ export async function POST(request: Request) {
 
   const payload = {
     secret: webhookSecret,
-    submissionId: asString(body.submissionId),
+    // The form always supplies one; this covers a direct API call that does
+    // not, since the script requires an id to guard against duplicates.
+    submissionId: asString(body.submissionId) || crypto.randomUUID(),
     submittedAt: new Date().toISOString(),
     name: asString(body.name),
     email: asString(body.email),
@@ -122,9 +136,8 @@ export async function POST(request: Request) {
       console.error(
         missingReturn
           ? '[enquiry] The Apps Script ran but returned no response, so the result could not ' +
-              'be confirmed (the row may still have been written). doPost must end with: ' +
-              'return ContentService.createTextOutput(JSON.stringify({ok:true}))' +
-              '.setMimeType(ContentService.MimeType.JSON);'
+              'be confirmed (the row may still have been written). Every doPost path must ' +
+              'return a ContentService JSON response — see docs/enquiry-integration.md.'
           : `[enquiry] Webhook responded ${response.status}: ${text.slice(0, 500)}`,
       );
       return NextResponse.json(
@@ -133,10 +146,14 @@ export async function POST(request: Request) {
       );
     }
 
-    // Apps Script always returns 200, so success is confirmed from the body.
-    let result: { ok?: boolean; error?: string } = {};
+    /*
+     * Apps Script always returns 200, so success is confirmed from the body.
+     * The script signals it as `success` on doPost and `ok` on doGet, so both
+     * are accepted, and the reason is read from whichever key carries it.
+     */
+    let result: WebhookResult = {};
     try {
-      result = JSON.parse(text) as { ok?: boolean; error?: string };
+      result = JSON.parse(text) as WebhookResult;
     } catch {
       // HTML back instead of JSON almost always means the live deployment is
       // serving an older version of the script than the editor shows.
@@ -154,12 +171,20 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!result.ok) {
-      console.error('[enquiry] Webhook reported a failure:', result.error);
+    if (result.success !== true && result.ok !== true) {
+      console.error(
+        '[enquiry] Webhook reported a failure:',
+        result.message ?? result.error ?? text.slice(0, 300),
+      );
       return NextResponse.json(
         { ok: false, error: 'We could not record your enquiry. Please call or WhatsApp us.' },
         { status: 502 },
       );
+    }
+
+    if (result.duplicate) {
+      // The row was already written by an earlier attempt; still a success.
+      console.warn('[enquiry] Webhook treated this as a duplicate submission.');
     }
 
     return NextResponse.json({ ok: true });

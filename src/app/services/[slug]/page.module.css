@@ -1,0 +1,8 @@
+.detail {
+  padding-block: clamp(32px, 4vw, 56px) 0;
+}
+
+.related {
+  padding-block: clamp(48px, 6vw, 80px);
+  border-top: 1px solid var(--border);
+}

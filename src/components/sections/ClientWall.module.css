@@ -1,0 +1,48 @@
+/* Column counts are fixed rather than auto-fill so the eighteen names always
+   fill whole rows — a part-filled row of hairline cells looks like a fault. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+}
+
+.cell {
+  display: grid;
+  place-items: center;
+  min-height: 92px;
+  padding: var(--space-4);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--primary-dark);
+  transition: background-color var(--t-card) var(--ease), color var(--t-card) var(--ease);
+}
+
+.cell:hover {
+  background: var(--primary-tint);
+  color: var(--primary);
+}
+
+@media (max-width: 1023px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 479px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cell {
+    min-height: 80px;
+    font-size: 0.75rem;
+    padding: var(--space-3);
+  }
+}

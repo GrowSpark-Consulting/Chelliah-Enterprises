@@ -1,0 +1,36 @@
+.body {
+  padding-block: clamp(48px, 6vw, 80px);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(32px, 4vw, 64px);
+  align-items: start;
+}
+
+.hours {
+  padding-block: clamp(40px, 5vw, 64px);
+}
+
+/* A coverage strip, not a headline — sized down from the h2 display scale. */
+.hoursHeading {
+  font-size: clamp(1.25rem, 1.05rem + 0.9vw, 1.75rem);
+  color: #fff;
+}
+
+.hoursBody {
+  margin-block: var(--space-4) var(--space-8);
+  max-width: 62ch;
+}
+
+@media (max-width: 899px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* On narrow screens the form is what people came for. */
+  .form {
+    order: -1;
+  }
+}

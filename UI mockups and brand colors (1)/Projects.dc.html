@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/industry-ecd6f456-bfbb-4e3a-bc88-3d10a184af4f/styles.css">
+<script src="_ds/industry-ecd6f456-bfbb-4e3a-bc88-3d10a184af4f/_ds_bundle.js"></script>
+<script src="./image-slot.js"></script>
+<style>
+:root{
+--color-bg:#F7F7F5;--color-surface:#ECECE8;--color-text:#1A1D21;
+--color-accent:#0B4DA2;--color-accent-2:#D6321F;
+--color-divider:color-mix(in srgb,#1A1D21 18%,transparent);
+--color-accent-100:#e8f0fb;--color-accent-200:#cfe0f6;--color-accent-300:#a8c4e8;--color-accent-400:#6f9ad1;--color-accent-500:#2f6bb5;--color-accent-600:#0B4DA2;--color-accent-700:#093d81;--color-accent-800:#072d60;--color-accent-900:#051d3f;
+--color-accent-2-100:#fdeceb;--color-accent-2-600:#D6321F;--color-accent-2-700:#ad2818;--color-accent-2-800:#821e12;
+}
+.btn{white-space:nowrap}
+.btn svg{flex:none}
+body{margin:0;text-wrap:pretty}
+a{color:var(--color-accent-700)}
+a:hover{color:var(--color-accent-2)}
+</style>
+</helmet>
+
+<dc-import name="SiteHeader" active="projects" hint-size="100%,72px"></dc-import>
+
+<section style="background:var(--color-accent-900);color:#F7F7F5">
+<div style="max-width:1280px;margin:0 auto;padding:60px 28px 56px">
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+<span style="width:34px;height:1px;background:var(--color-accent-2)"></span>
+<span style="font-family:var(--font-heading);font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-300)">Project record · Chennai &amp; Chengalpattu</span>
+</div>
+<h1 style="font-size:clamp(38px,4.2vw,56px);text-transform:uppercase;margin:0 0 16px;color:#fff;letter-spacing:-.02em">Our work speaks for itself</h1>
+<p style="font-size:17px;line-height:1.6;max-width:68ch;margin:0;color:color-mix(in srgb,#F7F7F5 82%,transparent)">Trusted by industrial leaders like L&amp;T, Murugappa Group, ESAB and CUMI — plus 150+ residential and commercial projects across Chennai.</p>
+</div>
+</section>
+
+<section style="max-width:1280px;margin:0 auto;padding:0 28px">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--color-divider);margin-top:-1px;border-bottom:1px solid var(--color-divider)">
+<div style="background:var(--color-bg);padding:22px"><div style="font-family:var(--font-heading);font-size:38px;line-height:1">150+</div><div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:color-mix(in srgb,var(--color-text) 65%,transparent);margin-top:6px">Projects delivered</div></div>
+<div style="background:var(--color-bg);padding:22px"><div style="font-family:var(--font-heading);font-size:38px;line-height:1">6</div><div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:color-mix(in srgb,var(--color-text) 65%,transparent);margin-top:6px">Brands we're authorized to apply</div></div>
+<div style="background:var(--color-bg);padding:22px"><div style="font-family:var(--font-heading);font-size:24px;line-height:1.15;margin-top:4px">L&amp;T · Murugappa<br>ESAB · CUMI</div><div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:color-mix(in srgb,var(--color-text) 65%,transparent);margin-top:6px">Industrial clients</div></div>
+<div style="background:var(--color-bg);padding:22px"><div style="font-family:var(--font-heading);font-size:24px;line-height:1.15;margin-top:4px">GST Registered</div><div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:color-mix(in srgb,var(--color-text) 65%,transparent);margin-top:6px">33AJUPC6761F1Z3</div></div>
+</div>
+</section>
+
+<section style="max-width:1280px;margin:0 auto;padding:34px 28px 0">
+<div class="seg" style="flex-wrap:wrap;margin-bottom:28px">
+<label class="seg-opt" style="font-family:var(--font-heading);font-size:14px;letter-spacing:.06em;text-transform:uppercase;padding:10px 16px"><input type="radio" name="pfilter" value="all" checked onChange="{{ onFilter }}">All</label>
+<label class="seg-opt" style="font-family:var(--font-heading);font-size:14px;letter-spacing:.06em;text-transform:uppercase;padding:10px 16px"><input type="radio" name="pfilter" value="wp" onChange="{{ onFilter }}">Waterproofing</label>
+<label class="seg-opt" style="font-family:var(--font-heading);font-size:14px;letter-spacing:.06em;text-transform:uppercase;padding:10px 16px"><input type="radio" name="pfilter" value="ep" onChange="{{ onFilter }}">Epoxy Flooring</label>
+<label class="seg-opt" style="font-family:var(--font-heading);font-size:14px;letter-spacing:.06em;text-transform:uppercase;padding:10px 16px"><input type="radio" name="pfilter" value="pu" onChange="{{ onFilter }}">PU &amp; ESD Flooring</label>
+<label class="seg-opt" style="font-family:var(--font-heading);font-size:14px;letter-spacing:.06em;text-transform:uppercase;padding:10px 16px"><input type="radio" name="pfilter" value="st" onChange="{{ onFilter }}">Structural Repair</label>
+<label class="seg-opt" style="font-family:var(--font-heading);font-size:14px;letter-spacing:.06em;text-transform:uppercase;padding:10px 16px"><input type="radio" name="pfilter" value="cp" onChange="{{ onFilter }}">Car Park &amp; Sports</label>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:28px">
+
+<sc-if value="{{ showWp }}" hint-placeholder-val="{{ true }}">
+<div class="blueprint" style="display:flex;flex-direction:column">
+<div style="height:200px;position:relative;border-bottom:1px solid var(--color-divider)"><image-slot id="pj-01" shape="rect" fit="cover" placeholder="Terrace with red waterproof coating"></image-slot></div>
+<div style="padding:16px 18px 18px"><span class="tag tag-accent" style="background:var(--color-accent-100);color:var(--color-accent-800)">Waterproofing</span><h4 style="text-transform:uppercase;margin:10px 0 4px">Residential terrace — Guduvancheri</h4><p style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 8px;color:color-mix(in srgb,var(--color-text) 55%,transparent)">3,200 sq.ft · Brickbats Coba</p><p style="font-size:13px;margin:0;color:color-mix(in srgb,var(--color-text) 75%,transparent)">Chronic slab leakage stopped through two monsoons since handover.</p></div>
+<i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+</div>
+</sc-if>
+
+<sc-if value="{{ showWp }}" hint-placeholder-val="{{ true }}">
+<div class="blueprint" style="display:flex;flex-direction:column">
+<div style="height:200px;position:relative;border-bottom:1px solid var(--color-divider)"><image-slot id="pj-02" shape="rect" fit="cover" placeholder="Basement membrane waterproofing"></image-slot></div>
+<div style="padding:16px 18px 18px"><span class="tag tag-accent" style="background:var(--color-accent-100);color:var(--color-accent-800)">Waterproofing</span><h4 style="text-transform:uppercase;margin:10px 0 4px">Industrial basement — Chengalpattu</h4><p style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 8px;color:color-mix(in srgb,var(--color-text) 55%,transparent)">HDPE membrane · Below-grade</p><p style="font-size:13px;margin:0;color:color-mix(in srgb,var(--color-text) 75%,transparent)">Dry basement plant room through a full seasonal water-table rise.</p></div>
+<i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+</div>
+</sc-if>
+
+<sc-if value="{{ showWp }}" hint-placeholder-val="{{ true }}">
+<div class="blueprint" style="display:flex;flex-direction:column">
+<div style="height:200px;position:relative;border-bottom:1px solid var(--color-divider)"><image-slot id="pj-03" shape="rect" fit="cover" placeholder="Bathroom / sunken slab waterproofing"></image-slot></div>
+<div style="padding:16px 18px 18px"><span class="tag tag-accent" style="background:var(--color-accent-100);color:var(--color-accent-800)">Waterproofing</span><h4 style="text-transform:uppercase;margin:10px 0 4px">Apartment block — Tambaram</h4><p style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 8px;color:color-mix(in srgb,var(--color-text) 55%,transparent)">18 bathrooms · Sunken slab treatment</p><p style="font-size:13px;margin:0;color:color-mix(in srgb,var(--color-text) 75%,transparent)">Seepage into ceilings below eliminated without breaking tiled floors.</p></div>
+<i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+</div>
+</sc-if>
+
+<sc-if value="{{ showEp }}" hint-placeholder-val="{{ true }}">
+<div class="blueprint" style="display:flex;flex-direction:column">
+<div style="height:200px;position:relative;border-bottom:1px solid var(--color-divider)"><image-slot id="pj-04" shape="rect" fit="cover" placeholder="Glossy epoxy factory floor, yellow line marking"></image-slot></div>
+<div style="padding:16px 18px 18px"><span class="tag tag-accent" style="background:var(--color-accent-100);color:var(--color-accent-800)">Epoxy Flooring</span><h4 style="text-transform:uppercase;margin:10px 0 4px">Machining plant — Oragadam</h4><p style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 8px;color:color-mix(in srgb,var(--color-text) 55%,transparent)">14,000 sq.ft · Self-levelling epoxy</p><p style="font-size:13px;margin:0;color:color-mix(in srgb,var(--color-text) 75%,transparent)">Delivered inside a six-day shutdown, including safety line marking.</p></div>
+<i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+</div>
+</sc-if>
+
+<sc-if value="{{ showEp }}" hint-placeholder-val="{{ true }}">
+<div class="blueprint" style="display:flex;flex-direction:column">
+<div style="height:200px;position:relative;border-bottom:1px solid var(--color-divider)"><image-slot id="pj-05" shape="rect" fit="cover" placeholder="Warehouse epoxy floor with aisle marking"></image-slot></div>
+<div style="padding:16px 18px 18px"><span class="tag tag-accent" style="background:var(--color-accent-100);color:var(--color-accent-800)">Epoxy Flooring</span><h4 style="text-transform:uppercase;margin:10px 0 4px">Distribution warehouse — Sriperumbudur</h4><p style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 8px;color:color-mix(in srgb,var(--color-text) 55%,transparent)">22,000 sq.ft · Epoxy + aisle marking</p><p style="font-size:13px;margin:0;color:color-mix(in srgb,var(--color-text) 75%,transparent)">Forklift-rated finish with colour-coded aisles and pedestrian walkways.</p></div>
+<i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+</div>
+</sc-if>
+
+<sc-if value="{{ showEp }}" hint-placeholder-val="{{ true }}">
+<div class="blueprint" style="display:flex;flex-direction:column">
+<div style="height:200px;position:relative;border-bottom:1px solid var(--color-divider)"><image-slot id="pj-06" shape="rect" fit="cover" placeholder="Epoxy coating in clean production area"></image-slot></div>
+<div style="padding:16px 18px 18px"><span class="tag tag-accent" style="background:var(--color-accent-100);color:var(--color-accent-800)">Epoxy Flooring</span><h4 style="text-transform:uppercase;margin:10px 0 4px">Welding consumables unit — Ambattur</h4><p style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 8px;color:color-mix(in srgb,var(--color-text) 55%,transparent)">Chemical-resistant epoxy coating</p><p style="font-size:13px;margin:0;color:color-mix(in srgb,var(--color-text) 75%,transparent)">Wash-down-ready surface that survives daily chemical exposure.</p></div>
+<i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+</div>
+</sc-if>
+
+<sc-if value="{{ showPu }}" hint-placeholder-val="{{ true }}">
+<div class="blueprint" style="display:flex;flex-direction:column">
+<div style="height:200px;position:relative;border-bottom:1px solid var(--color-divider)"><image-slot id="pj-07" shape="rect" fit="cover" placeholder="PU floor, food processing hall"></image-slot></div>
+<div style="padding:16px 18px 18px"><span class="tag tag-accent" style="background:var(--color-accent-100);color:var(--color-accent-800)">PU Flooring</span><h4 style="text-transform:uppercase;margin:10px 0 4px">Food processing hall — Chennai</h4><p style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 8px;color:color-mix(in srgb,var(--color-text) 55%,transparent)">Food-grade PU · Coved skirting</p><p style="font-size:13px;margin:0;color:color-mix(in srgb,var(--color-text) 75%,transparent)">Hygienic, thermal-shock-resistant floor that passed audit first time.</p></div>
+<i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+</div>
+</sc-if>
+
+<sc-if value="{{ showPu }}" hint-placeholder-val="{{ true }}">
+<div class="blueprint" style="display:flex;flex-direction:column">
+<div style="height:200px;position:relative;border-bottom:1px solid var(--color-divider)"><image-slot id="pj-08" shape="rect" fit="cover" placeholder="ESD floor, electronics assembly line"></image-slot></div>
+<div style="padding:16px 18px 18px"><span class="tag tag-accent" style="background:var(--color-accent-100);color:var(--color-accent-800)">ESD Flooring</span><h4 style="text-transform:uppercase;margin:10px 0 4px">Electronics assembly — Sriperumbudur</h4><p style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 8px;color:color-mix(in srgb,var(--color-text) 55%,transparent)">Conductive ESD system · Earthing grid</p><p style="font-size:13px;margin:0;color:color-mix(in srgb,var(--color-text) 75%,transparent)">Resistance tested to specification before the line restarted.</p></div>
+<i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+</div>
+</sc-if>
+
+<sc-if value="{{ showSt }}" hint-placeholder-val="{{ true }}">
+<div class="blueprint" style="display:flex;flex-direction:column">
+<div style="height:200px;position:relative;border-bottom:1px solid var(--color-divider)"><image-slot id="pj-09" shape="rect" fit="cover" placeholder="Corrosion treatment on RCC column"></image-slot></div>
+<div style="padding:16px 18px 18px"><span class="tag tag-accent" style="background:var(--color-accent-100);color:var(--color-accent-800)">Structural Repair</span><h4 style="text-transform:uppercase;margin:10px 0 4px">Coastal factory shed — Thoothukudi</h4><p style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 8px;color:color-mix(in srgb,var(--color-text) 55%,transparent)">Corrosion treatment · Column jacketing</p><p style="font-size:13px;margin:0;color:color-mix(in srgb,var(--color-text) 75%,transparent)">Exposed reinforcement treated and re-profiled without halting production.</p></div>
+<i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+</div>
+</sc-if>
+
+<sc-if value="{{ showSt }}" hint-placeholder-val="{{ true }}">
+<div class="blueprint" style="display:flex;flex-direction:column">
+<div style="height:200px;position:relative;border-bottom:1px solid var(--color-divider)"><image-slot id="pj-10" shape="rect" fit="cover" placeholder="Crack injection / grouting work"></image-slot></div>
+<div style="padding:16px 18px 18px"><span class="tag tag-accent" style="background:var(--color-accent-100);color:var(--color-accent-800)">Structural Repair</span><h4 style="text-transform:uppercase;margin:10px 0 4px">Commercial block — Vandalur</h4><p style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 8px;color:color-mix(in srgb,var(--color-text) 55%,transparent)">Crack injection · Rehabilitation</p><p style="font-size:13px;margin:0;color:color-mix(in srgb,var(--color-text) 75%,transparent)">Structural cracks sealed and slab strengthened ahead of refit.</p></div>
+<i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+</div>
+</sc-if>
+
+<sc-if value="{{ showCp }}" hint-placeholder-val="{{ true }}">
+<div class="blueprint" style="display:flex;flex-direction:column">
+<div style="height:200px;position:relative;border-bottom:1px solid var(--color-divider)"><image-slot id="pj-11" shape="rect" fit="cover" placeholder="Car park deck with bright directional markings"></image-slot></div>
+<div style="padding:16px 18px 18px"><span class="tag tag-accent" style="background:var(--color-accent-100);color:var(--color-accent-800)">Car Park Deck</span><h4 style="text-transform:uppercase;margin:10px 0 4px">Commercial park — Tambaram</h4><p style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 8px;color:color-mix(in srgb,var(--color-text) 55%,transparent)">2 basement levels · Deck coating</p><p style="font-size:13px;margin:0;color:color-mix(in srgb,var(--color-text) 75%,transparent)">Abrasion-resistant coating with directional markings and bay numbering.</p></div>
+<i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+</div>
+</sc-if>
+
+<sc-if value="{{ showCp }}" hint-placeholder-val="{{ true }}">
+<div class="blueprint" style="display:flex;flex-direction:column">
+<div style="height:200px;position:relative;border-bottom:1px solid var(--color-divider)"><image-slot id="pj-12" shape="rect" fit="cover" placeholder="Indoor sports court coating with line marking"></image-slot></div>
+<div style="padding:16px 18px 18px"><span class="tag tag-accent" style="background:var(--color-accent-100);color:var(--color-accent-800)">Sports Flooring</span><h4 style="text-transform:uppercase;margin:10px 0 4px">Indoor court — Guduvancheri</h4><p style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 8px;color:color-mix(in srgb,var(--color-text) 55%,transparent)">Impact-resistant coating · Line marking</p><p style="font-size:13px;margin:0;color:color-mix(in srgb,var(--color-text) 75%,transparent)">Multi-sport marking set out to regulation dimensions in one pass.</p></div>
+<i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+</div>
+</sc-if>
+
+</div>
+<p style="font-size:12px;margin-top:16px;color:color-mix(in srgb,var(--color-text) 55%,transparent)">Project titles and results shown are placeholders for layout — replace with real site records and photographs before launch.</p>
+</section>
+
+<section style="max-width:1280px;margin:0 auto;padding:60px 28px 0">
+<h2 style="font-size:36px;text-transform:uppercase;margin:0 0 24px">Esteemed clients</h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:0;border-top:1px solid var(--color-divider);border-left:1px solid var(--color-divider)">
+<div style="display:grid;place-items:center;min-height:78px;padding:12px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);font-family:var(--font-heading);font-size:14px;letter-spacing:.06em;text-transform:uppercase;text-align:center;color:var(--color-accent-800)">L&amp;T Energy Hydrocarbon</div>
+<div style="display:grid;place-items:center;min-height:78px;padding:12px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);font-family:var(--font-heading);font-size:14px;letter-spacing:.06em;text-transform:uppercase;text-align:center;color:var(--color-accent-800)">ESAB</div>
+<div style="display:grid;place-items:center;min-height:78px;padding:12px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);font-family:var(--font-heading);font-size:14px;letter-spacing:.06em;text-transform:uppercase;text-align:center;color:var(--color-accent-800)">Hanon Systems</div>
+<div style="display:grid;place-items:center;min-height:78px;padding:12px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);font-family:var(--font-heading);font-size:14px;letter-spacing:.06em;text-transform:uppercase;text-align:center;color:var(--color-accent-800)">Murugappa Group</div>
+<div style="display:grid;place-items:center;min-height:78px;padding:12px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);font-family:var(--font-heading);font-size:14px;letter-spacing:.06em;text-transform:uppercase;text-align:center;color:var(--color-accent-800)">CUMI</div>
+<div style="display:grid;place-items:center;min-height:78px;padding:12px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);font-family:var(--font-heading);font-size:14px;letter-spacing:.06em;text-transform:uppercase;text-align:center;color:var(--color-accent-800)">Checkpoint</div>
+<div style="display:grid;place-items:center;min-height:78px;padding:12px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);font-family:var(--font-heading);font-size:14px;letter-spacing:.06em;text-transform:uppercase;text-align:center;color:var(--color-accent-800)">SSS Hi-tech Constructions</div>
+<div style="display:grid;place-items:center;min-height:78px;padding:12px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);font-family:var(--font-heading);font-size:14px;letter-spacing:.06em;text-transform:uppercase;text-align:center;color:var(--color-accent-800)">Wittur</div>
+<div style="display:grid;place-items:center;min-height:78px;padding:12px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);font-family:var(--font-heading);font-size:14px;letter-spacing:.06em;text-transform:uppercase;text-align:center;color:var(--color-accent-800)">Bentoli</div>
+<div style="display:grid;place-items:center;min-height:78px;padding:12px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);font-family:var(--font-heading);font-size:14px;letter-spacing:.06em;text-transform:uppercase;text-align:center;color:var(--color-accent-800)">INFAC</div>
+<div style="display:grid;place-items:center;min-height:78px;padding:12px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);font-family:var(--font-heading);font-size:14px;letter-spacing:.06em;text-transform:uppercase;text-align:center;color:var(--color-accent-800)">Manek Micron</div>
+<div style="display:grid;place-items:center;min-height:78px;padding:12px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);font-family:var(--font-heading);font-size:14px;letter-spacing:.06em;text-transform:uppercase;text-align:center;color:var(--color-accent-800)">Ocean Healthcare</div>
+<div style="display:grid;place-items:center;min-height:78px;padding:12px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);font-family:var(--font-heading);font-size:14px;letter-spacing:.06em;text-transform:uppercase;text-align:center;color:var(--color-accent-800)">Marble Valley Foods</div>
+<div style="display:grid;place-items:center;min-height:78px;padding:12px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);font-family:var(--font-heading);font-size:14px;letter-spacing:.06em;text-transform:uppercase;text-align:center;color:var(--color-accent-800)">EPS Interiors</div>
+<div style="display:grid;place-items:center;min-height:78px;padding:12px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);font-family:var(--font-heading);font-size:14px;letter-spacing:.06em;text-transform:uppercase;text-align:center;color:var(--color-accent-800)">Vidveda</div>
+<div style="display:grid;place-items:center;min-height:78px;padding:12px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);font-family:var(--font-heading);font-size:14px;letter-spacing:.06em;text-transform:uppercase;text-align:center;color:var(--color-accent-800)">Helios</div>
+<div style="display:grid;place-items:center;min-height:78px;padding:12px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);font-family:var(--font-heading);font-size:14px;letter-spacing:.06em;text-transform:uppercase;text-align:center;color:var(--color-accent-800)">SVC</div>
+<div style="display:grid;place-items:center;min-height:78px;padding:12px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);font-family:var(--font-heading);font-size:14px;letter-spacing:.06em;text-transform:uppercase;text-align:center;color:var(--color-accent-800)">GATALA</div>
+</div>
+</section>
+
+<section style="margin-top:64px;background:var(--color-accent-900);color:#F7F7F5">
+<div style="max-width:1280px;margin:0 auto;padding:52px 28px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:26px">
+<div style="max-width:50ch">
+<h2 style="font-size:clamp(30px,3.2vw,44px);text-transform:uppercase;margin:0 0 10px;color:#fff">Want results like these on your property?</h2>
+<p style="font-size:16px;margin:0;color:color-mix(in srgb,#F7F7F5 80%,transparent)">Send us the site details — we'll come and measure, then quote in writing.</p>
+</div>
+<a class="btn btn-primary blueprint" href="https://wa.me/919962534338?text=Hi%20Chelliah%20Enterprises%2C%20I%27d%20like%20a%20free%20quote%20after%20seeing%20your%20projects." target="_blank" rel="noopener" style="background:var(--color-accent-2);border-color:var(--color-accent-2);color:#fff;padding:16px 26px;font-size:16px;letter-spacing:.06em;text-transform:uppercase">Get a free quote on WhatsApp<i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i></a>
+</div>
+</section>
+
+<dc-import name="SiteFooter" hint-size="100%,330px"></dc-import>
+
+<sc-if value="{{ showFab }}" hint-placeholder-val="{{ true }}">
+<a href="https://wa.me/919962534338?text=Hi%20Chelliah%20Enterprises%2C%20I%27d%20like%20a%20quote%20for%20waterproofing%2Fflooring%20work." target="_blank" rel="noopener" aria-label="Chat on WhatsApp" style="position:fixed;right:22px;bottom:22px;z-index:80;width:60px;height:60px;display:grid;place-items:center;background:#25D366;color:#0b3d22;border:1px solid #1A1D21;box-shadow:var(--shadow-md)">
+<svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.4A10 10 0 1 0 12 2Zm5.4 14.1c-.2.6-1.2 1.2-1.7 1.2-.5.1-1 .1-1.6-.1a11 11 0 0 1-4.3-2.8 9.6 9.6 0 0 1-2-3.3c-.2-.8 0-1.5.4-1.9l.5-.5c.3-.2.7-.2.9.2l.8 1.5c.1.3.1.5-.1.7l-.4.5c-.2.2-.2.4-.1.6a7.6 7.6 0 0 0 3.3 3.2c.3.1.5.1.7-.1l.5-.6c.2-.2.4-.3.7-.2l1.6.8c.3.2.4.5.3.8Z"/></svg>
+</a>
+</sc-if>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showFab&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Sections&quot;}}">
+class Component extends DCLogic {
+  state = { f: 'all' };
+  onFilter = (e) => this.setState({ f: e.target.value });
+  renderVals() {
+    const f = this.state.f, all = f === 'all';
+    return {
+      onFilter: this.onFilter,
+      showWp: all || f === 'wp',
+      showEp: all || f === 'ep',
+      showPu: all || f === 'pu',
+      showSt: all || f === 'st',
+      showCp: all || f === 'cp',
+      showFab: this.props.showFab ?? true
+    };
+  }
+}
+
+</script>
+</body>
+</html>

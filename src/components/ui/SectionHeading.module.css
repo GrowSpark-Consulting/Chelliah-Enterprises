@@ -1,0 +1,33 @@
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-6) var(--space-10);
+}
+
+.copy {
+  max-width: 62ch;
+}
+
+.title {
+  margin-top: var(--space-5);
+}
+
+.body {
+  margin-top: var(--space-4);
+}
+
+.action {
+  flex: none;
+}
+
+@media (max-width: 599px) {
+  .action {
+    width: 100%;
+  }
+
+  .action > * {
+    width: 100%;
+  }
+}

@@ -1,0 +1,36 @@
+.wrap {
+  display: flex;
+  align-items: center;
+  min-height: 60vh;
+  padding-block: clamp(64px, 8vw, 120px);
+  text-align: center;
+}
+
+.inner {
+  max-width: 54ch;
+  margin-inline: auto;
+}
+
+.inner :global(.lede) {
+  margin-inline: auto;
+}
+
+.code {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.title {
+  margin-block: var(--space-5) var(--space-5);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+}

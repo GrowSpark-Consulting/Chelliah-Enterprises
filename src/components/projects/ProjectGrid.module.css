@@ -1,0 +1,109 @@
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-10);
+}
+
+.filter {
+  min-height: 40px;
+  padding: 9px 16px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted-strong);
+  cursor: pointer;
+  transition:
+    background-color var(--t-button) var(--ease),
+    border-color var(--t-button) var(--ease),
+    color var(--t-button) var(--ease);
+}
+
+.filter:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.filter[aria-pressed='true'] {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+/* Explicit colours rather than an opacity knock-back, which failed contrast
+   against both the page ground and the selected blue fill. */
+.count {
+  margin-left: 6px;
+  color: var(--muted-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.filter:hover .count {
+  color: var(--primary);
+}
+
+.filter[aria-pressed='true'] .count {
+  color: #c7d8f0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-6);
+}
+
+.grid > * {
+  min-width: 0;
+}
+
+.item {
+  animation: enter 280ms var(--ease) both;
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.empty {
+  padding: var(--space-16) 0;
+  text-align: center;
+  color: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item {
+    animation: none;
+  }
+}
+
+@media (max-width: 1023px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 639px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .filters {
+    gap: 6px;
+  }
+
+  .filter {
+    padding: 9px 12px;
+    font-size: 0.6875rem;
+  }
+}

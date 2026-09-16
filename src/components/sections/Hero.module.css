@@ -1,0 +1,127 @@
+.hero {
+  padding-block: clamp(40px, 5vw, 80px) clamp(48px, 6vw, 96px);
+}
+
+/*
+ * Columns are top-aligned rather than centred. With `center`, the figure's
+ * vertical position depends on the height of the text column, so the reflow
+ * when the webfont swaps in moved the figure and cost ~0.09 CLS.
+ */
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+  gap: clamp(32px, 4vw, 64px);
+  align-items: start;
+}
+
+.copy {
+  min-width: 0;
+}
+
+.title {
+  margin-block: var(--space-6) var(--space-6);
+}
+
+.title em {
+  font-style: normal;
+  color: var(--primary);
+}
+
+.lede {
+  max-width: 54ch;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+}
+
+/* — Trust indicators —————————————————————————————————————————————— */
+
+.trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6) var(--space-8);
+  margin-top: var(--space-10);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--border);
+}
+
+.trustItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.trustValue {
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.trustLabel {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* — Figure ———————————————————————————————————————————————————— */
+
+.figure {
+  position: relative;
+  min-width: 0;
+  /* Drops the figure to sit against the headline rather than the eyebrow. */
+  margin-block-start: clamp(0px, 3vw, 52px);
+}
+
+.figure img {
+  transition: transform var(--t-image) var(--ease);
+}
+
+.figure:hover img {
+  transform: scale(1.02);
+}
+
+/* A thin engineering rule that ties the figure to the grid. */
+.figureMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-top: var(--space-3);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted-soft);
+}
+
+@media (max-width: 1023px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-10);
+  }
+
+  .figure {
+    margin-block-start: 0;
+  }
+
+  .lede {
+    max-width: 62ch;
+  }
+}
+
+@media (max-width: 599px) {
+  .actions > * {
+    flex: 1 1 100%;
+  }
+
+  .trust {
+    gap: var(--space-5) var(--space-6);
+  }
+}

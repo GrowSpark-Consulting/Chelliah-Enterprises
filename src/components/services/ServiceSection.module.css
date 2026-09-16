@@ -1,0 +1,131 @@
+.section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 64px);
+  align-items: center;
+  padding-block: clamp(48px, 6vw, 80px);
+  border-bottom: 1px solid var(--border);
+  scroll-margin-top: calc(var(--header-height) + 24px);
+}
+
+.section:last-of-type {
+  border-bottom: 0;
+}
+
+/* Alternate: content first, image second. */
+.reversed .figure {
+  order: 2;
+}
+
+.content {
+  min-width: 0;
+}
+
+.figure {
+  min-width: 0;
+}
+
+.figure img {
+  transition: transform var(--t-image) var(--ease);
+}
+
+.figure:hover img {
+  transform: scale(1.02);
+}
+
+.marker {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.marker span:last-child {
+  color: var(--muted);
+}
+
+.divider {
+  width: 20px;
+  height: 1px;
+  background: var(--border-strong);
+}
+
+.title {
+  margin-block: var(--space-5) var(--space-5);
+  font-size: clamp(1.5rem, 1.15rem + 1.35vw, 2.125rem);
+  text-transform: uppercase;
+}
+
+.description {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--muted-strong);
+  max-width: 58ch;
+}
+
+/* — Feature / application grids ————————————————————————————————— */
+
+.specs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: var(--space-6);
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+}
+
+.spec {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: 11px 14px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--muted-strong);
+}
+
+.spec svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--primary);
+}
+
+.specsLabel {
+  margin-top: var(--space-8);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.specsLabel + .specs {
+  margin-top: var(--space-3);
+}
+
+.action {
+  margin-top: var(--space-8);
+}
+
+@media (max-width: 899px) {
+  .section {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Mobile always reads image first, then content. */
+  .reversed .figure,
+  .figure {
+    order: -1;
+  }
+}
+
+@media (max-width: 479px) {
+  .specs {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -1,0 +1,30 @@
+.stats {
+  padding-block: 0;
+}
+
+.grid {
+  padding-block: clamp(40px, 5vw, 64px) 0;
+}
+
+.gridBody {
+  margin-top: var(--space-12);
+}
+
+.disclosure {
+  margin-top: var(--space-8);
+  padding: var(--space-4) var(--space-5);
+  border-left: 2px solid var(--accent);
+  background: var(--surface);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--muted-strong);
+  max-width: 78ch;
+}
+
+.clients {
+  padding-block: clamp(48px, 6vw, 80px);
+}
+
+.clientGrid {
+  margin-top: var(--space-10);
+}

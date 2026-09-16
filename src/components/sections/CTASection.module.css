@@ -1,0 +1,36 @@
+.cta {
+  padding-block: clamp(56px, 7vw, 96px);
+}
+
+.inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-10);
+}
+
+.copy {
+  max-width: 54ch;
+}
+
+.title {
+  margin-block: var(--space-5) var(--space-4);
+  color: #fff;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+@media (max-width: 767px) {
+  .actions {
+    width: 100%;
+  }
+
+  .actions > * {
+    flex: 1 1 100%;
+  }
+}

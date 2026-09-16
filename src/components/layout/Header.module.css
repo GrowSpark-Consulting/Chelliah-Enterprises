@@ -2,16 +2,14 @@
   position: sticky;
   top: 0;
   z-index: 60;
-  background: rgba(247, 247, 245, 0.92);
-  backdrop-filter: saturate(160%) blur(10px);
-  -webkit-backdrop-filter: saturate(160%) blur(10px);
+  background: var(--background);
   border-bottom: 1px solid var(--border-light);
   transition: border-color var(--t-link) var(--ease), box-shadow var(--t-link) var(--ease);
 }
 
 .header[data-scrolled='true'] {
   border-bottom-color: var(--border);
-  box-shadow: 0 1px 12px rgba(26, 29, 33, 0.05);
+  box-shadow: 0 1px 12px rgba(37, 37, 37, 0.05);
 }
 
 .bar {

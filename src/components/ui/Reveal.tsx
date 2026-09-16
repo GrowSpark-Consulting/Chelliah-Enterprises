@@ -17,8 +17,9 @@ type RevealProps = {
  * so a page with twenty reveals still ships one observer and no per-element
  * React state.
  *
- * The hidden starting state is applied by CSS only under `html.js`, so the
- * content stays visible if scripting is unavailable.
+ * The hidden starting state is unconditional CSS (matches on server and
+ * client, so hydration never disagrees on it) with a `<noscript>` stylesheet
+ * in the root layout restoring visibility when scripting is unavailable.
  */
 export function Reveal({ children, as: Tag = 'div', delay = 0, className }: RevealProps) {
   return (

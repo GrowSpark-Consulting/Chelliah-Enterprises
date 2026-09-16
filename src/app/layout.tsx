@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
-import { Inter } from 'next/font/google';
+import { Inter, Libre_Baskerville } from 'next/font/google';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { WhatsAppFab } from '@/components/layout/WhatsAppFab';
@@ -13,6 +13,13 @@ const inter = Inter({
   display: 'swap',
   variable: '--font-sans',
   weight: ['400', '500', '600', '700'],
+});
+
+const libreBaskerville = Libre_Baskerville({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-serif',
+  weight: ['400', '700'],
 });
 
 export const metadata: Metadata = {
@@ -88,18 +95,18 @@ const organisationJsonLd = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en-IN" className={inter.variable}>
+    <html lang="en-IN" className={`${inter.variable} ${libreBaskerville.variable}`}>
       <head>
         {/*
-          Marks the document as scripted before first paint. Scroll-reveal's
-          hidden starting state hangs off this class, so if the bundle fails
-          to load the content simply stays visible instead of disappearing.
+          .reveal starts hidden unconditionally in CSS (see globals.css), so
+          server and client markup match exactly and hydration never has a
+          DOM mutation to disagree over. This is the no-JS fallback: without
+          a script running, nothing ever sets data-revealed="true", so this
+          stylesheet restores visibility for that case only.
         */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: "document.documentElement.classList.add('js')",
-          }}
-        />
+        <noscript>
+          <style>{'.reveal { opacity: 1 !important; transform: none !important; }'}</style>
+        </noscript>
       </head>
       <body>
         <a href="#main" className="skipLink">

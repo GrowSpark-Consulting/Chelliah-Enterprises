@@ -214,7 +214,11 @@ export default function AboutPage() {
         </Container>
       </section>
 
-      <section className="section section--flush-top" aria-labelledby="about-clients-heading">
+      <section
+        id="clients"
+        className="section section--flush-top"
+        aria-labelledby="about-clients-heading"
+      >
         <Container>
           <SectionHeading
             id="about-clients-heading"

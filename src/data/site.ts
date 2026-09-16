@@ -98,10 +98,10 @@ export const stats: Stat[] = [
 ];
 
 export const nav = [
-  { href: '/', label: 'Home' },
   { href: '/services', label: 'Services' },
   { href: '/projects', label: 'Projects' },
   { href: '/about', label: 'About' },
+  { href: '/about#clients', label: 'Clients' },
   { href: '/contact', label: 'Contact' },
 ] as const;
 

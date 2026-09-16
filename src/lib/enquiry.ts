@@ -15,6 +15,16 @@ export type EnquiryResult =
   | { ok: true; channel: 'whatsapp' | 'api' }
   | { ok: false; error: string };
 
+/** Extra context recorded alongside the enquiry itself. */
+export type EnquiryContext = {
+  /** Which page the form was submitted from, recorded in the sheet. */
+  source: string;
+  /** Stable per-attempt id, so a retry cannot create a duplicate row. */
+  submissionId: string;
+  /** Honeypot value — always empty for a real person. */
+  website: string;
+};
+
 /** Formats an enquiry as the plain-text body used by every delivery channel. */
 export function formatEnquiry(enquiry: Enquiry): string {
   const lines = [
@@ -35,36 +45,52 @@ export function formatEnquiry(enquiry: Enquiry): string {
 
 /**
  * ─────────────────────────────────────────────────────────────────────────
- *  THE SUBMISSION HANDLER — the one place to connect a backend.
+ *  THE SUBMISSION HANDLER
  * ─────────────────────────────────────────────────────────────────────────
  *
- * There is no server-side endpoint yet, so the enquiry is delivered over
- * WhatsApp to the company's configured number: a real, working channel, not
- * a simulated success. The form only reports success once this resolves.
+ * Posts to our own `/api/enquiry` route, which forwards the enquiry to the
+ * Google Apps Script webhook that writes it to the Sheet and sends the
+ * notification email. Success is only reported once that whole workflow has
+ * confirmed it succeeded — a failure is surfaced, never swallowed.
  *
- * To connect an API / email service later, replace the body below with the
- * request and return `{ ok: true, channel: 'api' }`. Nothing else in the UI
- * needs to change — `ContactForm` renders whatever this returns.
- *
- *   const res = await fetch('/api/enquiry', {
- *     method: 'POST',
- *     headers: { 'Content-Type': 'application/json' },
- *     body: JSON.stringify(enquiry),
- *   });
- *   if (!res.ok) return { ok: false, error: 'We could not send your enquiry.' };
- *   return { ok: true, channel: 'api' };
+ * The webhook URL and secret live in server-only environment variables, so
+ * nothing secret reaches the browser. See docs/enquiry-integration.md.
  */
-export async function submitEnquiry(enquiry: Enquiry): Promise<EnquiryResult> {
-  const url = whatsappLink(formatEnquiry(enquiry));
-  const opened = window.open(url, '_blank', 'noopener,noreferrer');
+export async function submitEnquiry(
+  enquiry: Enquiry,
+  context: EnquiryContext,
+): Promise<EnquiryResult> {
+  try {
+    const response = await fetch('/api/enquiry', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...enquiry, ...context }),
+    });
 
-  if (!opened) {
+    const result = (await response.json().catch(() => null)) as
+      | { ok?: boolean; error?: string }
+      | null;
+
+    if (!response.ok || !result?.ok) {
+      return {
+        ok: false,
+        error:
+          result?.error ??
+          'We could not send your enquiry. Please call or WhatsApp us instead.',
+      };
+    }
+
+    return { ok: true, channel: 'api' };
+  } catch {
     return {
       ok: false,
       error:
-        'Your browser blocked the WhatsApp window. Allow pop-ups for this site, or call us directly.',
+        'We could not reach the server. Check your connection, or call or WhatsApp us instead.',
     };
   }
+}
 
-  return { ok: true, channel: 'whatsapp' };
+/** A prefilled WhatsApp link for the same enquiry, offered after it is sent. */
+export function enquiryWhatsAppLink(enquiry: Enquiry): string {
+  return whatsappLink(formatEnquiry(enquiry));
 }

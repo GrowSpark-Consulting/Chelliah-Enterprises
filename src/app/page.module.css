@@ -11,15 +11,34 @@
 .whyGrid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
   margin-top: var(--space-12);
   border-top: 1px solid var(--border);
-  border-left: 1px solid var(--border);
 }
 
 .whyItem {
-  padding: var(--space-6);
-  border-right: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+  position: relative;
+  padding: var(--space-6) var(--space-6) var(--space-4) 0;
+}
+
+.whyItem + .whyItem {
+  padding-left: var(--space-6);
+  border-left: 1px solid var(--border);
+}
+
+/* The bronze tick that marks each item against the top rule. */
+.whyItem::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 28px;
+  height: 2px;
+  background: var(--accent);
+}
+
+.whyItem + .whyItem::before {
+  left: var(--space-6);
 }
 
 .whyNumber {
@@ -73,13 +92,49 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  /* The third item starts a new row: swap its left divider/tick for a top one. */
+  .whyItem:nth-child(3) {
+    border-left: 0;
+    padding-left: 0;
+  }
+
+  .whyItem:nth-child(3)::before {
+    left: 0;
+  }
+
+  .whyItem:nth-child(n + 3) {
+    margin-top: var(--space-6);
+    border-top: 1px solid var(--border);
+  }
+
   .workGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 639px) {
-  .whyGrid,
+  .whyGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .whyItem {
+    padding: var(--space-6) 0 var(--space-5);
+  }
+
+  .whyItem + .whyItem {
+    padding-left: 0;
+    border-left: 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .whyItem + .whyItem::before {
+    left: 0;
+  }
+
+  .whyItem:nth-child(n + 3) {
+    margin-top: 0;
+  }
+
   .workGrid {
     grid-template-columns: minmax(0, 1fr);
   }

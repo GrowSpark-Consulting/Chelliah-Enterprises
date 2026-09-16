@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { CTASection } from '@/components/sections/CTASection';
 import { PageHero } from '@/components/sections/PageHero';
-import { ServiceGrid } from '@/components/services/ServiceGrid';
+import { ServiceList } from '@/components/services/ServiceList';
 import { ServiceSection } from '@/components/services/ServiceSection';
 import { Container } from '@/components/ui/Container';
 import { SectionHeading } from '@/components/ui/SectionHeading';
@@ -73,7 +73,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
             label="Related services"
             title="Other work we carry out"
           />
-          <ServiceGrid services={related} />
+          <ServiceList services={related} />
         </Container>
       </section>
 

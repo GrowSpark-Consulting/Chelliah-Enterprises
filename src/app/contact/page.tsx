@@ -36,7 +36,7 @@ export default function ContactPage() {
           <div className={styles.grid}>
             <ContactInfo />
             <div className={styles.form}>
-              <ContactForm />
+              <ContactForm source="Contact page" />
             </div>
           </div>
         </Container>

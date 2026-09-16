@@ -1,7 +1,7 @@
 import { ArrowRight } from 'lucide-react';
+import { ContactForm } from '@/components/contact/ContactForm';
 import { Button } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
-import { ImageFrame } from '@/components/ui/ImageFrame';
 import { SectionLabel } from '@/components/ui/SectionLabel';
 import { WhatsAppIcon } from '@/components/ui/WhatsAppIcon';
 import { site } from '@/data/site';
@@ -55,18 +55,9 @@ export function Hero() {
             </ul>
           </div>
 
-          <figure className={styles.figure}>
-            <ImageFrame
-              hint="Finished epoxy floor in a factory bay, with safety line marking"
-              ratio="4/3"
-              priority
-              sizes="(max-width: 1023px) 100vw, 620px"
-            />
-            <figcaption className={styles.figureMeta}>
-              <span>Industrial · Commercial · Residential</span>
-              <span>Est. {site.foundedYear}</span>
-            </figcaption>
-          </figure>
+          <div className={styles.enquiry}>
+            <ContactForm source="Home — hero" />
+          </div>
         </div>
       </Container>
     </section>

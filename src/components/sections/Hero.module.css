@@ -70,35 +70,12 @@
   color: var(--muted);
 }
 
-/* — Figure ———————————————————————————————————————————————————— */
+/* — Enquiry form ——————————————————————————————————————————————— */
 
-.figure {
-  position: relative;
+.enquiry {
   min-width: 0;
-  /* Drops the figure to sit against the headline rather than the eyebrow. */
-  margin-block-start: clamp(0px, 3vw, 52px);
-}
-
-.figure img {
-  transition: transform var(--t-image) var(--ease);
-}
-
-.figure:hover img {
-  transform: scale(1.02);
-}
-
-/* A thin engineering rule that ties the figure to the grid. */
-.figureMeta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
-  margin-top: var(--space-3);
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted-soft);
+  /* Drops the card to sit against the headline rather than the eyebrow. */
+  margin-block-start: clamp(0px, 2vw, 34px);
 }
 
 @media (max-width: 1023px) {
@@ -107,7 +84,7 @@
     gap: var(--space-10);
   }
 
-  .figure {
+  .enquiry {
     margin-block-start: 0;
   }
 

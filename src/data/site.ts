@@ -65,6 +65,20 @@ export const authorisedBrands = [
   'Sunanda Speciality Coatings',
 ] as const;
 
+/**
+ * Official logo files for the brands above, once they are supplied and
+ * cleared for use.
+ *
+ * TO ADD ONE: drop the file in `public/logos/` and add an entry keyed by the
+ * exact brand name above, e.g.
+ *
+ *   'Ardex Endura': { src: '/logos/ardex-endura.svg', width: 120, height: 32 },
+ *
+ * Any brand without an entry keeps showing its name with an empty logo slot,
+ * so nothing is fabricated and nothing breaks while assets are pending.
+ */
+export const brandLogos: Record<string, { src: string; width: number; height: number }> = {};
+
 /** Named clients from the company profile. */
 export const clients = [
   'L&T Energy Hydrocarbon',

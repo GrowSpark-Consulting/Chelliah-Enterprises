@@ -18,6 +18,28 @@ export const dynamic = 'force-dynamic';
 /** How long to wait on the Apps Script before giving up. */
 const WEBHOOK_TIMEOUT_MS = 15000;
 
+/** How much of a webhook body to keep when describing it in the log. */
+const DIAGNOSTIC_BODY_LIMIT = 300;
+
+/**
+ * Scrubs the shared secret out of anything bound for the log, in case the
+ * webhook ever echoes the request back to us in an error message.
+ */
+function redact(value: string, secret: string): string {
+  return secret ? value.split(secret).join('[redacted]') : value;
+}
+
+/**
+ * A short, safe description of a webhook response for the server log.
+ *
+ * Truncated and redacted. The enquiry's own field values are never logged:
+ * only what the webhook chose to return.
+ */
+function describeResponse(status: number, text: string, secret: string): string {
+  const body = redact(text.trim().slice(0, DIAGNOSTIC_BODY_LIMIT), secret);
+  return `HTTP ${status}; body: ${body || '(empty)'}`;
+}
+
 /**
  * What the Apps Script sends back. `success` is what doPost returns and `ok`
  * is what doGet returns; either counts as success.
@@ -137,8 +159,9 @@ export async function POST(request: Request) {
         missingReturn
           ? '[enquiry] The Apps Script ran but returned no response, so the result could not ' +
               'be confirmed (the row may still have been written). Every doPost path must ' +
-              'return a ContentService JSON response — see docs/enquiry-integration.md.'
-          : `[enquiry] Webhook responded ${response.status}: ${text.slice(0, 500)}`,
+              'return a ContentService JSON response — see docs/enquiry-integration.md. ' +
+              describeResponse(response.status, text, webhookSecret)
+          : `[enquiry] Webhook rejected the request. ${describeResponse(response.status, text, webhookSecret)}`,
       );
       return NextResponse.json(
         { ok: false, error: 'We could not record your enquiry. Please call or WhatsApp us.' },
@@ -162,8 +185,9 @@ export async function POST(request: Request) {
         staleDeployment
           ? '[enquiry] The Apps Script deployment is serving a version without this code. ' +
               'Redeploy it: Deploy > Manage deployments > Edit > Version: New version. ' +
-              'See docs/enquiry-integration.md step 4.'
-          : `[enquiry] Webhook returned a non-JSON body: ${text.slice(0, 500)}`,
+              'See docs/enquiry-integration.md step 4. ' +
+              describeResponse(response.status, text, webhookSecret)
+          : `[enquiry] Webhook returned a body that is not JSON. ${describeResponse(response.status, text, webhookSecret)}`,
       );
       return NextResponse.json(
         { ok: false, error: 'We could not record your enquiry. Please call or WhatsApp us.' },
@@ -171,11 +195,22 @@ export async function POST(request: Request) {
       );
     }
 
+    /*
+     * Confirmation, and only confirmation, is what makes this a success. The
+     * script signals it as `success` (doPost) or `ok` (doGet/health), so both
+     * count; anything else — false, missing, or a shape we do not recognise —
+     * stays a failure rather than being optimistically passed through.
+     */
     if (result.success !== true && result.ok !== true) {
-      console.error(
-        '[enquiry] Webhook reported a failure:',
-        result.message ?? result.error ?? text.slice(0, 300),
-      );
+      // The script's own `message` is the useful reason. Fall back to the raw
+      // body only when it gave none, so an unrecognised shape is still legible
+      // instead of logging `undefined`.
+      const reported = result.message ?? result.error;
+      const reason =
+        typeof reported === 'string'
+          ? redact(reported.slice(0, DIAGNOSTIC_BODY_LIMIT), webhookSecret)
+          : describeResponse(response.status, text, webhookSecret);
+      console.error('[enquiry] Webhook reported a failure:', reason);
       return NextResponse.json(
         { ok: false, error: 'We could not record your enquiry. Please call or WhatsApp us.' },
         { status: 502 },

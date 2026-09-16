@@ -47,7 +47,7 @@
 }
 
 .filter[aria-pressed='true'] .count {
-  color: #c7d8f0;
+  color: var(--on-dark-faint);
 }
 
 .grid {

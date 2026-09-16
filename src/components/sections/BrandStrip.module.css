@@ -21,6 +21,9 @@
 }
 
 .item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
   padding: 8px 14px;
   border: 1px solid var(--chip-border);
   border-radius: var(--radius-sm);
@@ -32,8 +35,31 @@
   color: var(--chip-color);
 }
 
+/* Reserved space for the official logo, so dropping the artwork in later
+   causes no reflow. Empty until a real file is supplied. */
+.logoSlot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 28px;
+  height: 20px;
+}
+
+.logoSlotEmpty {
+  border: 1px dashed var(--chip-border);
+  border-radius: 2px;
+}
+
+.logo {
+  width: auto;
+  height: 100%;
+  max-width: 28px;
+  object-fit: contain;
+}
+
 .ink {
-  --heading-color: rgba(168, 196, 232, 1);
+  --heading-color: var(--on-dark-accent);
   --chip-border: var(--on-dark-border);
   --chip-color: var(--on-dark);
 }

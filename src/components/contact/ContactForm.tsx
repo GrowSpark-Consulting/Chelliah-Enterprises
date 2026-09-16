@@ -6,8 +6,13 @@ import { AlertCircle, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { WhatsAppIcon } from '@/components/ui/WhatsAppIcon';
 import { enquiryServices } from '@/data/site';
-import { submitEnquiry, type Enquiry } from '@/lib/enquiry';
+import { enquiryWhatsAppLink, submitEnquiry, type Enquiry } from '@/lib/enquiry';
 import styles from './ContactForm.module.css';
+
+type ContactFormProps = {
+  /** Which page this instance sits on; recorded against the enquiry. */
+  source?: string;
+};
 
 type FieldName = keyof Enquiry;
 type Errors = Partial<Record<FieldName, string>>;
@@ -68,13 +73,22 @@ function FieldError({ id, message }: { id: string; message?: string }) {
   );
 }
 
-export function ContactForm() {
+export function ContactForm({ source = 'Website' }: ContactFormProps) {
   const id = useId();
   const formRef = useRef<HTMLFormElement>(null);
+  /** Guards against a double submit racing past the disabled button. */
+  const inFlight = useRef(false);
+  /**
+   * Identifies this attempt end to end. Kept until an attempt succeeds, so a
+   * retry after a failure reuses it and the sheet can reject the duplicate.
+   */
+  const submissionId = useRef('');
+  const honeypot = useRef('');
   const [values, setValues] = useState<Enquiry>(emptyEnquiry);
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'failed'>('idle');
   const [statusMessage, setStatusMessage] = useState('');
+  const [sentEnquiry, setSentEnquiry] = useState<Enquiry | null>(null);
 
   const update = (field: FieldName) => (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
@@ -87,6 +101,9 @@ export function ContactForm() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    // A second submit while one is already running would create a duplicate.
+    if (inFlight.current) return;
 
     const found = validate(values);
     setErrors(found);
@@ -104,17 +121,31 @@ export function ContactForm() {
       return;
     }
 
+    if (!submissionId.current) {
+      submissionId.current = crypto.randomUUID();
+    }
+
+    inFlight.current = true;
     setStatus('sending');
-    const result = await submitEnquiry(values);
+
+    const submitted = values;
+    const result = await submitEnquiry(submitted, {
+      source,
+      submissionId: submissionId.current,
+      website: honeypot.current,
+    });
+
+    inFlight.current = false;
 
     if (result.ok) {
       setStatus('sent');
       setStatusMessage(
-        result.channel === 'whatsapp'
-          ? 'Your enquiry has been prepared in WhatsApp. Send the message there and our team will respond — usually within a few hours.'
-          : 'Your enquiry has been received. Our team will respond — usually within a few hours.',
+        'Your enquiry has been recorded and sent to our team. We will respond — usually within a few hours.',
       );
+      setSentEnquiry(submitted);
       setValues(emptyEnquiry);
+      // The next enquiry from this form is a new one.
+      submissionId.current = '';
     } else {
       setStatus('failed');
       setStatusMessage(result.error);
@@ -207,6 +238,23 @@ export function ContactForm() {
         </div>
       </div>
 
+      {/* Honeypot: off-screen and skipped by keyboard and assistive tech, so
+          only an automated submitter will ever fill it in. */}
+      <div className={styles.honeypot} aria-hidden>
+        <label htmlFor={`${id}-website`}>Website</label>
+        <input
+          type="text"
+          id={`${id}-website`}
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+          defaultValue=""
+          onChange={(event) => {
+            honeypot.current = event.target.value;
+          }}
+        />
+      </div>
+
       <div className={styles.submit}>
         <Button type="submit" variant="accent" block disabled={status === 'sending'}>
           <WhatsAppIcon size={17} />
@@ -215,24 +263,35 @@ export function ContactForm() {
       </div>
 
       <p className={styles.footnote}>
-        Your details are sent straight to our team over WhatsApp. No marketing lists, no spam.
+        Your details go straight to our team. No marketing lists, no spam.
       </p>
 
       <div aria-live="polite">
         {status === 'sent' && (
-          <p className={`${styles.status} ${styles.statusSuccess}`}>
+          <div className={`${styles.status} ${styles.statusSuccess}`}>
             <CheckCircle2 size={18} strokeWidth={2} aria-hidden />
             <span>
-              <strong className={styles.statusTitle}>Enquiry ready to send</strong>
+              <strong className={styles.statusTitle}>Enquiry received</strong>
               {statusMessage}
+              {sentEnquiry && (
+                <a
+                  className={styles.statusAction}
+                  href={enquiryWhatsAppLink(sentEnquiry)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <WhatsAppIcon size={15} />
+                  Also send it on WhatsApp
+                </a>
+              )}
             </span>
-          </p>
+          </div>
         )}
         {status === 'failed' && (
           <p className={`${styles.status} ${styles.statusError}`}>
             <AlertCircle size={18} strokeWidth={2} aria-hidden />
             <span>
-              <strong className={styles.statusTitle}>We could not open WhatsApp</strong>
+              <strong className={styles.statusTitle}>Your enquiry was not sent</strong>
               {statusMessage}
             </span>
           </p>

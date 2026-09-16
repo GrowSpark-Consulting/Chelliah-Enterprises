@@ -17,10 +17,11 @@ export function ProjectCard({ project }: ProjectCardProps) {
         sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 400px"
       />
       <div className={styles.body}>
-        <div className={styles.tags}>
-          <span className={styles.tag}>{project.service}</span>
+        <p className={styles.meta}>
+          <span>{project.service}</span>
+          <span className={styles.metaDot} aria-hidden />
           <span className={styles.sector}>{project.sector}</span>
-        </div>
+        </p>
         <h3 className={styles.title}>{project.title}</h3>
         <p className={styles.location}>
           <MapPin size={14} strokeWidth={1.75} aria-hidden />

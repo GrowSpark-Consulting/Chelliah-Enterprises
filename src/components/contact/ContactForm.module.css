@@ -65,20 +65,42 @@
 }
 
 .statusSuccess {
-  border-color: rgba(11, 77, 162, 0.35);
+  border-color: rgba(22, 37, 54, 0.35);
   background: var(--primary-tint);
   color: var(--primary-dark);
 }
 
 .statusError {
-  border-color: rgba(214, 50, 31, 0.4);
-  background: var(--accent-tint);
-  color: var(--accent-hover);
+  border-color: rgba(179, 38, 30, 0.4);
+  background: var(--error-tint);
+  color: var(--error-hover);
 }
 
 .statusTitle {
   display: block;
   font-weight: 600;
+}
+
+.statusAction {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 40px;
+  margin-top: var(--space-2);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: inherit;
+  text-underline-offset: 3px;
+}
+
+/* Off-screen rather than display:none, so an automated submitter still sees
+   a fillable field while people and assistive tech never reach it. */
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 }
 
 @media (max-width: 639px) {

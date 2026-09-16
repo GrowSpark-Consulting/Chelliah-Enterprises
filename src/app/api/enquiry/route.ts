@@ -18,6 +18,40 @@ export const dynamic = 'force-dynamic';
 /** How long to wait on the Apps Script before giving up. */
 const WEBHOOK_TIMEOUT_MS = 15000;
 
+/** How much of a webhook body to keep when describing it in the log. */
+const DIAGNOSTIC_BODY_LIMIT = 300;
+
+/**
+ * Scrubs the shared secret out of anything bound for the log, in case the
+ * webhook ever echoes the request back to us in an error message.
+ */
+function redact(value: string, secret: string): string {
+  return secret ? value.split(secret).join('[redacted]') : value;
+}
+
+/**
+ * A short, safe description of a webhook response for the server log.
+ *
+ * Truncated and redacted. The enquiry's own field values are never logged:
+ * only what the webhook chose to return.
+ */
+function describeResponse(status: number, text: string, secret: string): string {
+  const body = redact(text.trim().slice(0, DIAGNOSTIC_BODY_LIMIT), secret);
+  return `HTTP ${status}; body: ${body || '(empty)'}`;
+}
+
+/**
+ * What the Apps Script sends back. `success` is what doPost returns and `ok`
+ * is what doGet returns; either counts as success.
+ */
+type WebhookResult = {
+  success?: boolean;
+  ok?: boolean;
+  duplicate?: boolean;
+  message?: string;
+  error?: string;
+};
+
 type RequestBody = Partial<Enquiry> & {
   /** Which page the enquiry was submitted from. */
   source?: string;
@@ -88,7 +122,9 @@ export async function POST(request: Request) {
 
   const payload = {
     secret: webhookSecret,
-    submissionId: asString(body.submissionId),
+    // The form always supplies one; this covers a direct API call that does
+    // not, since the script requires an id to guard against duplicates.
+    submissionId: asString(body.submissionId) || crypto.randomUUID(),
     submittedAt: new Date().toISOString(),
     name: asString(body.name),
     email: asString(body.email),
@@ -122,10 +158,10 @@ export async function POST(request: Request) {
       console.error(
         missingReturn
           ? '[enquiry] The Apps Script ran but returned no response, so the result could not ' +
-              'be confirmed (the row may still have been written). doPost must end with: ' +
-              'return ContentService.createTextOutput(JSON.stringify({ok:true}))' +
-              '.setMimeType(ContentService.MimeType.JSON);'
-          : `[enquiry] Webhook responded ${response.status}: ${text.slice(0, 500)}`,
+              'be confirmed (the row may still have been written). Every doPost path must ' +
+              'return a ContentService JSON response — see docs/enquiry-integration.md. ' +
+              describeResponse(response.status, text, webhookSecret)
+          : `[enquiry] Webhook rejected the request. ${describeResponse(response.status, text, webhookSecret)}`,
       );
       return NextResponse.json(
         { ok: false, error: 'We could not record your enquiry. Please call or WhatsApp us.' },
@@ -133,10 +169,14 @@ export async function POST(request: Request) {
       );
     }
 
-    // Apps Script always returns 200, so success is confirmed from the body.
-    let result: { ok?: boolean; error?: string } = {};
+    /*
+     * Apps Script always returns 200, so success is confirmed from the body.
+     * The script signals it as `success` on doPost and `ok` on doGet, so both
+     * are accepted, and the reason is read from whichever key carries it.
+     */
+    let result: WebhookResult = {};
     try {
-      result = JSON.parse(text) as { ok?: boolean; error?: string };
+      result = JSON.parse(text) as WebhookResult;
     } catch {
       // HTML back instead of JSON almost always means the live deployment is
       // serving an older version of the script than the editor shows.
@@ -145,8 +185,9 @@ export async function POST(request: Request) {
         staleDeployment
           ? '[enquiry] The Apps Script deployment is serving a version without this code. ' +
               'Redeploy it: Deploy > Manage deployments > Edit > Version: New version. ' +
-              'See docs/enquiry-integration.md step 4.'
-          : `[enquiry] Webhook returned a non-JSON body: ${text.slice(0, 500)}`,
+              'See docs/enquiry-integration.md step 4. ' +
+              describeResponse(response.status, text, webhookSecret)
+          : `[enquiry] Webhook returned a body that is not JSON. ${describeResponse(response.status, text, webhookSecret)}`,
       );
       return NextResponse.json(
         { ok: false, error: 'We could not record your enquiry. Please call or WhatsApp us.' },
@@ -154,12 +195,31 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!result.ok) {
-      console.error('[enquiry] Webhook reported a failure:', result.error);
+    /*
+     * Confirmation, and only confirmation, is what makes this a success. The
+     * script signals it as `success` (doPost) or `ok` (doGet/health), so both
+     * count; anything else — false, missing, or a shape we do not recognise —
+     * stays a failure rather than being optimistically passed through.
+     */
+    if (result.success !== true && result.ok !== true) {
+      // The script's own `message` is the useful reason. Fall back to the raw
+      // body only when it gave none, so an unrecognised shape is still legible
+      // instead of logging `undefined`.
+      const reported = result.message ?? result.error;
+      const reason =
+        typeof reported === 'string'
+          ? redact(reported.slice(0, DIAGNOSTIC_BODY_LIMIT), webhookSecret)
+          : describeResponse(response.status, text, webhookSecret);
+      console.error('[enquiry] Webhook reported a failure:', reason);
       return NextResponse.json(
         { ok: false, error: 'We could not record your enquiry. Please call or WhatsApp us.' },
         { status: 502 },
       );
+    }
+
+    if (result.duplicate) {
+      // The row was already written by an earlier attempt; still a success.
+      console.warn('[enquiry] Webhook treated this as a duplicate submission.');
     }
 
     return NextResponse.json({ ok: true });

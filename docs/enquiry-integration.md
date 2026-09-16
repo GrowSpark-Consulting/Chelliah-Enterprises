@@ -21,6 +21,77 @@ application. The only secrets are the deployment URL and a shared secret, both
 held server-side. The browser talks only to our own origin and never sees
 either. It also adds no dependencies to the project.
 
+## The payload contract
+
+The form collects seven fields. They travel unchanged through every layer and
+land in a fixed column order. Any change must be made in all four places at
+once, or rows will misalign.
+
+**1. Browser → `/api/enquiry`** (`ContactForm` → `submitEnquiry`)
+
+```jsonc
+{
+  "name":     "string, required",
+  "phone":    "string, required, ≥10 digits",
+  "email":    "string, optional, validated when present",
+  "company":  "string, optional",
+  "service":  "string, required, one of enquiryServices",
+  "location": "string, optional — the 'Project location' field",
+  "message":  "string, optional",
+  "source":   "string — 'Home — hero' or 'Contact page'",
+  "submissionId": "string — uuid, stable across retries of one attempt",
+  "website":  "string — honeypot, always empty for a person"
+}
+```
+
+**2. `/api/enquiry` → Apps Script.** The route re-validates, drops `website`,
+and adds the shared secret plus a server timestamp. `source` falls back to the
+`referer` header if absent.
+
+```jsonc
+{
+  "secret":       "from ENQUIRY_WEBHOOK_SECRET, server-side only",
+  "submissionId": "string",
+  "submittedAt":  "ISO 8601, set by the server",
+  "name": "…", "email": "…", "phone": "…", "company": "…",
+  "service": "…", "location": "…", "message": "…", "source": "…"
+}
+```
+
+**3. Apps Script → Sheet.** One row, in exactly this order:
+
+| # | Column | Source |
+| --- | --- | --- |
+| 1 | Timestamp | `submittedAt` |
+| 2 | Submission ID | `submissionId` |
+| 3 | Name | `name` |
+| 4 | Email | `email` |
+| 5 | Phone | `phone` |
+| 6 | Company | `company` |
+| 7 | Service | `service` |
+| 8 | Location | `location` |
+| 9 | Message | `message` |
+| 10 | Source | `source` |
+| 11 | Status | `New`, set by the script |
+
+**4. Apps Script → email.** The notification lists every field above,
+including Company and Project location, with `replyTo` set to the enquirer's
+email where they gave one.
+
+**Response contract.** Every `doPost` path must return a `ContentService` JSON
+response. Returning nothing still writes the row but leaves the site unable to
+confirm it, so the enquiry is reported as failed while the data is in the sheet.
+
+| Outcome | Body |
+| --- | --- |
+| Saved | `{"success":true,"message":"Enquiry submitted successfully."}` |
+| Already saved | `{"success":true,"message":"Enquiry already submitted.","duplicate":true}` |
+| Rejected/failed | `{"success":false,"message":"…"}` |
+| Health check (`doGet`) | `{"ok":true,"service":"…"}` |
+
+The API route accepts either `success: true` or `ok: true` as confirmation, and
+treats anything else — including HTML or an empty body — as a failure.
+
 ## Security properties
 
 - `ENQUIRY_WEBHOOK_URL` and `ENQUIRY_WEBHOOK_SECRET` are read only inside
@@ -48,135 +119,237 @@ Sign in as the GrowSpark account that should own the data.
 3. Leave sharing as **private** (default). Do not publish it to the web.
 4. Rename the first tab to **`Enquiries`**.
 
-The script writes this header row automatically on first run:
+5. Add this header row to row 1, in exactly this order — the script appends
+   positionally and does **not** create headers for you:
 
 | Timestamp | Submission ID | Name | Email | Phone | Company | Service | Location | Message | Source | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 
 `Status` is written as `New` and is yours to update by hand as enquiries are
-worked through — the script never overwrites it on existing rows.
+worked through — the script never overwrites it on an existing row. If the
+notification email fails after the row is saved, it is written as
+`New — email failed` so the failure is visible rather than silent.
 
-> **The column order must match `HEADERS` in the script.** If you change one,
-> change the other, or existing rows will misalign.
+> **The column order above is positional.** The script appends values in this
+> exact sequence, so reordering the sheet without changing `appendRow` will
+> misalign every future row.
 
 ### 2. Add the Apps Script
 
 In that spreadsheet: **Extensions → Apps Script**. Replace `Code.gs` with:
 
 ```javascript
-/** Chelliah Enterprises — website enquiry intake. */
-
 const SHEET_NAME = 'Enquiries';
-const HEADERS = [
-  'Timestamp', 'Submission ID', 'Name', 'Email', 'Phone', 'Company',
-  'Service', 'Location', 'Message', 'Source', 'Status',
-];
-const ID_COLUMN = 2; // 'Submission ID', used for the duplicate check.
+
+const SHARED_SECRET =
+  PropertiesService.getScriptProperties().getProperty('SHARED_SECRET');
+
+const NOTIFY_EMAIL =
+  PropertiesService.getScriptProperties().getProperty('NOTIFY_EMAIL');
 
 /**
- * Health check. Open the /exec URL in a browser: if you see this JSON, the
- * deployment is live and running THIS version of the code. If you instead see
- * "Script function not found: doGet", the deployment is serving an older
- * version — redeploy as a new version (see step 4).
+ * Website enquiry webhook.
+ *
+ * Website → Next.js /api/enquiry → Google Apps Script → Sheet + Email
  */
-function doGet() {
-  return json({ ok: true, service: 'Chelliah Enterprises enquiry intake' });
-}
-
 function doPost(e) {
+  let lock = null;
+
   try {
-    const body = JSON.parse(e.postData.contents);
-    const props = PropertiesService.getScriptProperties();
-
-    if (body.secret !== props.getProperty('SHARED_SECRET')) {
-      return json({ ok: false, error: 'unauthorised' });
+    if (!e || !e.postData || !e.postData.contents) {
+      return jsonResponse({ success: false, message: 'Invalid request.' });
     }
 
-    const sheet = getSheet();
-
-    // Reject a repeat of an attempt that already landed.
-    const id = String(body.submissionId || '');
-    if (id && isDuplicate(sheet, id)) {
-      return json({ ok: true, duplicate: true });
+    let data;
+    try {
+      data = JSON.parse(e.postData.contents);
+    } catch (error) {
+      console.error('Invalid JSON payload:', error);
+      return jsonResponse({ success: false, message: 'Invalid JSON payload.' });
     }
 
+    // ---- Shared secret -------------------------------------------------
+    if (!SHARED_SECRET) {
+      console.error('SHARED_SECRET is not configured.');
+      return jsonResponse({ success: false, message: 'Webhook is not configured.' });
+    }
+    if (data.secret !== SHARED_SECRET) {
+      console.warn('Unauthorized webhook request.');
+      return jsonResponse({ success: false, message: 'Unauthorized.' });
+    }
+
+    // ---- Honeypot ------------------------------------------------------
+    // Reported as success so an automated submitter learns nothing. No row
+    // is written. (The API route already rejects these before this point.)
+    if (data.website) {
+      return jsonResponse({ success: true, message: 'Enquiry submitted successfully.' });
+    }
+
+    // ---- Read fields ---------------------------------------------------
+    const submissionId = String(data.submissionId || '').trim();
+    const name = String(data.name || '').trim();
+    const email = String(data.email || '').trim();
+    const phone = String(data.phone || '').trim();
+    const company = String(data.company || '').trim();
+    const service = String(data.service || '').trim();
+    const location = String(data.location || '').trim();
+    const message = String(data.message || '').trim();
+    const source = String(data.source || 'Website').trim();
+
+    // ---- Validate ------------------------------------------------------
+    if (!name || !phone || !service) {
+      return jsonResponse({ success: false, message: 'Name, phone and service are required.' });
+    }
+    if (!submissionId) {
+      return jsonResponse({ success: false, message: 'Submission ID is required.' });
+    }
+    if (submissionId.length > 200) {
+      return jsonResponse({ success: false, message: 'Invalid submission ID.' });
+    }
+    if (email && !isValidEmail(email)) {
+      return jsonResponse({ success: false, message: 'Please provide a valid email address.' });
+    }
+
+    const tooLong =
+      (name.length > 100 && 'Name is too long.') ||
+      (email.length > 150 && 'Email address is too long.') ||
+      (phone.length > 50 && 'Phone number is too long.') ||
+      (company.length > 150 && 'Company name is too long.') ||
+      (service.length > 150 && 'Service value is too long.') ||
+      (location.length > 250 && 'Project location is too long.') ||
+      (message.length > 5000 && 'Message is too long.') ||
+      (source.length > 150 && 'Source value is too long.');
+
+    if (tooLong) {
+      return jsonResponse({ success: false, message: tooLong });
+    }
+
+    if (!NOTIFY_EMAIL || !isValidEmail(NOTIFY_EMAIL)) {
+      console.error('NOTIFY_EMAIL is missing or invalid.');
+      return jsonResponse({ success: false, message: 'Email notification is not configured.' });
+    }
+
+    // ---- Sheet ---------------------------------------------------------
+    const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+    if (!spreadsheet) throw new Error('Unable to access the active spreadsheet.');
+
+    const sheet = spreadsheet.getSheetByName(SHEET_NAME);
+    if (!sheet) throw new Error('Sheet "' + SHEET_NAME + '" not found.');
+
+    // Serialised so two submissions landing together cannot interleave a
+    // duplicate check with an append.
+    lock = LockService.getScriptLock();
+    lock.waitLock(10000);
+
+    if (findSubmissionRow(sheet, submissionId)) {
+      return jsonResponse({
+        success: true,
+        message: 'Enquiry already submitted.',
+        duplicate: true,
+      });
+    }
+
+    const timestamp = new Date();
+
+    // A=Timestamp B=Submission ID C=Name D=Email E=Phone F=Company
+    // G=Service H=Location I=Message J=Source K=Status
     sheet.appendRow([
-      body.submittedAt || new Date().toISOString(),
-      id,
-      body.name || '',
-      body.email || '',
-      body.phone || '',
-      body.company || '',
-      body.service || '',
-      body.location || '',
-      body.message || '',
-      body.source || '',
-      'New',
+      timestamp, submissionId, name, email, phone, company,
+      service, location, message, source, 'New',
     ]);
 
-    notify(props.getProperty('NOTIFY_EMAIL'), body);
+    // ---- Notification email -------------------------------------------
+    const body = [
+      'New enquiry received from the Chelliah Enterprises website.',
+      '',
+      '----------------------------------------',
+      'ENQUIRY DETAILS',
+      '----------------------------------------',
+      '',
+      'Submission ID: ' + submissionId,
+      'Name: ' + name,
+      'Email: ' + (email || 'Not provided'),
+      'Phone: ' + (phone || 'Not provided'),
+      'Company: ' + (company || 'Not provided'),
+      'Service: ' + (service || 'Not specified'),
+      'Project Location: ' + (location || 'Not provided'),
+      'Source: ' + source,
+      '',
+      'Message:',
+      message || 'Not provided',
+      '',
+      'Received: ' + timestamp,
+    ].join('\n');
 
-    // MUST return a response. Without this the row is still written, but the
-    // website cannot confirm it and correctly reports the enquiry as failed.
-    return json({ ok: true });
-  } catch (err) {
-    return json({ ok: false, error: String(err) });
+    const emailOptions = {
+      to: NOTIFY_EMAIL,
+      subject: 'New Website Enquiry — ' + name,
+      body: body,
+      name: 'Chelliah Enterprises Website',
+    };
+    if (email) emailOptions.replyTo = email;
+
+    // The row is already saved at this point. If the mail quota is exhausted
+    // the enquiry must not be reported as lost, or the visitor retries, the
+    // duplicate check short-circuits, and the email is never sent at all.
+    try {
+      MailApp.sendEmail(emailOptions);
+    } catch (mailError) {
+      console.error('Notification email failed:', mailError);
+      sheet.getRange(sheet.getLastRow(), 11).setValue('New — email failed');
+    }
+
+    return jsonResponse({ success: true, message: 'Enquiry submitted successfully.' });
+
+  } catch (error) {
+    console.error('Enquiry processing error:', error);
+    return jsonResponse({
+      success: false,
+      message: 'Unable to process enquiry. Please try again.',
+    });
+
+  } finally {
+    if (lock) {
+      try {
+        lock.releaseLock();
+      } catch (error) {
+        console.error('Unable to release lock:', error);
+      }
+    }
   }
 }
 
-function getSheet() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
-  let sheet = ss.getSheetByName(SHEET_NAME);
-  if (!sheet) sheet = ss.insertSheet(SHEET_NAME);
-  if (sheet.getLastRow() === 0) {
-    sheet.appendRow(HEADERS);
-    sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight('bold');
-    sheet.setFrozenRows(1);
+/**
+ * Health check. Open the /exec URL in a browser; if you see this JSON the
+ * deployment is live and running this version of the code. If you instead
+ * see "Script function not found: doGet", publish a new version (step 4).
+ */
+function doGet() {
+  return jsonResponse({ ok: true, service: 'Chelliah Enterprises enquiry intake' });
+}
+
+/** Finds an existing Submission ID in column B. Returns the row, or null. */
+function findSubmissionRow(sheet, submissionId) {
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) return null;
+
+  const values = sheet.getRange(2, 2, lastRow - 1, 1).getValues();
+
+  for (let i = 0; i < values.length; i++) {
+    if (String(values[i][0] || '').trim() === submissionId) {
+      return i + 2;
+    }
   }
-  return sheet;
+  return null;
 }
 
-/** Scans recent rows only — enough to catch a retry, cheap on a long sheet. */
-function isDuplicate(sheet, id) {
-  const last = sheet.getLastRow();
-  if (last < 2) return false;
-  const from = Math.max(2, last - 50);
-  const ids = sheet.getRange(from, ID_COLUMN, last - from + 1, 1).getValues();
-  return ids.some(function (row) { return String(row[0]) === id; });
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-function notify(to, body) {
-  if (!to) return; // No recipient configured: the row is still saved.
-
-  const lines = [
-    'New website enquiry',
-    '',
-    'Name:     ' + (body.name || '—'),
-    'Phone:    ' + (body.phone || '—'),
-    'Email:    ' + (body.email || '—'),
-    'Company:  ' + (body.company || '—'),
-    'Service:  ' + (body.service || '—'),
-    'Location: ' + (body.location || '—'),
-    '',
-    'Message:',
-    body.message || '—',
-    '',
-    'Submitted from: ' + (body.source || '—'),
-    'Received: ' + (body.submittedAt || ''),
-  ];
-
-  MailApp.sendEmail({
-    to: to,
-    subject: 'Website enquiry — ' + (body.name || 'Unknown') + ' (' + (body.service || '') + ')',
-    body: lines.join('\n'),
-    replyTo: body.email || undefined,
-    name: 'Chelliah Enterprises Website',
-  });
-}
-
-function json(payload) {
+function jsonResponse(data) {
   return ContentService
-    .createTextOutput(JSON.stringify(payload))
+    .createTextOutput(JSON.stringify(data))
     .setMimeType(ContentService.MimeType.JSON);
 }
 ```

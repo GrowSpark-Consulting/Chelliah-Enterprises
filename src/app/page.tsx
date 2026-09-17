@@ -63,13 +63,17 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* Authorised applicator — a light band so the marks stand bare. */}
-      <section className={styles.brands} aria-labelledby="brands-heading">
+      {/* Clients — straight after the figures, so the proof reads together.
+          No bottom padding: the services section below brings its own. */}
+      <section className="section section--flush-bottom" aria-labelledby="clients-heading">
         <Container>
-          <h2 id="brands-heading" className="srOnly">
-            Authorised applicator
-          </h2>
-          <BrandStrip />
+          <SectionHeading
+            id="clients-heading"
+            label="Esteemed clients"
+            title="Trusted by industrial & commercial operators"
+            body="A selection of the organisations whose sites we have worked on."
+          />
+          <ClientMarquee className={styles.clients} />
         </Container>
       </section>
 
@@ -112,19 +116,6 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* Clients */}
-      <section className="section section--flush-top" aria-labelledby="clients-heading">
-        <Container>
-          <SectionHeading
-            id="clients-heading"
-            label="Esteemed clients"
-            title="Trusted by industrial & commercial operators"
-            body="A selection of the organisations whose sites we have worked on."
-          />
-          <ClientMarquee className={styles.clients} />
-        </Container>
-      </section>
-
       {/* Recent work */}
       <section
         className="section section--flush-top section--flush-bottom"
@@ -153,6 +144,17 @@ export default function HomePage() {
       </section>
 
       <Process />
+
+      {/* Authorised applicator — a light band so the marks stand bare, closing
+          the page's proof before the call to action. */}
+      <section className={styles.brands} aria-labelledby="brands-heading">
+        <Container>
+          <h2 id="brands-heading" className="srOnly">
+            Authorised applicator
+          </h2>
+          <BrandStrip />
+        </Container>
+      </section>
 
       <CTASection />
     </>

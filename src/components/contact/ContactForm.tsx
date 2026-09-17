@@ -60,6 +60,9 @@ const emptyEnquiry: Enquiry = {
  */
 const UNSPECIFIED_SERVICE = 'Other / Not sure';
 
+/** How long a send may run before the form explains the wait. */
+const SLOW_SEND_MS = 2500;
+
 const placeholderSets = {
   surface: {
     name: '',
@@ -135,6 +138,12 @@ export function ContactForm({ source = 'Website', tone = 'surface', glass }: Con
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'failed'>('idle');
   const [statusMessage, setStatusMessage] = useState('');
   const [sentEnquiry, setSentEnquiry] = useState<Enquiry | null>(null);
+  /**
+   * Set once a send has run past a few seconds. The sheet sits behind Google
+   * Apps Script, which routinely takes that long, so the wait is explained
+   * rather than left to look like a hang.
+   */
+  const [slowSend, setSlowSend] = useState(false);
 
   const update = (field: FieldName) => (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
@@ -173,6 +182,8 @@ export function ContactForm({ source = 'Website', tone = 'surface', glass }: Con
 
     inFlight.current = true;
     setStatus('sending');
+    setSlowSend(false);
+    const slowTimer = window.setTimeout(() => setSlowSend(true), SLOW_SEND_MS);
 
     const submitted = values;
     const result = await submitEnquiry(submitted, {
@@ -181,6 +192,8 @@ export function ContactForm({ source = 'Website', tone = 'surface', glass }: Con
       website: honeypot.current,
     });
 
+    window.clearTimeout(slowTimer);
+    setSlowSend(false);
     inFlight.current = false;
 
     if (result.ok) {
@@ -345,6 +358,12 @@ export function ContactForm({ source = 'Website', tone = 'surface', glass }: Con
       </p>
 
       <div aria-live="polite">
+        {status === 'sending' && slowSend && (
+          <p className={styles.pending}>
+            Still saving your enquiry — this usually takes a few seconds. Please keep this page
+            open.
+          </p>
+        )}
         {status === 'sent' && (
           <div className={`${styles.status} ${styles.statusSuccess}`}>
             <CheckCircle2 size={18} strokeWidth={2} aria-hidden />

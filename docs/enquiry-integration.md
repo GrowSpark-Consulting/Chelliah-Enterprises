@@ -141,11 +141,14 @@ In that spreadsheet: **Extensions → Apps Script**. Replace `Code.gs` with:
 ```javascript
 const SHEET_NAME = 'Enquiries';
 
-const SHARED_SECRET =
-  PropertiesService.getScriptProperties().getProperty('SHARED_SECRET');
+/** How long a written Submission ID is remembered in the cache (6h, the max). */
+const DUPLICATE_CACHE_SECONDS = 21600;
 
-const NOTIFY_EMAIL =
-  PropertiesService.getScriptProperties().getProperty('NOTIFY_EMAIL');
+// One property-service call rather than one per property: this runs on every
+// request, including the health check.
+const PROPS = PropertiesService.getScriptProperties().getProperties();
+const SHARED_SECRET = PROPS.SHARED_SECRET;
+const NOTIFY_EMAIL = PROPS.NOTIFY_EMAIL;
 
 /**
  * Website enquiry webhook.
@@ -241,7 +244,7 @@ function doPost(e) {
     lock = LockService.getScriptLock();
     lock.waitLock(10000);
 
-    if (findSubmissionRow(sheet, submissionId)) {
+    if (isDuplicate(sheet, submissionId)) {
       return jsonResponse({
         success: true,
         message: 'Enquiry already submitted.',
@@ -257,6 +260,18 @@ function doPost(e) {
       timestamp, submissionId, name, email, phone, company,
       service, location, message, source, 'New',
     ]);
+
+    // Taken while the lock is still held. Once it is released another
+    // enquiry can append, and getLastRow() would then point at that row.
+    const row = sheet.getLastRow();
+    CacheService.getScriptCache()
+      .put(cacheKey(submissionId), '1', DUPLICATE_CACHE_SECONDS);
+
+    // The row is saved; the email does not need the lock. Releasing it now
+    // means an enquiry arriving at the same moment waits for this sheet
+    // write only, not for this one's email as well.
+    lock.releaseLock();
+    lock = null;
 
     // ---- Notification email -------------------------------------------
     const body = [
@@ -296,7 +311,7 @@ function doPost(e) {
       MailApp.sendEmail(emailOptions);
     } catch (mailError) {
       console.error('Notification email failed:', mailError);
-      sheet.getRange(sheet.getLastRow(), 11).setValue('New — email failed');
+      sheet.getRange(row, 11).setValue('New — email failed');
     }
 
     return jsonResponse({ success: true, message: 'Enquiry submitted successfully.' });
@@ -328,19 +343,32 @@ function doGet() {
   return jsonResponse({ ok: true, service: 'Chelliah Enterprises enquiry intake' });
 }
 
-/** Finds an existing Submission ID in column B. Returns the row, or null. */
-function findSubmissionRow(sheet, submissionId) {
+/**
+ * Whether this Submission ID has already been written.
+ *
+ * The cache answers a recent retry without touching the sheet at all. Past
+ * that, a TextFinder searches column B on Google's side instead of
+ * downloading the whole column — which is what the check used to do, and
+ * why it got slower with every enquiry the sheet held.
+ */
+function isDuplicate(sheet, submissionId) {
+  if (CacheService.getScriptCache().get(cacheKey(submissionId))) return true;
+
   const lastRow = sheet.getLastRow();
-  if (lastRow < 2) return null;
+  if (lastRow < 2) return false;
 
-  const values = sheet.getRange(2, 2, lastRow - 1, 1).getValues();
+  const match = sheet
+    .getRange(2, 2, lastRow - 1, 1)
+    .createTextFinder(submissionId)
+    .matchEntireCell(true)
+    .matchCase(true)
+    .findNext();
 
-  for (let i = 0; i < values.length; i++) {
-    if (String(values[i][0] || '').trim() === submissionId) {
-      return i + 2;
-    }
-  }
-  return null;
+  return match !== null;
+}
+
+function cacheKey(submissionId) {
+  return 'enquiry:' + submissionId;
 }
 
 function isValidEmail(email) {
@@ -410,6 +438,41 @@ Production, Preview and Development. Redeploy.
 Submit a test enquiry from `/contact`. You should see a new row in the sheet
 and an email at `NOTIFY_EMAIL`. Until the variables are set, the form shows
 "The enquiry service is not configured yet" rather than a false success.
+
+---
+
+## Why a submission takes a few seconds
+
+Most of the wait is Google's Apps Script platform, not this code. Measured
+against the live deployment on 2026-09-17, with calls that write nothing:
+
+| Call | Round trip |
+| --- | --- |
+| `doGet` health check (returns JSON, does nothing else) | 7–11 s |
+| `doPost` rejected on its first line | ~2 s |
+| One outlier | 58 s |
+
+Every call makes two hops — `script.google.com`, then a redirect to
+`script.googleusercontent.com` — and starts a script container, before the
+script itself does any work. A real submission then opens the sheet, takes the
+lock, checks for a duplicate, appends the row and sends the email.
+
+What is already done to keep that tolerable:
+
+- **The duplicate check no longer grows with the sheet.** It used to download
+  the whole Submission ID column on every enquiry; it now checks a cache, then
+  searches server-side.
+- **The lock is released before the email is sent**, so simultaneous enquiries
+  do not queue behind each other's mail.
+- **The host cannot cut a slow submission short.** `route.ts` sets
+  `maxDuration` above its own 15 s webhook timeout.
+- **The form explains the wait.** After 2.5 s it says the enquiry is still
+  being saved, rather than looking frozen.
+
+The two changes that would make submissions genuinely fast are structural:
+send the notification email from a time-driven trigger instead of inside the
+request, or replace Apps Script with a direct Google Sheets API call from
+`route.ts`. Both need setup outside this repo.
 
 ---
 

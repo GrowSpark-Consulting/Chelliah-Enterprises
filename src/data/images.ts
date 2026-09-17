@@ -186,6 +186,83 @@ const library = [
     // makes this read as a working plant rather than an empty room.
     focusMobile: '34% 52%',
   },
+  {
+    id: 'pink-epoxy-corridor-application',
+    src: '/project.jpeg',
+    alt: 'Two applicators rolling a bright pink epoxy coating along a corridor inside a working facility, the wet floor reflecting the ceiling lights, with equipment cabinets on one side and electrical panels on the other.',
+    categories: ['hero', 'industrial', 'epoxy', 'wip'],
+    label: 'Epoxy corridor coating',
+    // Like the home hero file, this one arrives with the navy fall-off already
+    // graded onto its left edge, so the masthead wash has less work to do.
+    // Both applicators sit centre-right with their heads close to the top of
+    // the frame. A masthead band crops ~250px off a 16:9 file at this width,
+    // so the crop is held high: centring it decapitated both of them.
+    focus: '52% 20%',
+    // Narrow crops cut in from the sides, so bias right to keep both men and
+    // the lit floor rather than the equipment racks.
+    focusMobile: '66% 48%',
+  },
+  {
+    id: 'branded-hard-hat-on-drawings',
+    src: '/about.jpeg',
+    alt: 'A white hard hat printed with the Chelliah Enterprises name resting on rolled architectural drawings on a workbench, with the interior of a building under construction out of focus behind it.',
+    categories: ['hero', 'general'],
+    label: 'Site documentation',
+    // The helmet sits in the right third and reads low in the frame; hold
+    // below centre so a wide crop does not cut its brim off.
+    focus: '50% 54%',
+    focusMobile: '74% 56%',
+  },
+  {
+    id: 'office-signage-wall',
+    src: '/contact.jpeg',
+    alt: 'A concrete signage wall at a building entrance carrying the Chelliah Enterprises name and the line Waterproofing & Epoxy Works, with glazing and planting beyond it.',
+    categories: ['hero', 'general'],
+    label: 'Office signage',
+    // The lettering occupies the upper right of the frame, so a wide crop is
+    // held high to keep the whole sign in shot.
+    focus: '50% 40%',
+    // A phone-width crop only keeps ~390 of 753 rendered pixels, and the
+    // lettering runs to the right edge of the file, so the crop is pushed
+    // most of the way right — at 76% it cut "EPOXY WORKS" mid-word.
+    focusMobile: '92% 40%',
+  },
+  {
+    id: 'waterproofing-terrace-before-after',
+    src: '/images/projects/waterproofing-terrace-before-after.jpeg',
+    alt: 'A palm-lined terrace walkway shown before and after waterproofing, the finished half coated in blue waterproof paint, alongside a diagram of the waterproof coating, cement screed, brickbats coba and RCC slab layers.',
+    categories: ['waterproofing', 'finished'],
+  },
+  {
+    id: 'cooling-tiles-terrace-laying',
+    src: '/images/projects/cooling-tiles-terrace-laying.jpeg',
+    alt: 'A worker spreading tile adhesive with a notched trowel to lay red cooling tiles on a terrace.',
+    categories: ['wip', 'general'],
+  },
+  {
+    id: 'structural-repair-collage',
+    src: '/images/projects/structural-repair-collage.jpeg',
+    alt: 'Two workers applying red epoxy coating with rollers, with inset photographs of a finished grey epoxy floor and a wide view of the completed hall.',
+    categories: ['wip', 'finished', 'general'],
+  },
+  {
+    id: 'residential-terrace-epoxy-floor',
+    src: '/images/projects/residential-terrace-epoxy-floor.jpeg',
+    alt: 'A finished hall with a glossy beige epoxy floor reflecting the ceiling fans and windows.',
+    categories: ['epoxy', 'finished'],
+  },
+  {
+    id: 'industrial-basement-red-epoxy-floor',
+    src: '/images/projects/industrial-basement-red-epoxy-floor.jpeg',
+    alt: 'A red epoxy floor walkway inside an industrial warehouse, running between storage racks and a shop-floor-management signage board.',
+    categories: ['epoxy', 'industrial', 'finished'],
+  },
+  {
+    id: 'office-institute-grey-epoxy-floor',
+    src: '/images/projects/office-institute-grey-epoxy-floor.jpeg',
+    alt: 'A finished grey epoxy floor in a bright office hall with a large window wall and a blue branded feature wall.',
+    categories: ['epoxy', 'finished'],
+  },
 ] as const satisfies readonly SiteImage[];
 
 export const imageLibrary: readonly SiteImage[] = library;
@@ -221,13 +298,13 @@ export const imageSlots = {
   /** Services page masthead. */
   servicesHero: 'green-epoxy-roller-application',
   /** About page masthead. */
-  aboutHero: null,
+  aboutHero: 'branded-hard-hat-on-drawings',
   /** About page — the large editorial image beside the company introduction. */
   aboutEditorial: 'company-team-and-sports-floor-composite',
   /** Projects page masthead. */
-  projectsHero: null,
+  projectsHero: 'pink-epoxy-corridor-application',
   /** Contact page masthead — kept quiet so it never fights the form. */
-  contactHero: null,
+  contactHero: 'office-signage-wall',
   /** The closing call-to-action band carried by every major page. */
   cta: null,
 } satisfies Record<string, ImageId | null>;
@@ -246,6 +323,9 @@ export function slotImage(slot: ImageSlot): SiteImage | undefined {
  * section then shows the placeholder naming the shot it needs.
  */
 export const serviceImages: Partial<Record<string, ImageId>> = {
+  waterproofing: 'waterproofing-terrace-before-after',
+  'weathering-course': 'cooling-tiles-terrace-laying',
+  'structural-repair': 'structural-repair-collage',
   'epoxy-flooring': 'epoxy-projects-composite',
   'membrane-waterproofing': 'app-membrane-torch-applied-roof',
   'pu-flooring': 'resin-floor-processing-hall',
@@ -258,7 +338,11 @@ export function serviceImage(slug: string): SiteImage | undefined {
 }
 
 /** Project record id → photograph, keyed by the `id` in data/projects.ts. */
-export const projectImages: Partial<Record<string, ImageId>> = {};
+export const projectImages: Partial<Record<string, ImageId>> = {
+  'wp-terrace-guduvancheri': 'residential-terrace-epoxy-floor',
+  'wp-basement-chengalpattu': 'industrial-basement-red-epoxy-floor',
+  'wp-apartment-tambaram': 'office-institute-grey-epoxy-floor',
+};
 
 export function projectImage(id: string): SiteImage | undefined {
   return getImage(projectImages[id] ?? null);

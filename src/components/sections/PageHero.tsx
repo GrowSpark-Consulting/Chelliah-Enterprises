@@ -62,7 +62,14 @@ export function PageHero({
             sizes="100vw"
             quality={80}
             className={styles.image}
-            style={{ '--focus': photo.focus ?? 'center center' } as CSSProperties}
+            style={
+              {
+                '--focus': photo.focus ?? 'center center',
+                // Narrow viewports crop in from the sides, so a subject sitting
+                // in the right third needs its own crop point or it is lost.
+                '--focus-mobile': photo.focusMobile ?? photo.focus ?? 'center center',
+              } as CSSProperties
+            }
           />
           <div className={cx(styles.scrim, quiet && styles.scrimQuiet)} aria-hidden />
         </div>

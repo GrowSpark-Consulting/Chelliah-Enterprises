@@ -87,16 +87,6 @@
   min-width: 0;
 }
 
-.placeholderNote {
-  margin-top: var(--space-6);
-  padding: var(--space-4) var(--space-5);
-  border-left: 2px solid var(--accent);
-  background: var(--surface);
-  font-size: 0.8125rem;
-  line-height: 1.6;
-  color: var(--muted-strong);
-}
-
 @media (max-width: 1023px) {
   .whyGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -503,6 +503,24 @@ textarea {
   font-size: 0.9375rem;
 }
 
+/*
+ * Buttons never wrap their label, so on the narrowest phones the longest of
+ * them — "Book a site inspection" — was wider than the container and pushed
+ * out of it. The label keeps its single line; the padding and tracking give
+ * way instead, which is the part that was costing the most room.
+ */
+@media (max-width: 359px) {
+  .btn {
+    padding-inline: 16px;
+    letter-spacing: 0.04em;
+  }
+
+  .btn--lg {
+    padding-inline: 16px;
+    font-size: 0.875rem;
+  }
+}
+
 /* ==========================================================================
    Forms
    ========================================================================== */

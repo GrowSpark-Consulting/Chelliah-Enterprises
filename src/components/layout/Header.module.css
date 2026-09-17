@@ -281,11 +281,38 @@
   }
 
   .brandDescriptor {
-    font-size: 0.5625rem;
     letter-spacing: 0.12em;
   }
 
   .actions .callButton {
     display: none;
+  }
+
+  /* 32px between the lockup and the menu button is more than a phone can
+     spare: at 320px it was squeezing the brand text, which is nowrap, so the
+     name and the descriptor both spilled out of their own boxes. */
+  .bar {
+    gap: var(--space-4);
+  }
+}
+
+/*
+ * Below 360px the descriptor cannot be set at a readable size and still clear
+ * the menu button, so it gives way to the company name rather than shrinking
+ * into illegibility. The descriptor still appears in the footer and in the
+ * page copy, so nothing is lost.
+ */
+@media (max-width: 359px) {
+  .brandDescriptor {
+    display: none;
+  }
+
+  .brandMark {
+    width: 32px;
+    height: 32px;
+  }
+
+  .brandName {
+    font-size: 0.875rem;
   }
 }

@@ -281,6 +281,15 @@
   font-weight: 600;
 }
 
+/* Shown only while a slow send is still running. Plain text, not a status
+   box: nothing has succeeded or failed yet. */
+.pending {
+  margin-top: var(--space-3);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
 .statusAction {
   display: inline-flex;
   align-items: center;
@@ -415,6 +424,7 @@
 
 .glass .intro,
 .glass .footnote,
+.glass .pending,
 .glass :global(.field) > label,
 .glass :global(.field .optional) {
   color: var(--glass-ink-soft);

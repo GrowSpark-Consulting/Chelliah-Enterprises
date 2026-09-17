@@ -15,6 +15,15 @@ import type { Enquiry } from '@/lib/enquiry';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
+/**
+ * Seconds the host may run this function. Set explicitly because Apps Script
+ * is slow — a routine submission takes several seconds — and a host default
+ * shorter than WEBHOOK_TIMEOUT_MS would kill the request mid-flight. The
+ * visitor would then see a bare gateway error, often for an enquiry the
+ * sheet had already saved. Must stay above WEBHOOK_TIMEOUT_MS.
+ */
+export const maxDuration = 20;
+
 /** How long to wait on the Apps Script before giving up. */
 const WEBHOOK_TIMEOUT_MS = 15000;
 

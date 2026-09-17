@@ -10,12 +10,12 @@
 
 /*
  * The authorised-applicator band. A light ground is what lets the logos stand
- * bare, so this sits on the page colour rather than inside the dark section
- * above it, with a hairline separating the two claims.
+ * bare. A hairline separates it from the process section above, which shares
+ * that ground; below, the navy call-to-action band closes it on its own.
  */
 .brands {
   padding-block: clamp(44px, 5vw, 68px);
-  border-bottom: 1px solid var(--border-light);
+  border-top: 1px solid var(--border-light);
 }
 
 .whyGrid {

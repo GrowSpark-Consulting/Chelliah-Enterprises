@@ -21,6 +21,35 @@
   transition: transform var(--t-image) var(--ease);
 }
 
+/*
+ * A file that arrives on its own white ground — a supplied composite with
+ * brushed edges. Boxing it produced a white panel inside a hairline rectangle
+ * sitting on the off-white page, so the box goes and the file is multiplied
+ * into the ground instead: its white resolves to exactly the page colour and
+ * the brushwork feathers out. Multiplying by #f7f7f5 costs the photographs
+ * about 3% of their value, which is below the eye's threshold.
+ */
+.bleed {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.bleed img {
+  mix-blend-mode: multiply;
+  /*
+   * `contain`, not `cover`. Cover fills the box by cropping, and on a file
+   * whose edges are brushwork that cut the feathered edge into a straight
+   * line down each side — which is exactly what a border looks like. Contain
+   * shows the file whole, and the slack it leaves is transparent, so the page
+   * runs behind it.
+   */
+  object-fit: contain;
+  /* The supplied composite is already graded. The trim the other photographs
+     share only drains it, and the point here is to match the file. */
+  filter: none;
+}
+
 /* Parent card / figure opts in with data-hover="true" on a wrapping element. */
 :global(.hoverScale):hover .frame img,
 .frame[data-hover='true']:hover img {

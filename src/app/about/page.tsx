@@ -151,9 +151,16 @@ export default function AboutPage() {
             Company record
           </h2>
           <StatStrip items={stats} tone="ink" />
-          <div className={styles.statsFooter}>
-            <BrandStrip tone="ink" />
-          </div>
+        </Container>
+      </section>
+
+      {/* Authorised applicator — a light band so the marks stand bare. */}
+      <section className={styles.brands} aria-labelledby="about-brands-heading">
+        <Container>
+          <h2 id="about-brands-heading" className="srOnly">
+            Authorised applicator
+          </h2>
+          <BrandStrip />
         </Container>
       </section>
 

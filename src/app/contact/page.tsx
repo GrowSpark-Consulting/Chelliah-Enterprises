@@ -53,7 +53,16 @@ export default function ContactPage() {
           <p className={`lede ${styles.hoursBody}`}>
             An authorised applicator for industry-leading branded systems.
           </p>
-          <BrandStrip tone="ink" heading="Systems we apply" />
+        </Container>
+      </section>
+
+      {/* Authorised applicator — a light band so the marks stand bare. */}
+      <section className={styles.brands} aria-labelledby="systems-heading">
+        <Container>
+          <h2 id="systems-heading" className="srOnly">
+            Systems we apply
+          </h2>
+          <BrandStrip heading="Systems we apply" />
         </Container>
       </section>
     </>

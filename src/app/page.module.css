@@ -72,8 +72,8 @@
   color: var(--muted-strong);
 }
 
-.clientNote {
-  margin-top: var(--space-4);
+.clients {
+  margin-top: var(--space-10);
 }
 
 .workGrid {

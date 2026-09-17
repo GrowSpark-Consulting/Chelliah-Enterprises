@@ -1,13 +1,14 @@
 ﻿'use client';
 
 import { useId, useRef, useState } from 'react';
-import type { ChangeEvent, FormEvent } from 'react';
+import type { CSSProperties, ChangeEvent, FormEvent } from 'react';
 import { AlertCircle, CheckCircle2, Send } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { WhatsAppIcon } from '@/components/ui/WhatsAppIcon';
 import { enquiryServices } from '@/data/site';
 import { cx } from '@/lib/cx';
 import { enquiryWhatsAppLink, submitEnquiry, type Enquiry } from '@/lib/enquiry';
+import type { GlassTheme } from '@/lib/glass';
 import styles from './ContactForm.module.css';
 
 type ContactFormProps = {
@@ -15,11 +16,15 @@ type ContactFormProps = {
   source?: string;
   /**
    * `surface` — the default off-white panel, for use on a page ground.
-   * `card` — a white floating card with a hairline border and a soft shadow,
-   * for the home hero where the form sits over a photograph and has to read
-   * as a separate object rather than a tinted area of the image.
+   * `card` — a floating card with a hairline border and a soft shadow, for the
+   * home hero where the form sits over a photograph.
    */
   tone?: 'surface' | 'card';
+  /**
+   * Turns the card into translucent glass tinted from the photograph behind
+   * it. Measured on the server; without it the card stays opaque white.
+   */
+  glass?: GlassTheme;
 };
 
 type FieldName = keyof Enquiry;
@@ -109,8 +114,9 @@ function FieldError({ id, message }: { id: string; message?: string }) {
   );
 }
 
-export function ContactForm({ source = 'Website', tone = 'surface' }: ContactFormProps) {
+export function ContactForm({ source = 'Website', tone = 'surface', glass }: ContactFormProps) {
   const isCard = tone === 'card';
+  const glassTheme = isCard ? glass : undefined;
   const placeholder = placeholderSets[tone];
   const id = useId();
   const formRef = useRef<HTMLFormElement>(null);
@@ -210,7 +216,16 @@ export function ContactForm({ source = 'Website', tone = 'surface' }: ContactFor
   return (
     <form
       ref={formRef}
-      className={cx(styles.form, tone === 'card' && styles.formCard)}
+      className={cx(styles.form, isCard && styles.formCard, glassTheme && styles.glass)}
+      data-glass={glassTheme?.mode}
+      style={
+        glassTheme
+          ? ({
+              '--glass-light': glassTheme.light,
+              '--glass-dark': glassTheme.dark,
+            } as CSSProperties)
+          : undefined
+      }
       onSubmit={handleSubmit}
       noValidate
     >

@@ -7,6 +7,7 @@ import { Container } from '@/components/ui/Container';
 import { SectionLabel } from '@/components/ui/SectionLabel';
 import { slotImage } from '@/data/images';
 import { site } from '@/data/site';
+import { glassThemeFor } from '@/lib/glass.server';
 import { generalEnquiry } from '@/lib/whatsapp';
 import styles from './Hero.module.css';
 
@@ -23,8 +24,11 @@ const trustIndicators = [
   { icon: Settings, label: 'Quality execution' },
 ];
 
-export function Hero() {
+export async function Hero() {
   const photo = slotImage('homeHero');
+  // The enquiry card's tint is measured from this photograph, so a new hero
+  // image brings a matching card with it.
+  const glass = photo ? await glassThemeFor(photo.src) : undefined;
 
   return (
     <section className={`onNavy ${styles.hero}`} aria-labelledby="hero-heading">
@@ -86,7 +90,7 @@ export function Hero() {
             </div>
 
             <div className={styles.enquiry}>
-              <ContactForm source="Home — hero" tone="card" />
+              <ContactForm source="Home — hero" tone="card" glass={glass} />
             </div>
           </div>
         </Container>

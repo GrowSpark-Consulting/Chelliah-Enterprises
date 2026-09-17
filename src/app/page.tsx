@@ -13,7 +13,7 @@ import { Container } from '@/components/ui/Container';
 import { Reveal } from '@/components/ui/Reveal';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { featuredServices } from '@/data/services';
-import { PROJECTS_ARE_PLACEHOLDERS, projects } from '@/data/projects';
+import { projects } from '@/data/projects';
 import { site, stats } from '@/data/site';
 import styles from './page.module.css';
 
@@ -126,7 +126,10 @@ export default function HomePage() {
       </section>
 
       {/* Recent work */}
-      <section className="section section--flush-top" aria-labelledby="work-heading">
+      <section
+        className="section section--flush-top section--flush-bottom"
+        aria-labelledby="work-heading"
+      >
         <Container>
           <SectionHeading
             id="work-heading"
@@ -146,11 +149,6 @@ export default function HomePage() {
               </Reveal>
             ))}
           </ul>
-          {PROJECTS_ARE_PLACEHOLDERS && (
-            <p className={styles.placeholderNote}>
-              Indicative project records. Verified site records and photography are being added.
-            </p>
-          )}
         </Container>
       </section>
 

@@ -299,6 +299,24 @@ const library = [
     alt: 'A worker rolling red epoxy coating onto a floor, with a Jotun paint tin standing on the wet surface nearby.',
     categories: ['epoxy', 'wip'],
   },
+  {
+    id: 'food-processing-warehouse-floor',
+    src: '/images/projects/food-processing-warehouse-floor.jpeg',
+    alt: 'A finished grey resin floor with yellow aisle marking in a warehouse, running between tall pallet racking with a forklift parked at the far end.',
+    categories: ['pu', 'industrial', 'finished'],
+  },
+  {
+    id: 'electronics-assembly-esd-floor',
+    src: '/images/projects/electronics-assembly-esd-floor.jpeg',
+    alt: 'A finished light grey ESD floor with yellow demarcation lines running down an electronics assembly line, past workstations with monitors on either side.',
+    categories: ['esd', 'industrial', 'finished'],
+  },
+  {
+    id: 'coastal-factory-column-repair',
+    src: '/images/projects/coastal-factory-column-repair.jpeg',
+    alt: 'A worker in hi-vis and a hard hat applying repair render to an RCC column with exposed reinforcement, on a construction site with a crane in the background.',
+    categories: ['industrial', 'wip'],
+  },
 ] as const satisfies readonly SiteImage[];
 
 export const imageLibrary: readonly SiteImage[] = library;
@@ -384,6 +402,9 @@ export const projectImages: Partial<Record<string, ImageId>> = {
   'ep-machining-oragadam': 'machining-plant-epoxy-floor',
   'ep-warehouse-sriperumbudur': 'distribution-warehouse-epoxy-floor',
   'ep-welding-ambattur': 'welding-unit-epoxy-coating',
+  'pu-food-chennai': 'food-processing-warehouse-floor',
+  'esd-electronics-sriperumbudur': 'electronics-assembly-esd-floor',
+  'st-coastal-thoothukudi': 'coastal-factory-column-repair',
 };
 
 export function projectImage(id: string): SiteImage | undefined {

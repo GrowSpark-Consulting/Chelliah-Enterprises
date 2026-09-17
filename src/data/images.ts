@@ -22,6 +22,8 @@
  * shown.
  */
 
+import type { ImageRatio } from '@/components/ui/ImageFrame';
+
 /** How a photograph may be used. One image can belong to several. */
 export type ImageCategory =
   /** A. Strong enough to carry a full-bleed hero or background band. */
@@ -65,6 +67,23 @@ export type SiteImage = {
   focus?: string;
   /** object-position for narrow (portrait) crops, where more is cropped away. */
   focusMobile?: string;
+  /**
+   * Overrides the frame's own aspect ratio. Set this only where cropping the
+   * file would destroy it — a composite of several panels, for instance, is
+   * not a photograph you can crop into and must be shown whole.
+   */
+  ratio?: ImageRatio;
+  /**
+   * Set for a file that arrives on its own white ground — a supplied
+   * composite with brushed or torn edges, rather than a photograph that
+   * fills its frame edge to edge.
+   *
+   * The frame then drops its border and lets the file multiply into the page,
+   * so the white becomes the page colour and the edges feather out. Without
+   * it such a file reads as a white panel pasted onto the off-white ground.
+   * Never set it for an image shown on a dark section: multiply would sink it.
+   */
+  bleed?: boolean;
 };
 
 /* ── The library ──────────────────────────────────────────────────────── */
@@ -93,6 +112,79 @@ const library = [
     // crop is vertical: hold it high enough to keep him whole in frame.
     focus: '50% 36%',
     focusMobile: '70% 42%',
+  },
+  {
+    id: 'app-membrane-torch-applied-roof',
+    src: '/HDPE.png',
+    alt: 'A worker torch-applying an APP bitumen membrane along a rooftop slab, the roll part-laid ahead of him and a second operative bedding down an earlier run further along the roof.',
+    categories: ['waterproofing', 'wip'],
+    label: 'Membrane waterproofing',
+    // The frame carries a light diagonal flare across its right-hand edge;
+    // biasing the crop left keeps the applicator and the roll central and
+    // pushes most of that edge out of a 4:3 frame.
+    focus: '38% 50%',
+    focusMobile: '38% 50%',
+  },
+  {
+    id: 'esd-floor-electronics-assembly',
+    src: '/epu_esd.png',
+    alt: 'A grey conductive ESD floor running the length of an electronics assembly area, marked with yellow demarcation lines and an ESD warning triangle, with anti-static workbenches and an "ESD protected area" sign along the left-hand side.',
+    categories: ['industrial', 'esd', 'finished'],
+    label: 'ESD flooring',
+    // The frame runs down the aisle with the vanishing point high and right.
+    // Holding the crop slightly above centre keeps the marked floor and the
+    // benches in shot rather than filling a wide frame with bare foreground.
+    focus: '50% 42%',
+    focusMobile: '55% 45%',
+  },
+  {
+    id: 'vacuum-dewatering-concrete-slab',
+    src: '/vacum.png',
+    alt: 'Two operatives in hi-vis vests and hard hats drawing water off a freshly laid concrete slab with suction mats, the hoses running back to a wheeled vacuum dewatering unit standing on the wet floor of a new shed.',
+    categories: ['industrial', 'wip'],
+    label: 'Vacuum dewatering',
+    // The plant and both operatives sit across the left half of the frame and
+    // the slab runs away to the right. A 4:3 crop takes the sides off a 3:2
+    // file, so the crop is biased left to keep the machine and the crew whole.
+    focus: '40% 50%',
+    focusMobile: '35% 50%',
+  },
+  {
+    id: 'company-team-and-sports-floor-composite',
+    src: '/about.png',
+    alt: 'Three panels: three men standing together on a covered sports court finished in green and red coating; two men rolling red sports floor coating across a hall; and a man rolling green floor coating across a room in a bare building.',
+    categories: ['general', 'wip', 'finished'],
+    label: 'Sports floor coating projects',
+    // Three panels behind a brushed edge, not a single frame. At 2:1 the file
+    // is shown effectively whole — an editorial crop would cut the outer two
+    // panels in half and take the brushwork with them.
+    ratio: '2/1',
+    // The file's own white ground carries those brushed edges, so it is
+    // multiplied into the page rather than boxed in a frame.
+    bleed: true,
+  },
+  {
+    id: 'epoxy-projects-composite',
+    src: '/epoxyy.png',
+    alt: 'Four Chelliah Enterprises epoxy projects: an applicator spreading grey epoxy across a plant floor, a green floor with yellow safety lines being coated in a production hall, a cream self-levelling epoxy being worked with a notched trowel, and a red outdoor sports surface being rolled.',
+    categories: ['industrial', 'epoxy', 'wip', 'finished'],
+    label: 'Epoxy flooring projects',
+    // A composite of four panels, not a single frame: cropping into it cuts
+    // the panels on its edges in half, so it is shown at its own ratio.
+    ratio: '3/2',
+  },
+  {
+    id: 'resin-floor-processing-hall',
+    src: '/Polyurethane.png',
+    alt: 'A seamless light-grey resin floor running the length of a clean processing hall, its gloss surface reflecting the ceiling lights, with guarded machinery wrapped in protective sheeting along one wall.',
+    categories: ['industrial', 'pu', 'finished'],
+    label: 'PU flooring',
+    // The floor is the subject and fills the lower two thirds; a 4:3 frame
+    // crops only width, and nothing important sits at either edge.
+    focus: '50% 52%',
+    // Narrow crops lose the machinery bay first, which is the context that
+    // makes this read as a working plant rather than an empty room.
+    focusMobile: '34% 52%',
   },
   {
     id: 'pink-epoxy-corridor-application',
@@ -208,7 +300,7 @@ export const imageSlots = {
   /** About page masthead. */
   aboutHero: 'branded-hard-hat-on-drawings',
   /** About page — the large editorial image beside the company introduction. */
-  aboutEditorial: null,
+  aboutEditorial: 'company-team-and-sports-floor-composite',
   /** Projects page masthead. */
   projectsHero: 'pink-epoxy-corridor-application',
   /** Contact page masthead — kept quiet so it never fights the form. */
@@ -234,7 +326,11 @@ export const serviceImages: Partial<Record<string, ImageId>> = {
   waterproofing: 'waterproofing-terrace-before-after',
   'weathering-course': 'cooling-tiles-terrace-laying',
   'structural-repair': 'structural-repair-collage',
-  'epoxy-flooring': 'epoxy-application-plant-floor',
+  'epoxy-flooring': 'epoxy-projects-composite',
+  'membrane-waterproofing': 'app-membrane-torch-applied-roof',
+  'pu-flooring': 'resin-floor-processing-hall',
+  'esd-flooring': 'esd-floor-electronics-assembly',
+  'vacuum-dewatering-flooring': 'vacuum-dewatering-concrete-slab',
 };
 
 export function serviceImage(slug: string): SiteImage | undefined {

@@ -17,10 +17,10 @@ import styles from './Hero.module.css';
  * once and sourced.
  */
 const trustIndicators = [
-  { icon: ShieldCheck, lines: ['Durable', 'surfaces'] },
-  { icon: Building2, lines: ['Industrial', 'expertise'] },
-  { icon: Users, lines: ['Trusted', 'partner'] },
-  { icon: Settings, lines: ['Quality', 'execution'] },
+  { icon: ShieldCheck, label: 'Durable surfaces' },
+  { icon: Building2, label: 'Industrial expertise' },
+  { icon: Users, label: 'Trusted partner' },
+  { icon: Settings, label: 'Quality execution' },
 ];
 
 export function Hero() {
@@ -55,63 +55,70 @@ export function Hero() {
         </div>
       )}
 
-      <Container className={styles.inner}>
-        <div className={styles.grid}>
-          <div className={styles.copy}>
-            <SectionLabel>
-              {site.name} · Since {site.foundedYear} · GST registered
-            </SectionLabel>
+      <div className={styles.body}>
+        <Container className={styles.inner}>
+          <div className={styles.grid}>
+            <div className={styles.copy}>
+              <SectionLabel>
+                {site.name} · Since {site.foundedYear} · GST registered
+              </SectionLabel>
 
-            <h1 id="hero-heading" className={styles.title}>
-              Waterproofing &amp; flooring solutions <em>built to last</em>
-            </h1>
+              <h1 id="hero-heading" className={styles.title}>
+                Waterproofing &amp; flooring solutions <em>built to last</em>
+              </h1>
 
-            <p className={styles.lede}>
-              Epoxy, PU and ESD flooring, terrace and basement waterproofing, and structural
-              repair for factories, commercial buildings and homes — delivered by an authorised
-              applicator for six manufacturer systems across Chennai and Chengalpattu.
-            </p>
+              <p className={styles.lede}>
+                Epoxy, PU and ESD flooring, terrace and basement waterproofing, and structural
+                repair for factories, commercial buildings and homes — delivered by an authorised
+                applicator for six manufacturer systems across Chennai and Chengalpattu.
+              </p>
 
-            <div className={styles.actions}>
-              <Button href={generalEnquiry} variant="accent" size="lg">
-                <CalendarDays size={17} strokeWidth={1.75} aria-hidden />
-                Book a site inspection
-              </Button>
-              <Button href="/projects" variant="outline" size="lg">
-                View our projects
-                <ArrowRight size={17} strokeWidth={1.75} aria-hidden />
-              </Button>
+              <div className={styles.actions}>
+                <Button href={generalEnquiry} variant="accent" size="lg">
+                  <CalendarDays size={17} strokeWidth={1.75} aria-hidden />
+                  Book a site inspection
+                </Button>
+                <Button href="/projects" variant="outline" size="lg">
+                  View our projects
+                  <ArrowRight size={17} strokeWidth={1.75} aria-hidden />
+                </Button>
+              </div>
             </div>
 
-            <ul className={styles.trust}>
-              {trustIndicators.map(({ icon: Icon, lines }) => (
-                <li key={lines.join(' ')} className={styles.trustItem}>
-                  <Icon size={26} strokeWidth={1.25} aria-hidden className={styles.trustIcon} />
-                  <span className={styles.trustLabel}>
-                    {lines[0]}
-                    <br />
-                    {lines[1]}
-                  </span>
-                </li>
-              ))}
-            </ul>
+            <div className={styles.enquiry}>
+              <ContactForm source="Home — hero" tone="card" />
+            </div>
           </div>
+        </Container>
 
-          <div className={styles.enquiry}>
-            <ContactForm source="Home — hero" tone="card" />
-          </div>
-        </div>
-      </Container>
+        {/* The standing mark in the bottom corner of the approved hero design.
+            Decorative: it repeats nothing and is hidden from assistive tech. */}
+        <p className={styles.mark} aria-hidden>
+          Floors
+          <br />
+          that
+          <br />
+          perform
+        </p>
+      </div>
 
-      {/* The standing mark in the bottom corner of the approved hero design.
-          Decorative: it repeats nothing and is hidden from assistive tech. */}
-      <p className={styles.mark} aria-hidden>
-        Floors
-        <br />
-        that
-        <br />
-        perform
-      </p>
+      {/*
+        The plinth the hero stands on. Full width rather than tucked under the
+        copy column: it gives the photograph a finished bottom edge instead of
+        a hard crop, and hands the four marks the room they were cramped out of.
+      */}
+      <div className={styles.trustBand}>
+        <Container>
+          <ul className={styles.trust}>
+            {trustIndicators.map(({ icon: Icon, label }) => (
+              <li key={label} className={styles.trustItem}>
+                <Icon size={22} strokeWidth={1.25} aria-hidden className={styles.trustIcon} />
+                <span className={styles.trustLabel}>{label}</span>
+              </li>
+            ))}
+          </ul>
+        </Container>
+      </div>
     </section>
   );
 }

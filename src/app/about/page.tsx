@@ -10,7 +10,7 @@ import { ImageFrame } from '@/components/ui/ImageFrame';
 import { Reveal } from '@/components/ui/Reveal';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { services } from '@/data/services';
-import { contact, groupCompanies, site, stats } from '@/data/site';
+import { contact, groupCompanies, ogImage, site, stats } from '@/data/site';
 import styles from './page.module.css';
 
 export const metadata: Metadata = {
@@ -21,6 +21,7 @@ export const metadata: Metadata = {
     title: 'About | Chelliah Enterprises',
     description: `Waterproofing, resin flooring and structural repair contractors operating from Chennai since ${site.foundedYear}.`,
     url: '/about',
+    images: [ogImage],
   },
 };
 

@@ -44,7 +44,7 @@ export function BrandStrip({
                   />
                 ) : null}
               </span>
-              {brand}
+              <span className={styles.name}>{brand}</span>
             </li>
           );
         })}

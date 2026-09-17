@@ -7,6 +7,7 @@ import { ServiceSection } from '@/components/services/ServiceSection';
 import { Container } from '@/components/ui/Container';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { getService, services, servicePages } from '@/data/services';
+import { ogImage } from '@/data/site';
 import { serviceEnquiry } from '@/lib/whatsapp';
 import styles from './page.module.css';
 
@@ -33,7 +34,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: service.title,
     description,
     alternates: { canonical: `/services/${service.slug}` },
-    openGraph: { title, description, url: `/services/${service.slug}` },
+    openGraph: { title, description, url: `/services/${service.slug}`, images: [ogImage] },
   };
 }
 

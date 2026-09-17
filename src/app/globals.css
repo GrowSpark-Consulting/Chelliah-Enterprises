@@ -34,10 +34,13 @@
   --error-tint: #fbebe9;
 
   /* Neutral greys derived from the foreground ink. Every step clears 4.5:1
-     against --background, --surface, white and --primary-tint. */
+     against --background, --surface, white and --primary-tint — --surface is
+     the strictest of those grounds, so check any new grey against that one.
+     --muted-soft sits at 4.63:1 on --surface and is the lightest step there
+     is room for; anything lighter fails. */
   --muted: #5c5f63;
   --muted-strong: #3a3d40;
-  --muted-soft: #6c6f73;
+  --muted-soft: #64676b;
 
   --border: rgba(37, 37, 37, 0.16);
   --border-strong: rgba(37, 37, 37, 0.28);

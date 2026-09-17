@@ -7,7 +7,7 @@ import { ProjectGrid } from '@/components/projects/ProjectGrid';
 import { Container } from '@/components/ui/Container';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { PROJECTS_ARE_PLACEHOLDERS } from '@/data/projects';
-import { stats } from '@/data/site';
+import { ogImage, stats } from '@/data/site';
 import { projectsEnquiry } from '@/lib/whatsapp';
 import styles from './page.module.css';
 
@@ -21,6 +21,7 @@ export const metadata: Metadata = {
     description:
       'A record of waterproofing, resin flooring and structural repair work across Chennai and Chengalpattu.',
     url: '/projects',
+    images: [ogImage],
   },
 };
 

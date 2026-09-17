@@ -126,4 +126,14 @@
   .specs {
     grid-template-columns: minmax(0, 1fr);
   }
+
+  /*
+   * "Enquire about this service" is wider than a 320px viewport on one line.
+   * Full width with a wrappable label, matching how the hero and closing CTA
+   * already behave on narrow screens.
+   */
+  .action > * {
+    width: 100%;
+    white-space: normal;
+  }
 }

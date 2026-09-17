@@ -27,12 +27,22 @@
   padding: 8px 14px;
   border: 1px solid var(--chip-border);
   border-radius: var(--radius-sm);
+  max-width: 100%;
   font-size: 0.8125rem;
   font-weight: 500;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  white-space: nowrap;
   color: var(--chip-color);
+}
+
+/*
+ * The longest name ("Sunanda Speciality Coatings") plus its logo slot is wider
+ * than a 320px viewport, so the label wraps rather than forcing the page to
+ * scroll sideways. On every wider screen the chips still sit on one line.
+ */
+.name {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 /* Reserved space for the official logo, so dropping the artwork in later

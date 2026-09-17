@@ -7,6 +7,7 @@ import { ServiceSection } from '@/components/services/ServiceSection';
 import { Container } from '@/components/ui/Container';
 import { SectionLabel } from '@/components/ui/SectionLabel';
 import { services } from '@/data/services';
+import { ogImage } from '@/data/site';
 import { generalEnquiry } from '@/lib/whatsapp';
 import styles from './page.module.css';
 
@@ -20,6 +21,7 @@ export const metadata: Metadata = {
     description:
       'Eleven service lines covering waterproofing, resin flooring and structural repair for industrial, commercial and residential properties.',
     url: '/services',
+    images: [ogImage],
   },
 };
 

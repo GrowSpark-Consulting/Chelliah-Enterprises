@@ -4,7 +4,7 @@ import { PageHero } from '@/components/sections/PageHero';
 import { ContactForm } from '@/components/contact/ContactForm';
 import { ContactInfo } from '@/components/contact/ContactInfo';
 import { Container } from '@/components/ui/Container';
-import { contact, site } from '@/data/site';
+import { contact, ogImage, site } from '@/data/site';
 import styles from './page.module.css';
 
 export const metadata: Metadata = {
@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     title: 'Contact | Chelliah Enterprises',
     description: 'Book a free site inspection or request a written quotation.',
     url: '/contact',
+    images: [ogImage],
   },
 };
 

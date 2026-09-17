@@ -11,12 +11,32 @@ export const site = {
   legalName: 'Chelliah Enterprises',
   descriptor: 'Waterproofing & Epoxy Works',
   foundedYear: 2009,
-  url: 'https://www.chelliahenterprises.com',
-  displayUrl: 'www.chelliahenterprises.com',
+  /*
+   * Drives canonical URLs, Open Graph URLs, sitemap.xml and robots.txt, so it
+   * must be the address that actually serves the site. Switch this to the
+   * custom domain only once that domain is connected and serving, or search
+   * engines will be pointed at a canonical that does not respond.
+   */
+  url: 'https://chelliah-enterprises.vercel.app',
+  displayUrl: 'chelliah-enterprises.vercel.app',
   gstin: '33AJUPC6761F1Z3',
   tagline: 'Waterproofing & flooring solutions built to last',
   shortDescription:
     'Waterproofing, epoxy, PU and ESD flooring and structural repair contractors serving industrial, commercial and residential properties across Chennai.',
+} as const;
+
+/**
+ * The share card, used by every route's Open Graph and Twitter metadata.
+ *
+ * Next merges metadata shallowly, so a page that declares its own `openGraph`
+ * replaces the parent's entirely — every such page has to spread this in, or
+ * its links unfurl with no image.
+ */
+export const ogImage = {
+  url: '/og.png',
+  width: 1200,
+  height: 630,
+  alt: 'Chelliah Enterprises — Waterproofing & Epoxy Works',
 } as const;
 
 export const contact = {

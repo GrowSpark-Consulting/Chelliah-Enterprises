@@ -5,7 +5,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { WhatsAppFab } from '@/components/layout/WhatsAppFab';
 import { RevealObserver } from '@/components/ui/RevealObserver';
-import { authorisedBrands, contact, site } from '@/data/site';
+import { authorisedBrands, contact, ogImage, site } from '@/data/site';
 import './globals.css';
 
 const inter = Inter({
@@ -48,11 +48,13 @@ export const metadata: Metadata = {
     url: site.url,
     title: `${site.name} | Waterproofing & Epoxy Flooring Contractors, Chennai`,
     description: site.shortDescription,
+    images: [ogImage],
   },
   twitter: {
     card: 'summary_large_image',
     title: `${site.name} | Waterproofing & Epoxy Flooring Contractors, Chennai`,
     description: site.shortDescription,
+    images: [ogImage.url],
   },
   robots: {
     index: true,

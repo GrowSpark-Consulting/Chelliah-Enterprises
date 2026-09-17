@@ -73,6 +73,17 @@ export type SiteImage = {
    * not a photograph you can crop into and must be shown whole.
    */
   ratio?: ImageRatio;
+  /**
+   * Set for a file that arrives on its own white ground — a supplied
+   * composite with brushed or torn edges, rather than a photograph that
+   * fills its frame edge to edge.
+   *
+   * The frame then drops its border and lets the file multiply into the page,
+   * so the white becomes the page colour and the edges feather out. Without
+   * it such a file reads as a white panel pasted onto the off-white ground.
+   * Never set it for an image shown on a dark section: multiply would sink it.
+   */
+  bleed?: boolean;
 };
 
 /* ── The library ──────────────────────────────────────────────────────── */
@@ -148,6 +159,9 @@ const library = [
     // is shown effectively whole — an editorial crop would cut the outer two
     // panels in half and take the brushwork with them.
     ratio: '2/1',
+    // The file's own white ground carries those brushed edges, so it is
+    // multiplied into the page rather than boxed in a frame.
+    bleed: true,
   },
   {
     id: 'epoxy-projects-composite',

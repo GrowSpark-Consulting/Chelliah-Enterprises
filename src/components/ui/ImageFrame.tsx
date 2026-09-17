@@ -55,7 +55,7 @@ export function ImageFrame({
 
   return (
     <div
-      className={cx(styles.frame, className)}
+      className={cx(styles.frame, image?.bleed && styles.bleed, className)}
       style={
         {
           '--frame-ratio': frameRatio.replace('/', ' / '),

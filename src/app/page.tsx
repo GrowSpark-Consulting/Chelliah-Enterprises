@@ -60,9 +60,16 @@ export default function HomePage() {
             Our record
           </h2>
           <StatStrip items={stats} tone="ink" />
-          <div className={styles.trustFooter}>
-            <BrandStrip tone="ink" />
-          </div>
+        </Container>
+      </section>
+
+      {/* Authorised applicator — a light band so the marks stand bare. */}
+      <section className={styles.brands} aria-labelledby="brands-heading">
+        <Container>
+          <h2 id="brands-heading" className="srOnly">
+            Authorised applicator
+          </h2>
+          <BrandStrip />
         </Container>
       </section>
 

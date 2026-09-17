@@ -12,9 +12,10 @@ type BrandStripProps = {
 /**
  * The manufacturer systems the company is an authorised applicator for.
  *
- * Each item carries a logo slot. Where an official logo has been supplied and
- * registered in `brandLogos`, it is shown; otherwise the slot stays empty and
- * the brand name carries the item. No logo is ever invented.
+ * Where an official logo has been supplied and registered in `brandLogos` it
+ * carries the cell; until then the brand name is set as the mark itself. No
+ * logo is ever invented, and no empty box stands in for one — a reserved,
+ * visibly blank slot read as a broken image rather than as pending artwork.
  */
 export function BrandStrip({
   heading = 'Authorised applicator',
@@ -23,28 +24,24 @@ export function BrandStrip({
 }: BrandStripProps) {
   return (
     <div className={cx(styles.wrap, styles[tone], className)}>
-      <h3 className={styles.heading}>{heading}</h3>
+      <h3 className={cx('label', styles.heading)}>{heading}</h3>
       <ul className={styles.list}>
         {authorisedBrands.map((brand) => {
           const logo = brandLogos[brand];
 
           return (
             <li key={brand} className={styles.item}>
-              <span
-                className={cx(styles.logoSlot, !logo && styles.logoSlotEmpty)}
-                title={logo ? undefined : `Logo slot — add ${brand} artwork in public/logos/`}
-              >
-                {logo ? (
-                  <Image
-                    src={logo.src}
-                    alt={`${brand} logo`}
-                    width={logo.width}
-                    height={logo.height}
-                    className={styles.logo}
-                  />
-                ) : null}
-              </span>
-              <span className={styles.name}>{brand}</span>
+              {logo ? (
+                <Image
+                  src={logo.src}
+                  alt={`${brand} logo`}
+                  width={logo.width}
+                  height={logo.height}
+                  className={styles.logo}
+                />
+              ) : (
+                <span className={styles.name}>{brand}</span>
+              )}
             </li>
           );
         })}

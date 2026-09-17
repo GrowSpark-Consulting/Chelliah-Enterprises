@@ -1,11 +1,19 @@
+/*
+ * The charcoal band under the hero. Its job is the transition as much as the
+ * figures: the hero now closes on its own plinth, and this section has to
+ * read as a separate, quieter register rather than as more of the same dark.
+ * Hence the deep top padding — the figures start well clear of the fold.
+ */
 .trust {
-  padding-block: clamp(32px, 4vw, 48px);
+  padding-block: clamp(64px, 7vw, 100px);
 }
 
+/* The brands are a second claim, not a footnote to the figures: a full rule
+   and a wide gap set them apart without another background colour. */
 .trustFooter {
-  margin-top: var(--space-8);
-  padding-top: var(--space-6);
-  border-top: 1px solid var(--on-dark-border);
+  margin-top: clamp(48px, 5.5vw, 72px);
+  padding-top: clamp(36px, 4vw, 52px);
+  border-top: 1px solid rgba(247, 247, 245, 0.14);
 }
 
 .whyGrid {

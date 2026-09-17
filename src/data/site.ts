@@ -94,8 +94,8 @@ export const authorisedBrands = [
  *
  *   'Ardex Endura': { src: '/logos/ardex-endura.svg', width: 120, height: 32 },
  *
- * Any brand without an entry keeps showing its name with an empty logo slot,
- * so nothing is fabricated and nothing breaks while assets are pending.
+ * Any brand without an entry is set typographically — its name carries the
+ * cell — so nothing is fabricated and nothing breaks while assets are pending.
  */
 export const brandLogos: Record<string, { src: string; width: number; height: number }> = {};
 

@@ -5,7 +5,9 @@ import type { SiteImage } from '@/data/images';
 import { cx } from '@/lib/cx';
 import styles from './ImageFrame.module.css';
 
-export type ImageRatio = '16/10' | '16/9' | '4/3' | '3/2' | '1/1';
+/* `2/1` exists for supplied composites — multi-panel files that are wider
+   than any editorial crop and cannot be cut into without losing a panel. */
+export type ImageRatio = '2/1' | '16/10' | '16/9' | '4/3' | '3/2' | '1/1';
 
 type ImageFrameProps = {
   /**
@@ -48,13 +50,15 @@ export function ImageFrame({
 }: ImageFrameProps) {
   const source = image?.src ?? src;
   const description = image?.alt ?? alt;
+  // A registry record may pin its own ratio where cropping would destroy it.
+  const frameRatio = image?.ratio ?? ratio;
 
   return (
     <div
       className={cx(styles.frame, className)}
       style={
         {
-          '--frame-ratio': ratio.replace('/', ' / '),
+          '--frame-ratio': frameRatio.replace('/', ' / '),
           '--frame-focus': image?.focus ?? 'center center',
         } as CSSProperties
       }

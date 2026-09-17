@@ -135,6 +135,42 @@ const library = [
     // most of the way right — at 76% it cut "EPOXY WORKS" mid-word.
     focusMobile: '92% 40%',
   },
+  {
+    id: 'waterproofing-terrace-before-after',
+    src: '/images/projects/waterproofing-terrace-before-after.jpeg',
+    alt: 'A palm-lined terrace walkway shown before and after waterproofing, the finished half coated in blue waterproof paint, alongside a diagram of the waterproof coating, cement screed, brickbats coba and RCC slab layers.',
+    categories: ['waterproofing', 'finished'],
+  },
+  {
+    id: 'cooling-tiles-terrace-laying',
+    src: '/images/projects/cooling-tiles-terrace-laying.jpeg',
+    alt: 'A worker spreading tile adhesive with a notched trowel to lay red cooling tiles on a terrace.',
+    categories: ['wip', 'general'],
+  },
+  {
+    id: 'structural-repair-collage',
+    src: '/images/projects/structural-repair-collage.jpeg',
+    alt: 'Two workers applying red epoxy coating with rollers, with inset photographs of a finished grey epoxy floor and a wide view of the completed hall.',
+    categories: ['wip', 'finished', 'general'],
+  },
+  {
+    id: 'residential-terrace-epoxy-floor',
+    src: '/images/projects/residential-terrace-epoxy-floor.jpeg',
+    alt: 'A finished hall with a glossy beige epoxy floor reflecting the ceiling fans and windows.',
+    categories: ['epoxy', 'finished'],
+  },
+  {
+    id: 'industrial-basement-red-epoxy-floor',
+    src: '/images/projects/industrial-basement-red-epoxy-floor.jpeg',
+    alt: 'A red epoxy floor walkway inside an industrial warehouse, running between storage racks and a shop-floor-management signage board.',
+    categories: ['epoxy', 'industrial', 'finished'],
+  },
+  {
+    id: 'office-institute-grey-epoxy-floor',
+    src: '/images/projects/office-institute-grey-epoxy-floor.jpeg',
+    alt: 'A finished grey epoxy floor in a bright office hall with a large window wall and a blue branded feature wall.',
+    categories: ['epoxy', 'finished'],
+  },
 ] as const satisfies readonly SiteImage[];
 
 export const imageLibrary: readonly SiteImage[] = library;
@@ -195,6 +231,9 @@ export function slotImage(slot: ImageSlot): SiteImage | undefined {
  * section then shows the placeholder naming the shot it needs.
  */
 export const serviceImages: Partial<Record<string, ImageId>> = {
+  waterproofing: 'waterproofing-terrace-before-after',
+  'weathering-course': 'cooling-tiles-terrace-laying',
+  'structural-repair': 'structural-repair-collage',
   'epoxy-flooring': 'epoxy-application-plant-floor',
 };
 
@@ -203,7 +242,11 @@ export function serviceImage(slug: string): SiteImage | undefined {
 }
 
 /** Project record id → photograph, keyed by the `id` in data/projects.ts. */
-export const projectImages: Partial<Record<string, ImageId>> = {};
+export const projectImages: Partial<Record<string, ImageId>> = {
+  'wp-terrace-guduvancheri': 'residential-terrace-epoxy-floor',
+  'wp-basement-chengalpattu': 'industrial-basement-red-epoxy-floor',
+  'wp-apartment-tambaram': 'office-institute-grey-epoxy-floor',
+};
 
 export function projectImage(id: string): SiteImage | undefined {
   return getImage(projectImages[id] ?? null);

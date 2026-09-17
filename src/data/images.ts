@@ -171,6 +171,24 @@ const library = [
     alt: 'A finished grey epoxy floor in a bright office hall with a large window wall and a blue branded feature wall.',
     categories: ['epoxy', 'finished'],
   },
+  {
+    id: 'car-park-deck-coating',
+    src: '/images/projects/car-park-deck-coating.jpeg',
+    alt: 'A finished car park deck with grey epoxy coating, yellow and blue directional markings, hazard-striped columns and parked cars.',
+    categories: ['epoxy', 'carpark', 'finished'],
+  },
+  {
+    id: 'sports-court-epoxy-line-marking',
+    src: '/images/projects/sports-court-epoxy-line-marking.jpeg',
+    alt: 'A finished outdoor badminton court with green and red epoxy coating and white line marking, set among trees.',
+    categories: ['epoxy', 'finished'],
+  },
+  {
+    id: 'wall-coating-epoxy-corridor',
+    src: '/images/projects/wall-coating-epoxy-corridor.jpeg',
+    alt: 'A finished red and grey epoxy floor corridor inside an industrial facility, with yellow and black hazard-striped columns and a row of doors along one wall.',
+    categories: ['epoxy', 'industrial', 'finished'],
+  },
 ] as const satisfies readonly SiteImage[];
 
 export const imageLibrary: readonly SiteImage[] = library;
@@ -235,6 +253,9 @@ export const serviceImages: Partial<Record<string, ImageId>> = {
   'weathering-course': 'cooling-tiles-terrace-laying',
   'structural-repair': 'structural-repair-collage',
   'epoxy-flooring': 'epoxy-application-plant-floor',
+  'car-park-deck-coating': 'car-park-deck-coating',
+  'sports-flooring': 'sports-court-epoxy-line-marking',
+  'wall-coatings': 'wall-coating-epoxy-corridor',
 };
 
 export function serviceImage(slug: string): SiteImage | undefined {

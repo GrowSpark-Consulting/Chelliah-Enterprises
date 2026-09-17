@@ -94,6 +94,47 @@ const library = [
     focus: '50% 36%',
     focusMobile: '70% 42%',
   },
+  {
+    id: 'pink-epoxy-corridor-application',
+    src: '/project.jpeg',
+    alt: 'Two applicators rolling a bright pink epoxy coating along a corridor inside a working facility, the wet floor reflecting the ceiling lights, with equipment cabinets on one side and electrical panels on the other.',
+    categories: ['hero', 'industrial', 'epoxy', 'wip'],
+    label: 'Epoxy corridor coating',
+    // Like the home hero file, this one arrives with the navy fall-off already
+    // graded onto its left edge, so the masthead wash has less work to do.
+    // Both applicators sit centre-right with their heads close to the top of
+    // the frame. A masthead band crops ~250px off a 16:9 file at this width,
+    // so the crop is held high: centring it decapitated both of them.
+    focus: '52% 20%',
+    // Narrow crops cut in from the sides, so bias right to keep both men and
+    // the lit floor rather than the equipment racks.
+    focusMobile: '66% 48%',
+  },
+  {
+    id: 'branded-hard-hat-on-drawings',
+    src: '/about.jpeg',
+    alt: 'A white hard hat printed with the Chelliah Enterprises name resting on rolled architectural drawings on a workbench, with the interior of a building under construction out of focus behind it.',
+    categories: ['hero', 'general'],
+    label: 'Site documentation',
+    // The helmet sits in the right third and reads low in the frame; hold
+    // below centre so a wide crop does not cut its brim off.
+    focus: '50% 54%',
+    focusMobile: '74% 56%',
+  },
+  {
+    id: 'office-signage-wall',
+    src: '/contact.jpeg',
+    alt: 'A concrete signage wall at a building entrance carrying the Chelliah Enterprises name and the line Waterproofing & Epoxy Works, with glazing and planting beyond it.',
+    categories: ['hero', 'general'],
+    label: 'Office signage',
+    // The lettering occupies the upper right of the frame, so a wide crop is
+    // held high to keep the whole sign in shot.
+    focus: '50% 40%',
+    // A phone-width crop only keeps ~390 of 753 rendered pixels, and the
+    // lettering runs to the right edge of the file, so the crop is pushed
+    // most of the way right — at 76% it cut "EPOXY WORKS" mid-word.
+    focusMobile: '92% 40%',
+  },
 ] as const satisfies readonly SiteImage[];
 
 export const imageLibrary: readonly SiteImage[] = library;
@@ -129,13 +170,13 @@ export const imageSlots = {
   /** Services page masthead. */
   servicesHero: 'green-epoxy-roller-application',
   /** About page masthead. */
-  aboutHero: null,
+  aboutHero: 'branded-hard-hat-on-drawings',
   /** About page — the large editorial image beside the company introduction. */
   aboutEditorial: null,
   /** Projects page masthead. */
-  projectsHero: null,
+  projectsHero: 'pink-epoxy-corridor-application',
   /** Contact page masthead — kept quiet so it never fights the form. */
-  contactHero: null,
+  contactHero: 'office-signage-wall',
   /** The closing call-to-action band carried by every major page. */
   cta: null,
 } satisfies Record<string, ImageId | null>;

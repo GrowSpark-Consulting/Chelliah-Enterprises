@@ -3,11 +3,31 @@
 }
 
 /* Taller when there is a photograph to show, so the image has room to read
-   as one rather than as a texture behind the type. */
+   as one rather than as a texture behind the type. The floor is a minimum,
+   not a fixed height: a masthead with more copy or a row of marks simply
+   grows past it. Content is centred so the extra room falls either side of
+   the type rather than all below it. */
 .hasPhoto {
   position: relative;
   isolation: isolate;
+  display: grid;
+  align-content: center;
+  min-height: 560px;
   padding-block: clamp(64px, 8vw, 128px);
+}
+
+@media (max-width: 1023px) {
+  .hasPhoto {
+    min-height: 470px;
+  }
+}
+
+/* Phones get a shorter band: the copy stacks to full width here, so the
+   desktop height would be mostly empty photograph above the fold. */
+@media (max-width: 767px) {
+  .hasPhoto {
+    min-height: 400px;
+  }
 }
 
 .media {
@@ -70,6 +90,12 @@
  * held just heavy enough to carry the text without flattening the floor.
  */
 @media (max-width: 1023px) {
+  /* Narrow crops cut in from the sides, so a subject in the right third is
+     the first thing lost. Each photograph carries its own narrow crop point. */
+  .image {
+    object-position: var(--focus-mobile, var(--focus, center center));
+  }
+
   .scrim {
     background: linear-gradient(
       to bottom,

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { ClientWall } from '@/components/sections/ClientWall';
+import { ClientMarquee } from '@/components/sections/ClientMarquee';
 import { CTASection } from '@/components/sections/CTASection';
 import { PageHero } from '@/components/sections/PageHero';
 import { StatStrip } from '@/components/sections/StatStrip';
@@ -73,7 +73,7 @@ export default function ProjectsPage() {
             label="Esteemed clients"
             title="Organisations we have worked for"
           />
-          <ClientWall className={styles.clientGrid} />
+          <ClientMarquee className={styles.clientGrid} />
         </Container>
       </section>
 

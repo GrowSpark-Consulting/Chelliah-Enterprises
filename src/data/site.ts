@@ -181,6 +181,69 @@ export const clients = [
   'GATALA',
 ] as const;
 
+/**
+ * Supplied client logos, keyed by the name in `clients`. A client with no
+ * entry is set as its name, as `brandLogos` does — no logo is ever invented.
+ *
+ * Same conventions as `brandLogos`. Files that needed cleaning have a
+ * derivative in `public/logos/clients/` and the original is untouched:
+ *   - L&T arrived as a JPEG on a white canvas; the canvas is knocked out.
+ *   - Checkpoint and Helios arrived as reversed (white) marks, invisible on
+ *     the page ground; they are recoloured to --ink with their alpha kept.
+ * Everything else is the supplied file as delivered.
+ *
+ * `renderHeight` is solved from the measured ink in each file for an even
+ * visual weight: wide wordmarks sit lower, compact marks taller, and the
+ * solid fields (ESAB, CUMI) are given less area than lettering because they
+ * carry more mass.
+ *
+ * Not used: `Wittur_Logo_left_110.png` is a fragment of Wittur's artwork, not
+ * the logo, so Wittur is still set as its name. No files have been supplied
+ * for INFAC, EPS Interiors, Vidveda or GATALA.
+ */
+export const clientLogos: Partial<
+  Record<(typeof clients)[number], { src: string; width: number; height: number; renderHeight: number }>
+> = {
+  'L&T Energy Hydrocarbon': {
+    src: '/logos/clients/lnt-energy-hydrocarbon.png',
+    width: 640,
+    height: 183,
+    renderHeight: 29,
+  },
+  ESAB: { src: '/logos/clients/esab.svg', width: 718, height: 449, renderHeight: 32 },
+  'Hanon Systems': { src: '/logo_hanon.svg', width: 130, height: 50, renderHeight: 34 },
+  'Murugappa Group': {
+    src: '/Group_40279_92b4cee325.svg',
+    width: 136,
+    height: 83,
+    renderHeight: 42,
+  },
+  CUMI: { src: '/CUMI.png', width: 554, height: 554, renderHeight: 40 },
+  Checkpoint: { src: '/logos/clients/checkpoint.png', width: 400, height: 75, renderHeight: 23 },
+  'SSS Hi-tech Constructions': { src: '/23.png', width: 384, height: 75, renderHeight: 24 },
+  Bentoli: { src: '/logos/clients/bentoli.svg', width: 358, height: 370, renderHeight: 46 },
+  'Manek Micron': {
+    src: '/Manek-Micron-edited.new-PNG-copy-1.png',
+    width: 2033,
+    height: 456,
+    renderHeight: 32,
+  },
+  'Ocean Healthcare': {
+    src: '/logos/clients/ocean-healthcare.svg',
+    width: 1900,
+    height: 800,
+    renderHeight: 43,
+  },
+  'Marble Valley Foods': {
+    src: '/logos/clients/marble-valley-foods.png',
+    width: 500,
+    height: 84,
+    renderHeight: 25,
+  },
+  Helios: { src: '/logos/clients/helios.png', width: 257, height: 74, renderHeight: 29 },
+  SVC: { src: '/svc-logo-1.png', width: 1658, height: 322, renderHeight: 24 },
+};
+
 export type Stat = { value: string; label: string };
 
 /** Figures supported by the supplied company material — nothing inferred. */

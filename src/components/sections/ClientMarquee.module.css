@@ -1,0 +1,192 @@
+/*
+ * Client logo strip.
+ *
+ * Seamless loop: the track holds two identical groups, and each group carries
+ * its own trailing gap, so the track is exactly twice one group's width.
+ * Moving it by -50% therefore lands the second group precisely on the first
+ * group's starting position, and the animation restarts on an identical frame.
+ */
+
+.marquee {
+  /* Space between marks, and the multiplier every mark is drawn at. */
+  --gap: clamp(48px, 5vw, 76px);
+  --scale: 1;
+  /* ~34 px/s across the desktop group — slow enough to read each mark. */
+  --duration: 90s;
+  /* The tallest registered mark, so the row height never changes. */
+  --row: 46px;
+
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.viewport {
+  overflow: hidden;
+  padding-block: clamp(26px, 3vw, 38px);
+  border-block: 1px solid var(--border);
+  /* The strip cannot affect layout or paint outside itself. */
+  contain: layout paint;
+  /* Marks fade in and out at the edges rather than being cut off. */
+  --fade: clamp(28px, 8%, 120px);
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 var(--fade),
+    #000 calc(100% - var(--fade)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 var(--fade),
+    #000 calc(100% - var(--fade)),
+    transparent 100%
+  );
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: marquee var(--duration) linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.group {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--gap);
+  padding-inline-end: var(--gap);
+}
+
+.item {
+  display: flex;
+  flex: none;
+  align-items: center;
+  height: calc(var(--row) * var(--scale));
+}
+
+.logo {
+  display: block;
+  height: calc(var(--logo-h) * var(--scale));
+  width: auto;
+  /* The exact file ratio, so the width is the same before and after the
+     image loads — a change there would shift the whole strip. */
+  aspect-ratio: var(--logo-ratio);
+  max-width: none;
+  opacity: 0.9;
+  transition: opacity var(--t-card) var(--ease);
+}
+
+/* Clients with no supplied logo, set in the house style for client names. */
+.name {
+  font-size: calc(0.8125rem * var(--scale));
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--primary-dark);
+  opacity: 0.9;
+}
+
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* Pointer users can stop the strip to read it. */
+@media (hover: hover) {
+  .viewport:hover .track {
+    animation-play-state: paused;
+  }
+
+  .viewport:hover .logo,
+  .viewport:hover .name {
+    opacity: 1;
+  }
+}
+
+/* — Pause control ——————————————————————————————————————————————— */
+
+.toggle {
+  /* First in the DOM, last on screen. */
+  order: 2;
+  /*
+   * Left, not right: the fixed WhatsApp button owns the bottom-right corner,
+   * and at phone widths and at 1280px it shares this column exactly. Right-
+   * aligned, the button slid under it whenever the strip sat low on screen,
+   * and a tap opened WhatsApp instead of pausing.
+   */
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-top: var(--space-3);
+  color: var(--muted-strong);
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition:
+    border-color var(--t-button) var(--ease),
+    color var(--t-button) var(--ease);
+}
+
+.toggle:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.toggle[aria-pressed='true'] ~ .viewport .track {
+  animation-play-state: paused;
+}
+
+/* — Responsive —————————————————————————————————————————————————— */
+
+@media (max-width: 767px) {
+  .marquee {
+    --scale: 0.8;
+    /* The group is shorter here, so the same speed needs less time. */
+    --duration: 70s;
+  }
+
+  .viewport {
+    --fade: 32px;
+  }
+}
+
+/* — Reduced motion: a static, wrapped row of the same marks ——————— */
+
+@media (prefers-reduced-motion: reduce) {
+  .viewport {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .track {
+    width: auto;
+    animation: none;
+  }
+
+  .group {
+    flex: 1 1 auto;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: calc(var(--gap) * 0.5);
+    padding-inline-end: 0;
+  }
+
+  .group[aria-hidden='true'],
+  .toggle {
+    display: none;
+  }
+}

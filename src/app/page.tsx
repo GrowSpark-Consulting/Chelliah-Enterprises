@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ArrowRight } from 'lucide-react';
 import { Hero } from '@/components/sections/Hero';
 import { BrandStrip } from '@/components/sections/BrandStrip';
-import { ClientWall } from '@/components/sections/ClientWall';
+import { ClientMarquee } from '@/components/sections/ClientMarquee';
 import { CTASection } from '@/components/sections/CTASection';
 import { Process } from '@/components/sections/Process';
 import { StatStrip } from '@/components/sections/StatStrip';
@@ -121,7 +121,7 @@ export default function HomePage() {
             title="Trusted by industrial & commercial operators"
             body="A selection of the organisations whose sites we have worked on."
           />
-          <ClientWall className={styles.clientNote} />
+          <ClientMarquee className={styles.clients} />
         </Container>
       </section>
 

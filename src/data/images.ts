@@ -281,6 +281,24 @@ const library = [
     alt: 'A finished red and grey epoxy floor corridor inside an industrial facility, with yellow and black hazard-striped columns and a row of doors along one wall.',
     categories: ['epoxy', 'industrial', 'finished'],
   },
+  {
+    id: 'machining-plant-epoxy-floor',
+    src: '/images/projects/machining-plant-epoxy-floor.jpeg',
+    alt: 'A finished grey epoxy floor with yellow line marking down the centre of an aisle in a machining plant, running between rows of production machinery.',
+    categories: ['epoxy', 'industrial', 'finished'],
+  },
+  {
+    id: 'distribution-warehouse-epoxy-floor',
+    src: '/images/projects/distribution-warehouse-epoxy-floor.jpeg',
+    alt: 'A finished blue epoxy floor with white aisle marking in a distribution warehouse, running between tall pallet racking with hazard-striped corner guards.',
+    categories: ['epoxy', 'industrial', 'finished'],
+  },
+  {
+    id: 'welding-unit-epoxy-coating',
+    src: '/images/projects/welding-unit-epoxy-coating.jpeg',
+    alt: 'A worker rolling red epoxy coating onto a floor, with a Jotun paint tin standing on the wet surface nearby.',
+    categories: ['epoxy', 'wip'],
+  },
 ] as const satisfies readonly SiteImage[];
 
 export const imageLibrary: readonly SiteImage[] = library;
@@ -363,6 +381,9 @@ export const projectImages: Partial<Record<string, ImageId>> = {
   'wp-terrace-guduvancheri': 'residential-terrace-epoxy-floor',
   'wp-basement-chengalpattu': 'industrial-basement-red-epoxy-floor',
   'wp-apartment-tambaram': 'office-institute-grey-epoxy-floor',
+  'ep-machining-oragadam': 'machining-plant-epoxy-floor',
+  'ep-warehouse-sriperumbudur': 'distribution-warehouse-epoxy-floor',
+  'ep-welding-ambattur': 'welding-unit-epoxy-coating',
 };
 
 export function projectImage(id: string): SiteImage | undefined {

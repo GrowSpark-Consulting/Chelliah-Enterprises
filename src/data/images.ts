@@ -317,6 +317,24 @@ const library = [
     alt: 'A worker in hi-vis and a hard hat applying repair render to an RCC column with exposed reinforcement, on a construction site with a crane in the background.',
     categories: ['industrial', 'wip'],
   },
+  {
+    id: 'commercial-block-crack-repair',
+    src: '/images/projects/commercial-block-crack-repair.jpeg',
+    alt: 'A close view of a structural crack in a concrete column opened up to expose rusted reinforcement bars, ready for repair.',
+    categories: ['industrial', 'wip'],
+  },
+  {
+    id: 'commercial-park-car-park-deck',
+    src: '/images/projects/commercial-park-car-park-deck.jpeg',
+    alt: 'A finished grey car park deck on a rooftop level with yellow directional and bay markings, a city skyline visible beyond the parapet.',
+    categories: ['carpark', 'finished'],
+  },
+  {
+    id: 'indoor-sports-court-line-marking',
+    src: '/images/projects/indoor-sports-court-line-marking.jpeg',
+    alt: 'A finished indoor sports court with blue coating, yellow and white multi-sport line marking, and a basketball hoop against one wall.',
+    categories: ['epoxy', 'finished'],
+  },
 ] as const satisfies readonly SiteImage[];
 
 export const imageLibrary: readonly SiteImage[] = library;
@@ -405,6 +423,9 @@ export const projectImages: Partial<Record<string, ImageId>> = {
   'pu-food-chennai': 'food-processing-warehouse-floor',
   'esd-electronics-sriperumbudur': 'electronics-assembly-esd-floor',
   'st-coastal-thoothukudi': 'coastal-factory-column-repair',
+  'st-commercial-vandalur': 'commercial-block-crack-repair',
+  'cp-park-tambaram': 'commercial-park-car-park-deck',
+  'sp-court-guduvancheri': 'indoor-sports-court-line-marking',
 };
 
 export function projectImage(id: string): SiteImage | undefined {

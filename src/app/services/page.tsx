@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
+import type { HeroMark } from '@/components/sections/PageHero';
 import Link from 'next/link';
+import { Clock, FlaskConical, HardHat, LayoutGrid } from 'lucide-react';
 import { BrandStrip } from '@/components/sections/BrandStrip';
 import { CTASection } from '@/components/sections/CTASection';
 import { PageHero } from '@/components/sections/PageHero';
@@ -25,14 +27,33 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * Qualitative marks only, each one restating a characteristic already stated
+ * on a service below — chemical and impact resistance, extended service life,
+ * applied to manufacturer specification, and the industrial / commercial /
+ * residential range. Nothing counted, nothing new claimed.
+ */
+const heroMarks: HeroMark[] = [
+  { icon: FlaskConical, lines: ['Chemical', 'resistant'] },
+  { icon: Clock, lines: ['Long', 'lasting'] },
+  { icon: HardHat, lines: ['Professional', 'execution'] },
+  { icon: LayoutGrid, lines: ['All types', 'of spaces'] },
+];
+
 export default function ServicesPage() {
   return (
     <>
       <PageHero
         label={`${services.length} service lines · Industrial · Commercial · Residential`}
-        title="Our services"
+        title={
+          <>
+            Our <em>services</em>
+          </>
+        }
         lede="A complete platform for concrete flooring, waterproofing and structural repair problems — specified for the conditions each site actually faces."
         breadcrumbs={[{ href: '/', label: 'Home' }, { label: 'Services' }]}
+        image="servicesHero"
+        marks={heroMarks}
       />
 
       <section className={styles.index} aria-labelledby="service-index-heading">

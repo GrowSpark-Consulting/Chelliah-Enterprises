@@ -9,6 +9,7 @@ import { Container } from '@/components/ui/Container';
 import { ImageFrame } from '@/components/ui/ImageFrame';
 import { Reveal } from '@/components/ui/Reveal';
 import { SectionHeading } from '@/components/ui/SectionHeading';
+import { slotImage } from '@/data/images';
 import { services } from '@/data/services';
 import { contact, groupCompanies, ogImage, site, stats } from '@/data/site';
 import styles from './page.module.css';
@@ -78,6 +79,7 @@ export default function AboutPage() {
         title={`Protecting structures across Chennai since ${site.foundedYear}`}
         lede={`${site.name} carries out waterproofing, resin flooring and structural repair work across Chennai and Chengalpattu — for factories, commercial buildings and homes.`}
         breadcrumbs={[{ href: '/', label: 'Home' }, { label: 'About' }]}
+        image="aboutHero"
       />
 
       <section className={styles.intro} aria-labelledby="intro-heading">
@@ -115,6 +117,7 @@ export default function AboutPage() {
 
             <div className={styles.aside}>
               <ImageFrame
+                image={slotImage('aboutEditorial')}
                 hint="Site team preparing a substrate before application"
                 ratio="4/3"
                 sizes="(max-width: 1023px) 100vw, 560px"

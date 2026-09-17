@@ -27,6 +27,8 @@ export default function ContactPage() {
         title="Let's talk about your project"
         lede="Reach out for a site inspection, a quotation or a technical consultation on the right system for your building."
         breadcrumbs={[{ href: '/', label: 'Home' }, { label: 'Contact' }]}
+        image="contactHero"
+        quiet
       />
 
       <section className={styles.body} aria-labelledby="contact-heading">

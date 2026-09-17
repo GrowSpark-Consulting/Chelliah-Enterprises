@@ -1,13 +1,20 @@
 import Image from 'next/image';
 import type { CSSProperties } from 'react';
 import { ImageIcon } from 'lucide-react';
+import type { SiteImage } from '@/data/images';
 import { cx } from '@/lib/cx';
 import styles from './ImageFrame.module.css';
 
 export type ImageRatio = '16/10' | '16/9' | '4/3' | '3/2' | '1/1';
 
 type ImageFrameProps = {
-  /** Path under /public. Omit to render the placeholder. */
+  /**
+   * A record from the photography registry (data/images.ts). This is the
+   * normal way to fill a frame — it carries the path, the alt text and the
+   * crop focus together. Omit it to render the placeholder.
+   */
+  image?: SiteImage;
+  /** Path under /public. Only for one-off images outside the registry. */
   src?: string;
   /** Meaningful alternative text. Required whenever `src` is set. */
   alt?: string;
@@ -25,11 +32,12 @@ type ImageFrameProps = {
  * Every content image on the site goes through here: one aspect-ratio system,
  * one hairline frame, lazy loading below the fold, and no layout shift.
  *
- * Until real site photography is supplied, it draws a blueprint-style
- * placeholder naming the shot the slot needs. Drop a file into /public/images
- * and pass `src` + `alt` — nothing else changes.
+ * Until a photograph is registered for a slot, it draws a blueprint-style
+ * placeholder naming the shot that slot needs. Register the file in
+ * data/images.ts and pass the record as `image` — nothing else changes.
  */
 export function ImageFrame({
+  image,
   src,
   alt,
   hint,
@@ -38,20 +46,27 @@ export function ImageFrame({
   sizes = '(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 620px',
   className,
 }: ImageFrameProps) {
+  const source = image?.src ?? src;
+  const description = image?.alt ?? alt;
+
   return (
     <div
       className={cx(styles.frame, className)}
-      style={{ '--frame-ratio': ratio.replace('/', ' / ') } as CSSProperties}
+      style={
+        {
+          '--frame-ratio': ratio.replace('/', ' / '),
+          '--frame-focus': image?.focus ?? 'center center',
+        } as CSSProperties
+      }
     >
-      {src ? (
+      {source ? (
         <Image
-          src={src}
-          alt={alt ?? ''}
+          src={source}
+          alt={description ?? ''}
           fill
           sizes={sizes}
           priority={priority}
           loading={priority ? undefined : 'lazy'}
-          style={{ objectFit: 'cover' }}
         />
       ) : (
         <>

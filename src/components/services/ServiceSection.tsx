@@ -2,6 +2,7 @@ import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { ImageFrame } from '@/components/ui/ImageFrame';
 import { WhatsAppIcon } from '@/components/ui/WhatsAppIcon';
+import { serviceImage } from '@/data/images';
 import type { Service } from '@/data/services';
 import { cx } from '@/lib/cx';
 import { serviceEnquiry } from '@/lib/whatsapp';
@@ -49,6 +50,7 @@ export function ServiceSection({
     >
       <figure className={styles.figure}>
         <ImageFrame
+          image={serviceImage(service.slug)}
           hint={service.imageHint}
           ratio="4/3"
           sizes="(max-width: 899px) 100vw, 600px"

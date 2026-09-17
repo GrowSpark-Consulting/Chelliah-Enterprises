@@ -13,6 +13,11 @@
   padding-block: clamp(40px, 5vw, 64px);
 }
 
+/* A light ground — it is what lets the manufacturer marks stand bare. */
+.brands {
+  padding-block: clamp(44px, 5vw, 68px);
+}
+
 /* A coverage strip, not a headline — sized down from the h2 display scale. */
 .hoursHeading {
   font-size: clamp(1.25rem, 1.05rem + 0.9vw, 1.75rem);

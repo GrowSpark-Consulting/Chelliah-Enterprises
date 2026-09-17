@@ -81,12 +81,12 @@ export default function ServicesPage() {
         </Container>
       </div>
 
-      <section className={`onInk ${styles.brands}`} aria-labelledby="brands-heading">
+      <section className={styles.brands} aria-labelledby="brands-heading">
         <Container>
           <h2 id="brands-heading" className="srOnly">
             Authorised applicator
           </h2>
-          <BrandStrip tone="ink" />
+          <BrandStrip />
         </Container>
       </section>
 

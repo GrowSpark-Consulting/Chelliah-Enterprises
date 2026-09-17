@@ -1,47 +1,48 @@
 /*
- * The authorised-applicator credibility block: a label, then a row of equal
- * cells, one per manufacturer system. Six cells of identical size read as a
- * set of credentials; the mixed-width chips they replaced read as tags.
+ * The authorised-applicator row: a centred label and the manufacturer marks
+ * standing free on the page, evenly spaced.
+ *
+ * The marks carry themselves — no cell, no border, no plate. That only works
+ * on a light ground, which is why every section that shows this strip is a
+ * light band. The `ink` tone below keeps the plated treatment for a dark
+ * ground, since the supplied files are opaque rasters and would otherwise
+ * show as pale rectangles.
  */
 
 .wrap {
   display: block;
 }
 
-/* Inherits the bronze rule and uppercase setting from the global .label. */
 .heading {
-  margin-bottom: var(--space-5);
+  margin-bottom: clamp(24px, 3vw, 36px);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--heading-color);
 }
 
 .list {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: var(--space-3);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  /* Wide enough that the marks read as a set of separate credentials rather
+     than one run-on graphic. */
+  gap: clamp(28px, 4.5vw, 60px);
 }
 
-/*
- * Fixed height across all six, so the cells stay a grid whether they hold a
- * one-word name, a three-word one, or a supplied logo. The border is a
- * hairline — enough to define the cell, not enough to make it a card.
- */
 .item {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   min-width: 0;
-  min-height: 74px;
-  padding: var(--space-4) var(--space-3);
-  border: 1px solid var(--chip-border);
-  border-radius: var(--radius-sm);
-  background: var(--chip-ground);
   text-align: center;
 }
 
-/*
- * The brand name set as the mark. Slightly wider tracking than body UI text
- * and a touch smaller, so six of them side by side read as wordmarks rather
- * than as a sentence broken into boxes.
- */
+/* The fallback where no artwork is registered: the brand name set as its own
+   mark, so a pending logo reads as intentional rather than broken. */
 .name {
   min-width: 0;
   font-size: 0.75rem;
@@ -50,8 +51,6 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--chip-color);
-  /* "Sunanda Speciality Coatings" is wider than a cell on a 320px screen, so
-     it breaks rather than pushing the page sideways. */
   overflow-wrap: anywhere;
 }
 
@@ -59,38 +58,72 @@
   width: auto;
   max-width: 100%;
   height: auto;
-  max-height: 34px;
+  /* Set per logo from its own measured ink — see `renderHeight` in data/site.
+     The fallback covers a file registered without one. */
+  max-height: var(--logo-h, 60px);
   object-fit: contain;
 }
 
 /* Tones */
 
-.ink {
-  --chip-border: rgba(247, 247, 245, 0.16);
-  --chip-ground: rgba(247, 247, 245, 0.03);
-  --chip-color: rgba(247, 247, 245, 0.88);
-}
-
 .page {
-  --chip-border: var(--border);
-  --chip-ground: transparent;
+  --heading-color: var(--muted);
   --chip-color: var(--muted-strong);
 }
 
+/*
+ * Dark ground. The files cannot stand bare here, so each one keeps the white
+ * plate it was drawn for and the row goes back to an even grid of cells.
+ */
+.ink {
+  --heading-color: var(--on-dark-accent);
+  --chip-color: rgba(247, 247, 245, 0.88);
+  --plate-border: rgba(247, 247, 245, 0.16);
+  --chip-border: rgba(247, 247, 245, 0.16);
+  --chip-ground: rgba(247, 247, 245, 0.03);
+}
+
+.ink .list {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.ink .item {
+  display: flex;
+  min-height: 100px;
+  padding: var(--space-4) var(--space-3);
+  border: 1px solid var(--chip-border);
+  border-radius: var(--radius-sm);
+  background: var(--chip-ground);
+}
+
+.ink .itemLogo {
+  padding: var(--space-3);
+  border-color: var(--plate-border);
+  background: #fff;
+}
+
 @media (max-width: 1023px) {
-  .list {
+  .ink .list {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 599px) {
+@media (max-width: 767px) {
   .list {
+    gap: clamp(24px, 6vw, 40px) clamp(24px, 7vw, 44px);
+  }
+}
+
+@media (max-width: 599px) {
+  .ink .list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--space-2);
   }
 
-  .item {
-    min-height: 66px;
+  .ink .item {
+    min-height: 88px;
     padding-inline: var(--space-2);
   }
 

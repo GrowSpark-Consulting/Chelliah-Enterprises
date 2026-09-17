@@ -96,8 +96,68 @@ export const authorisedBrands = [
  *
  * Any brand without an entry is set typographically — its name carries the
  * cell — so nothing is fabricated and nothing breaks while assets are pending.
+ *
+ * `renderHeight` is the height the file is drawn at. Each supplied file wraps
+ * its mark in a different amount of its own margin — the lettering runs from
+ * 35% to 100% of the canvas — so drawing them all at one height left some
+ * marks twice the size of others. These values were derived by measuring the
+ * ink in each file and solving for a common optical height of about 25px.
  */
-export const brandLogos: Record<string, { src: string; width: number; height: number }> = {};
+export const brandLogos: Record<
+  string,
+  { src: string; width: number; height: number; renderHeight?: number }
+> = {
+  /*
+   * Cleaned derivatives of the supplied artwork, in `public/logos/`. The files
+   * as delivered were opaque rasters, each on its own canvas — two of them not
+   * on white — so standing them on the page left a grey rectangle under the
+   * mark. The canvas has been flood-filled to transparency from the edges,
+   * which removes the ground without touching the mark or the white inside it.
+   * The originals are untouched in `public/`.
+   */
+  'Ardex Endura': {
+    src: '/logos/ardex-endura.png',
+    width: 225,
+    height: 180,
+    renderHeight: 62,
+  },
+  /*
+   * The exception: CUMI's blue field is the mark, not a canvas, so this one is
+   * the supplied file as delivered. It is judged as a tile rather than by its
+   * lettering — sized against the other marks' overall presence, not their
+   * text height.
+   */
+  CUMI: { src: '/CUMI.png', width: 554, height: 554, renderHeight: 40 },
+  /* A compact badge rather than a line of lettering, so it is given a little
+     more height than the ink calculation alone suggested — at the shared 25px
+     it read small beside the wordmarks either side of it. */
+  'Nippon Paint': {
+    src: '/logos/nippon-paint.png',
+    width: 242,
+    height: 194,
+    renderHeight: 72,
+  },
+  // A stacked lockup — symbol over wordmark — so it needs less height than a
+  // single line of lettering to carry the same weight.
+  'Asian Paints': {
+    src: '/logos/asian-paints.png',
+    width: 242,
+    height: 193,
+    renderHeight: 38,
+  },
+  'MYK Arment': {
+    src: '/logos/myk-arment.png',
+    width: 715,
+    height: 429,
+    renderHeight: 68,
+  },
+  'Sunanda Speciality Coatings': {
+    src: '/logos/sunanda-speciality-coatings.png',
+    width: 333,
+    height: 250,
+    renderHeight: 72,
+  },
+};
 
 /** Named clients from the company profile. */
 export const clients = [

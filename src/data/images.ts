@@ -90,6 +90,19 @@ export type SiteImage = {
 
 const library = [
   {
+    id: 'blue-coated-driveway',
+    src: '/home.jpeg',
+    alt: 'A finished bright blue floor coating running the length of an outdoor driveway, lined with brick planters and palms on one side and a green screened boundary wall on the other.',
+    categories: ['hero', 'carpark', 'finished'],
+    label: 'Outdoor floor coating',
+    // Desktop heroes crop this 16:9 file very little. Where they do, hold
+    // below centre: the coated floor is the subject, the sky is not.
+    focus: '50% 62%',
+    // Tall crops cut in from the sides; bias right to keep the far gate, the
+    // vanishing point of the floor.
+    focusMobile: '64% 58%',
+  },
+  {
     id: 'epoxy-application-plant-floor',
     src: '/hero.png',
     alt: 'An applicator spreading epoxy floor coating with a squeegee across the floor of an industrial plant, the finished surface reflecting the roof structure behind him.',
@@ -365,8 +378,14 @@ export function imagesIn(category: ImageCategory): SiteImage[] {
  * a borrowed or badly-cropped image.
  */
 export const imageSlots = {
-  /** Home page — full-bleed hero behind the headline and enquiry card. */
-  homeHero: 'epoxy-application-plant-floor',
+  /**
+   * Home page — full-bleed hero behind the headline and enquiry card.
+   *
+   * To replace it, register the new file above and point this slot at it.
+   * The translucent enquiry card is tinted from whatever photograph this
+   * resolves to, measured at build time, so nothing else needs changing.
+   */
+  homeHero: 'blue-coated-driveway',
   /** Services page masthead. */
   servicesHero: 'green-epoxy-roller-application',
   /** About page masthead. */

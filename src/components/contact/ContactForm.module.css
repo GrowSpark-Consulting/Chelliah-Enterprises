@@ -6,10 +6,10 @@
 }
 
 /*
- * The hero variant. The form sits on a photograph there, so it needs to read
- * as a solid, opaque card — white ground, hairline border, one soft shadow.
- * Deliberately not translucent: a glass panel over a working plant floor
- * makes both the form and the photograph harder to read.
+ * The hero variant: white ground, hairline border, one soft shadow. This
+ * opaque card is the fallback — when the hero photograph has been measured,
+ * `.glass` (at the end of this file) turns it into a translucent panel tinted
+ * from that photograph.
  */
 .formCard {
   background: #fff;
@@ -306,5 +306,194 @@
 @media (max-width: 639px) {
   .fields {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   Glass card — the home hero's enquiry card as a translucent panel.
+
+   The panel's own fill is held at 50%, tinted from the hero photograph
+   (--glass-light / --glass-dark, measured at build time), over a heavily
+   blurred copy of that photograph. The text, fields and button are never
+   made translucent: only the panel is.
+
+   Every colour inside the card goes through the --glass-* tokens, so the
+   light and dark variants are one token swap each.
+   ────────────────────────────────────────────────────────────────────── */
+
+.glass {
+  /* Light glass: a frosted pane with dark text. */
+  --glass-tint: var(--glass-light);
+  --glass-edge: rgba(255, 255, 255, 0.5);
+  /*
+   * Darker than the page's own text tokens on purpose. The pane averages the
+   * photograph rather than hiding it, so dark foliage behind a label lowers
+   * the ground under it; these hold 4.5:1 there as well as on the open floor.
+   */
+  --glass-ink: #121518;
+  --glass-ink-soft: #1f2327;
+  /* The eyebrow sits highest on the card, over the brightest part of most
+     photographs (sky, glazing), so the bronze is taken this deep. */
+  --glass-accent: #33271a;
+  --glass-field: rgba(255, 255, 255, 0.76);
+  --glass-field-hover: rgba(255, 255, 255, 0.84);
+  --glass-field-focus: rgba(255, 255, 255, 0.94);
+  --glass-field-border: rgba(18, 21, 24, 0.18);
+  --glass-field-border-hover: rgba(18, 21, 24, 0.34);
+  --glass-field-ink: #121518;
+  --glass-placeholder: #4b4f54;
+  --glass-focus: var(--primary);
+  --glass-focus-ring: rgba(22, 37, 54, 0.16);
+  --glass-error: #7a1813;
+
+  background: rgb(var(--glass-tint) / 0.5);
+  border-color: var(--glass-edge);
+  /*
+   * contrast() pulls the photograph's darkest and brightest patches toward
+   * the middle before the tint lands, which is what keeps the text readable
+   * over a mixed background rather than only over its average.
+   */
+  -webkit-backdrop-filter: blur(26px) saturate(140%) contrast(0.8);
+  backdrop-filter: blur(26px) saturate(140%) contrast(0.8);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 18px 40px -22px rgba(11, 20, 30, 0.45);
+}
+
+/* Dark glass: a smoked pane with light text, for darker photographs. */
+.glass[data-glass='dark'] {
+  --glass-tint: var(--glass-dark);
+  --glass-edge: rgba(247, 247, 245, 0.16);
+  --glass-ink: #f7f7f5;
+  --glass-ink-soft: rgba(247, 247, 245, 0.84);
+  --glass-accent: var(--on-dark-accent);
+  --glass-field: rgba(8, 14, 20, 0.42);
+  --glass-field-hover: rgba(8, 14, 20, 0.5);
+  --glass-field-focus: rgba(8, 14, 20, 0.62);
+  --glass-field-border: rgba(247, 247, 245, 0.24);
+  --glass-field-border-hover: rgba(247, 247, 245, 0.4);
+  --glass-field-ink: #f7f7f5;
+  --glass-placeholder: rgba(247, 247, 245, 0.66);
+  --glass-focus: var(--on-dark-accent);
+  --glass-focus-ring: rgba(217, 201, 166, 0.26);
+  --glass-error: #ffb4a9;
+}
+
+/*
+ * Stacked hero (tablet and phone): the hero lays a ~70% navy wash over the
+ * whole photograph, so whatever the photograph is, the card sits on a dark
+ * ground. Dark glass, still tinted from the photograph.
+ */
+@media (max-width: 1023px) {
+  .glass {
+    --glass-tint: var(--glass-dark);
+    --glass-edge: rgba(247, 247, 245, 0.16);
+    --glass-ink: #f7f7f5;
+    --glass-ink-soft: rgba(247, 247, 245, 0.84);
+    --glass-accent: var(--on-dark-accent);
+    --glass-field: rgba(8, 14, 20, 0.42);
+    --glass-field-hover: rgba(8, 14, 20, 0.5);
+    --glass-field-focus: rgba(8, 14, 20, 0.62);
+    --glass-field-border: rgba(247, 247, 245, 0.24);
+    --glass-field-border-hover: rgba(247, 247, 245, 0.4);
+    --glass-field-ink: #f7f7f5;
+    --glass-placeholder: rgba(247, 247, 245, 0.66);
+    --glass-focus: var(--on-dark-accent);
+    --glass-focus-ring: rgba(217, 201, 166, 0.26);
+    --glass-error: #ffb4a9;
+  }
+}
+
+.glass .eyebrow {
+  color: var(--glass-accent);
+}
+
+/* Three classes, to outrank `.form .heading` and the global `.onNavy h2`. */
+.form.glass .heading {
+  color: var(--glass-ink);
+}
+
+.glass .intro,
+.glass .footnote,
+.glass :global(.field) > label,
+.glass :global(.field .optional) {
+  color: var(--glass-ink-soft);
+}
+
+.glass :global(.input) {
+  background: var(--glass-field);
+  border-color: var(--glass-field-border);
+  color: var(--glass-field-ink);
+  caret-color: var(--glass-field-ink);
+}
+
+.glass :global(.input::placeholder) {
+  color: var(--glass-placeholder);
+}
+
+.glass :global(.input:hover) {
+  background: var(--glass-field-hover);
+  border-color: var(--glass-field-border-hover);
+}
+
+.glass :global(.input:focus) {
+  background: var(--glass-field-focus);
+  border-color: var(--glass-focus);
+  box-shadow: 0 0 0 3px var(--glass-focus-ring);
+}
+
+/* Restated, because the field rule above would otherwise hide the error edge. */
+.glass :global(.input[aria-invalid='true']) {
+  border-color: var(--glass-error);
+}
+
+.glass :global(.fieldError) {
+  color: var(--glass-error);
+}
+
+/*
+ * On dark glass the navy submit button would sink into the pane. It takes the
+ * hero's own primary-action bronze instead, so the two read as one family.
+ */
+.glass[data-glass='dark'] .submit :global(.btn--accent) {
+  background: #c9a063;
+  border-color: #c9a063;
+  color: #16202b;
+}
+
+.glass[data-glass='dark'] .submit :global(.btn--accent:hover:not(:disabled)) {
+  background: #d8b277;
+  border-color: #d8b277;
+  color: #16202b;
+}
+
+@media (max-width: 1023px) {
+  .glass .submit :global(.btn--accent) {
+    background: #c9a063;
+    border-color: #c9a063;
+    color: #16202b;
+  }
+
+  .glass .submit :global(.btn--accent:hover:not(:disabled)) {
+    background: #d8b277;
+    border-color: #d8b277;
+    color: #16202b;
+  }
+}
+
+/* Without backdrop blur the photograph shows through unsoftened, and a 50%
+   pane cannot hold text over it. Thicken the pane instead. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass {
+    background: rgb(var(--glass-tint) / 0.9);
+  }
+}
+
+/* Visitors who have asked for less transparency get a near-solid pane. */
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    background: rgb(var(--glass-tint) / 0.94);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 }

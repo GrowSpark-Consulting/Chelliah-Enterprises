@@ -13,6 +13,11 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* Per-image crop focus, supplied by the registry record. */
+  object-position: var(--frame-focus, center center);
+  /* The same restrained trim the hero uses, so photography reads as one
+     consistent set across the site. */
+  filter: saturate(0.92) contrast(1.03);
   transition: transform var(--t-image) var(--ease);
 }
 

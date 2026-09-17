@@ -1,9 +1,13 @@
+import Image from 'next/image';
+import type { CSSProperties } from 'react';
 import { Phone } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
 import { SectionLabel } from '@/components/ui/SectionLabel';
 import { WhatsAppIcon } from '@/components/ui/WhatsAppIcon';
+import { slotImage } from '@/data/images';
 import { contact } from '@/data/site';
+import { cx } from '@/lib/cx';
 import { generalEnquiry } from '@/lib/whatsapp';
 
 import styles from './CTASection.module.css';
@@ -26,10 +30,32 @@ export function CTASection({
   enquiryLabel = 'Book a site inspection',
 }: CTASectionProps) {
   const phone = contact.phones[0];
+  // The one major band that carries a photograph. Falls back to flat navy
+  // until a suitable project photograph is assigned to the slot.
+  const photo = slotImage('cta');
 
   return (
-    <section className={`onNavy ${styles.cta}`} aria-labelledby="cta-heading">
-      <Container>
+    <section
+      className={cx('onNavy', styles.cta, photo && styles.hasPhoto)}
+      aria-labelledby="cta-heading"
+    >
+      {photo && (
+        <div className={styles.media}>
+          <Image
+            src={photo.src}
+            alt=""
+            aria-hidden
+            fill
+            loading="lazy"
+            sizes="100vw"
+            quality={78}
+            className={styles.image}
+            style={{ '--focus': photo.focus ?? 'center center' } as CSSProperties}
+          />
+          <div className={styles.scrim} aria-hidden />
+        </div>
+      )}
+      <Container className={styles.content}>
         <div className={styles.inner}>
           <div className={styles.copy}>
             <SectionLabel>{label}</SectionLabel>

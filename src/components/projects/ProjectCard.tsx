@@ -1,5 +1,6 @@
 import { MapPin } from 'lucide-react';
 import { ImageFrame } from '@/components/ui/ImageFrame';
+import { projectImage } from '@/data/images';
 import type { Project } from '@/data/projects';
 import styles from './ProjectCard.module.css';
 
@@ -11,6 +12,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
   return (
     <article className={styles.card}>
       <ImageFrame
+        image={projectImage(project.id)}
         hint={project.imageHint}
         ratio="4/3"
         className={styles.media}

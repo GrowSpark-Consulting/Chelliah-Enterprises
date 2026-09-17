@@ -33,6 +33,7 @@ export default function ProjectsPage() {
         title="Our work speaks for itself"
         lede="Trusted by industrial operators including L&T Energy Hydrocarbon, Murugappa Group, ESAB and CUMI — alongside 150+ commercial and residential projects."
         breadcrumbs={[{ href: '/', label: 'Home' }, { label: 'Projects' }]}
+        image="projectsHero"
       />
 
       <section className={styles.stats} aria-labelledby="project-stats-heading">

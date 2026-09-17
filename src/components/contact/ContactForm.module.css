@@ -5,6 +5,200 @@
   border-radius: var(--radius-sm);
 }
 
+/*
+ * The hero variant. The form sits on a photograph there, so it needs to read
+ * as a solid, opaque card — white ground, hairline border, one soft shadow.
+ * Deliberately not translucent: a glass panel over a working plant floor
+ * makes both the form and the photograph harder to read.
+ */
+.formCard {
+  background: #fff;
+  border-color: rgba(37, 37, 37, 0.1);
+  border-radius: var(--radius-lg);
+  padding: clamp(24px, 2.4vw, 34px);
+  box-shadow:
+    0 1px 2px rgba(11, 20, 30, 0.1),
+    0 18px 40px -22px rgba(11, 20, 30, 0.45);
+}
+
+.formCard {
+  padding: clamp(22px, 2vw, 30px);
+}
+
+/* On white, the inputs need their own edge back — --surface was providing
+   the contrast for them on the default panel. */
+.formCard :global(.input) {
+  background: #fcfcfb;
+}
+
+.formCard :global(.input:focus) {
+  background: #fff;
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   Compact metrics for the hero card.
+   The whole form has to sit inside the first viewport on a 1366×768
+   desktop, so every vertical step is tightened — but nothing is removed,
+   nothing is hidden, and no field is made smaller than a comfortable
+   44px target.
+   ────────────────────────────────────────────────────────────────────── */
+
+.formCard .heading {
+  /* Smaller than the page-level form: at this size the heading sets on one
+     line inside the card at desktop widths, which is worth ~36px of height. */
+  font-size: clamp(1.75rem, 1.35rem + 0.95vw, 2.125rem);
+  margin-block: var(--space-2) 6px;
+}
+
+.formCard .intro {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.formCard .fields {
+  margin-top: var(--space-4);
+  gap: var(--space-3) var(--space-4);
+}
+
+.formCard :global(.field) {
+  gap: 4px;
+}
+
+.formCard :global(.field) > label {
+  font-size: 0.6875rem;
+}
+
+.formCard :global(.input) {
+  min-height: 44px;
+  padding: 10px 13px;
+}
+
+.formCard :global(select.input) {
+  padding-right: 38px;
+}
+
+/*
+ * `height`, not `min-height`: the `rows` attribute sets the textarea's own
+ * content height and wins over a min-height, which is what kept this box at
+ * 118px and pushed the submit button below the fold. The attribute stays so
+ * the field is still the right size with no CSS.
+ */
+.formCard :global(textarea.input) {
+  height: 80px;
+  min-height: 80px;
+}
+
+.formCard .submit {
+  margin-top: var(--space-4);
+}
+
+.formCard .submit :global(.btn) {
+  min-height: 48px;
+}
+
+.formCard .footnote {
+  margin-top: 10px;
+  font-size: 0.8125rem;
+}
+
+/*
+ * Short desktop viewports. These are keyed off the real browser viewport, not
+ * the screen: a 1366×768 laptop running Chrome with a bookmarks bar and the
+ * Windows taskbar has roughly 620px of page height, not 768. Both tiers below
+ * only give up spacing — every field stays present and every control stays at
+ * a comfortable size.
+ */
+
+/* Tier one — around 700–790px of viewport. */
+@media (min-width: 1024px) and (max-height: 790px) {
+  .formCard {
+    padding: 22px 24px;
+  }
+
+  .formCard .heading {
+    font-size: 1.75rem;
+  }
+
+  .formCard .fields {
+    margin-top: var(--space-3);
+    gap: 10px var(--space-4);
+  }
+
+  .formCard :global(textarea.input) {
+    height: 72px;
+    min-height: 72px;
+  }
+
+  .formCard .submit {
+    margin-top: var(--space-3);
+  }
+}
+
+/*
+ * Tier two — under ~700px of viewport, which is what a 1366×768 laptop
+ * actually gives you. The heading drops to a single line, the vertical rhythm
+ * tightens to its floor and the textarea shows two lines instead of three.
+ * Inputs stay at 44px and the body copy stays at 14px: below that the card
+ * stops being comfortable to fill in, which would defeat the point of having
+ * it above the fold at all.
+ */
+@media (min-width: 1024px) and (max-height: 700px) {
+  .formCard {
+    padding: 18px 22px;
+  }
+
+  .formCard .eyebrow {
+    font-size: 0.625rem;
+  }
+
+  .formCard .heading {
+    font-size: 1.5rem;
+    margin-block: 6px 4px;
+  }
+
+  .formCard .intro {
+    font-size: 0.875rem;
+    line-height: 1.45;
+  }
+
+  .formCard .fields {
+    margin-top: 10px;
+    gap: 8px var(--space-3);
+  }
+
+  .formCard :global(.field) {
+    gap: 3px;
+  }
+
+  .formCard :global(.field) > label {
+    font-size: 0.625rem;
+  }
+
+  .formCard :global(.input) {
+    min-height: 44px;
+    padding: 9px 12px;
+    font-size: 0.875rem;
+  }
+
+  .formCard :global(textarea.input) {
+    height: 54px;
+    min-height: 54px;
+  }
+
+  .formCard .submit {
+    margin-top: 10px;
+  }
+
+  .formCard .submit :global(.btn) {
+    min-height: 44px;
+  }
+
+  .formCard .footnote {
+    margin-top: 8px;
+    font-size: 0.75rem;
+  }
+}
+
 .eyebrow {
   font-size: 0.6875rem;
   font-weight: 600;
@@ -13,8 +207,14 @@
   color: var(--accent-text);
 }
 
-.heading {
+/*
+ * Scoped to .form so it outranks the global `.onNavy h2` rule. The hero
+ * places this form inside a dark section, and without this the heading
+ * inherits that section's white and disappears against the white card.
+ */
+.form .heading {
   margin-block: var(--space-3) var(--space-2);
+  color: var(--foreground);
 }
 
 .intro {

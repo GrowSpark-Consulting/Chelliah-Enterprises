@@ -2,16 +2,24 @@
 
 import { useId, useRef, useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
-import { AlertCircle, CheckCircle2 } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Send } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { WhatsAppIcon } from '@/components/ui/WhatsAppIcon';
 import { enquiryServices } from '@/data/site';
+import { cx } from '@/lib/cx';
 import { enquiryWhatsAppLink, submitEnquiry, type Enquiry } from '@/lib/enquiry';
 import styles from './ContactForm.module.css';
 
 type ContactFormProps = {
   /** Which page this instance sits on; recorded against the enquiry. */
   source?: string;
+  /**
+   * `surface` — the default off-white panel, for use on a page ground.
+   * `card` — a white floating card with a hairline border and a soft shadow,
+   * for the home hero where the form sits over a photograph and has to read
+   * as a separate object rather than a tinted area of the image.
+   */
+  tone?: 'surface' | 'card';
 };
 
 type FieldName = keyof Enquiry;
@@ -37,6 +45,34 @@ const emptyEnquiry: Enquiry = {
   location: '',
   message: '',
 };
+
+/**
+ * The hero card follows the approved hero design, which asks for six fields.
+ * The service picker is not one of them, so that instance records the neutral
+ * option rather than a guessed service — the requirement field and the
+ * follow-up call establish what the job actually is. The contact page still
+ * carries the full picker.
+ */
+const UNSPECIFIED_SERVICE = 'Other / Not sure';
+
+const placeholderSets = {
+  surface: {
+    name: '',
+    phone: '',
+    email: '',
+    company: '',
+    location: 'e.g. Oragadam, Chennai',
+    message: 'The site, the problem, approximate area and your timeline.',
+  },
+  card: {
+    name: 'Your name',
+    phone: 'Your phone number',
+    email: 'Your email address',
+    company: 'Company name',
+    location: 'City / Area',
+    message: 'Tell us about your project…',
+  },
+} as const;
 
 function validate(values: Enquiry): Errors {
   const errors: Errors = {};
@@ -73,7 +109,9 @@ function FieldError({ id, message }: { id: string; message?: string }) {
   );
 }
 
-export function ContactForm({ source = 'Website' }: ContactFormProps) {
+export function ContactForm({ source = 'Website', tone = 'surface' }: ContactFormProps) {
+  const isCard = tone === 'card';
+  const placeholder = placeholderSets[tone];
   const id = useId();
   const formRef = useRef<HTMLFormElement>(null);
   /** Guards against a double submit racing past the disabled button. */
@@ -84,7 +122,9 @@ export function ContactForm({ source = 'Website' }: ContactFormProps) {
    */
   const submissionId = useRef('');
   const honeypot = useRef('');
-  const [values, setValues] = useState<Enquiry>(emptyEnquiry);
+  const [values, setValues] = useState<Enquiry>(
+    isCard ? { ...emptyEnquiry, service: UNSPECIFIED_SERVICE } : emptyEnquiry,
+  );
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'failed'>('idle');
   const [statusMessage, setStatusMessage] = useState('');
@@ -143,7 +183,7 @@ export function ContactForm({ source = 'Website' }: ContactFormProps) {
         'Your enquiry has been recorded and sent to our team. We will respond — usually within a few hours.',
       );
       setSentEnquiry(submitted);
-      setValues(emptyEnquiry);
+      setValues(isCard ? { ...emptyEnquiry, service: UNSPECIFIED_SERVICE } : emptyEnquiry);
       // The next enquiry from this form is a new one.
       submissionId.current = '';
     } else {
@@ -168,7 +208,12 @@ export function ContactForm({ source = 'Website' }: ContactFormProps) {
   });
 
   return (
-    <form ref={formRef} className={styles.form} onSubmit={handleSubmit} noValidate>
+    <form
+      ref={formRef}
+      className={cx(styles.form, tone === 'card' && styles.formCard)}
+      onSubmit={handleSubmit}
+      noValidate
+    >
       <p className={styles.eyebrow}>Free site inspection</p>
       <h2 className={styles.heading}>Send your project details</h2>
       <p className={styles.intro}>
@@ -178,13 +223,25 @@ export function ContactForm({ source = 'Website' }: ContactFormProps) {
       <div className={styles.fields}>
         <div className="field">
           <label htmlFor={`${id}-name`}>Name</label>
-          <input type="text" autoComplete="name" required {...fieldProps('name')} />
+          <input
+            type="text"
+            autoComplete="name"
+            placeholder={placeholder.name}
+            required
+            {...fieldProps('name')}
+          />
           <FieldError {...errorFor('name')} />
         </div>
 
         <div className="field">
           <label htmlFor={`${id}-phone`}>Phone</label>
-          <input type="tel" autoComplete="tel" required {...fieldProps('phone')} />
+          <input
+            type="tel"
+            autoComplete="tel"
+            placeholder={placeholder.phone}
+            required
+            {...fieldProps('phone')}
+          />
           <FieldError {...errorFor('phone')} />
         </div>
 
@@ -192,7 +249,12 @@ export function ContactForm({ source = 'Website' }: ContactFormProps) {
           <label htmlFor={`${id}-email`}>
             Email <span className="optional">(optional)</span>
           </label>
-          <input type="email" autoComplete="email" {...fieldProps('email')} />
+          <input
+            type="email"
+            autoComplete="email"
+            placeholder={placeholder.email}
+            {...fieldProps('email')}
+          />
           <FieldError {...errorFor('email')} />
         </div>
 
@@ -200,41 +262,40 @@ export function ContactForm({ source = 'Website' }: ContactFormProps) {
           <label htmlFor={`${id}-company`}>
             Company <span className="optional">(optional)</span>
           </label>
-          <input type="text" autoComplete="organization" {...fieldProps('company')} />
+          <input
+            type="text"
+            autoComplete="organization"
+            placeholder={placeholder.company}
+            {...fieldProps('company')}
+          />
         </div>
 
-        <div className="field">
-          <label htmlFor={`${id}-service`}>Service required</label>
-          <select required {...fieldProps('service')}>
-            {enquiryServices.map((service) => (
-              <option key={service} value={service}>
-                {service}
-              </option>
-            ))}
-          </select>
-          <FieldError {...errorFor('service')} />
-        </div>
+        {!isCard && (
+          <div className="field">
+            <label htmlFor={`${id}-service`}>Service required</label>
+            <select required {...fieldProps('service')}>
+              {enquiryServices.map((service) => (
+                <option key={service} value={service}>
+                  {service}
+                </option>
+              ))}
+            </select>
+            <FieldError {...errorFor('service')} />
+          </div>
+        )}
 
-        <div className="field">
+        <div className={cx('field', isCard && styles.full)}>
           <label htmlFor={`${id}-location`}>
             Project location <span className="optional">(optional)</span>
           </label>
-          <input
-            type="text"
-            placeholder="e.g. Oragadam, Chennai"
-            {...fieldProps('location')}
-          />
+          <input type="text" placeholder={placeholder.location} {...fieldProps('location')} />
         </div>
 
         <div className={`field ${styles.full}`}>
           <label htmlFor={`${id}-message`}>
-            Message <span className="optional">(optional)</span>
+            {isCard ? 'Requirement' : 'Message'} <span className="optional">(optional)</span>
           </label>
-          <textarea
-            rows={4}
-            placeholder="The site, the problem, approximate area and your timeline."
-            {...fieldProps('message')}
-          />
+          <textarea rows={4} placeholder={placeholder.message} {...fieldProps('message')} />
         </div>
       </div>
 
@@ -257,13 +318,15 @@ export function ContactForm({ source = 'Website' }: ContactFormProps) {
 
       <div className={styles.submit}>
         <Button type="submit" variant="accent" block disabled={status === 'sending'}>
-          <WhatsAppIcon size={17} />
-          {status === 'sending' ? 'Sending…' : 'Send enquiry'}
+          {isCard ? <Send size={17} strokeWidth={1.75} aria-hidden /> : <WhatsAppIcon size={17} />}
+          {status === 'sending' ? 'Sending…' : isCard ? 'Send details' : 'Send enquiry'}
         </Button>
       </div>
 
       <p className={styles.footnote}>
-        Your details go straight to our team. No marketing lists, no spam.
+        {isCard
+          ? 'We typically respond within 24 hours.'
+          : 'Your details go straight to our team. No marketing lists, no spam.'}
       </p>
 
       <div aria-live="polite">

@@ -21,7 +21,7 @@ export function ServiceList({ services, className }: ServiceListProps) {
       {services.map((service, index) => (
         <Reveal as="li" key={service.slug} delay={(index % 4) * 60}>
           <Link href={serviceHref(service)} className={styles.row}>
-            <span className={styles.number}>{service.number}</span>
+            <span className={styles.number}>{String(index + 1).padStart(2, '0')}</span>
             <span className={styles.copy}>
               <h3 className={styles.title}>{service.shortName}</h3>
               <p className={styles.body}>{service.summary}</p>

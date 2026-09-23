@@ -14,7 +14,7 @@ export function ServiceGrid({ services, className }: ServiceGridProps) {
     <ul className={cx(styles.grid, className)}>
       {services.map((service, index) => (
         <Reveal as="li" key={service.slug} delay={(index % 3) * 70}>
-          <ServiceCard service={service} />
+          <ServiceCard service={service} number={String(index + 1).padStart(2, '0')} />
         </Reveal>
       ))}
     </ul>

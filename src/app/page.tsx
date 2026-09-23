@@ -16,7 +16,7 @@ import { SectionHeading } from '@/components/ui/SectionHeading';
 import { SectionLabel } from '@/components/ui/SectionLabel';
 import { featuredComparison, resolveComparison } from '@/data/images';
 import { featuredServices } from '@/data/services';
-import { projects } from '@/data/projects';
+import { homeFeaturedProjectIds, projects } from '@/data/projects';
 import { site, stats } from '@/data/site';
 import styles from './page.module.css';
 
@@ -49,7 +49,9 @@ const whyUs = [
   },
 ];
 
-const recentWork = projects.slice(0, 3);
+const recentWork = homeFeaturedProjectIds
+  .map((id) => projects.find((project) => project.id === id))
+  .filter((project): project is (typeof projects)[number] => Boolean(project));
 
 /** The before/after the work section leads with. */
 const featured = resolveComparison(featuredComparison);

@@ -95,6 +95,7 @@
 .whyItem {
   position: relative;
   padding: var(--space-6) var(--space-6) var(--space-4) 0;
+  transition: background-color var(--t-card) var(--ease);
 }
 
 .whyItem + .whyItem {
@@ -102,19 +103,22 @@
   border-left: 1px solid var(--border);
 }
 
-/* The bronze tick that marks each item against the top rule. */
+/* The bronze tick that marks each item against the top rule. On hover it
+   draws out to the item's full width — the same mark, just following
+   through — rather than introducing an unrelated effect. */
 .whyItem::before {
   content: '';
   position: absolute;
   top: -1px;
-  left: 0;
+  left: var(--tick-left, 0px);
   width: 28px;
   height: 2px;
   background: var(--accent);
+  transition: width var(--t-card) var(--ease);
 }
 
 .whyItem + .whyItem::before {
-  left: var(--space-6);
+  --tick-left: var(--space-6);
 }
 
 .whyNumber {
@@ -122,6 +126,31 @@
   font-weight: 700;
   letter-spacing: 0.18em;
   color: var(--accent-text);
+  transition: color var(--t-card) var(--ease);
+}
+
+/* Pointer users only: a soft tint, the tick drawing full width, and the
+   number picking up the fuller accent — restrained, no motion or scale. */
+@media (hover: hover) and (pointer: fine) {
+  .whyItem:hover {
+    background-color: var(--accent-tint);
+  }
+
+  .whyItem:hover::before {
+    width: calc(100% - var(--tick-left, 0px) - var(--space-6));
+  }
+
+  .whyItem:hover .whyNumber {
+    color: var(--accent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .whyItem,
+  .whyItem::before,
+  .whyNumber {
+    transition: none;
+  }
 }
 
 .whyTitle {
@@ -165,7 +194,7 @@
   }
 
   .whyItem:nth-child(3)::before {
-    left: 0;
+    --tick-left: 0px;
   }
 
   .whyItem:nth-child(n + 3) {
@@ -194,7 +223,7 @@
   }
 
   .whyItem + .whyItem::before {
-    left: 0;
+    --tick-left: 0px;
   }
 
   .whyItem:nth-child(n + 3) {

@@ -10,8 +10,12 @@ const nextConfig = {
   },
   experimental: {
     // CSS Modules otherwise emit a separate render-blocking stylesheet per
-    // component chunk; 'loose' merges them so a page costs fewer round trips.
-    cssChunking: 'loose',
+    // component chunk; merging them costs fewer round trips per page. The
+    // installed Next.js version only accepts `boolean | 'strict'` here —
+    // `true` is the current name for the old 'loose' merge behaviour this
+    // was set for; the invalid string silently broke the dev server's CSS
+    // pipeline (assets 404ing, HMR throwing "[object Event]").
+    cssChunking: true,
   },
 };
 

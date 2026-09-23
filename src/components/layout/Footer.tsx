@@ -112,6 +112,20 @@ export function Footer() {
           </p>
           <p>Serving {contact.serviceArea}</p>
         </div>
+
+        <div className={styles.credit}>
+          <p>
+            Designed &amp; developed by{' '}
+            <a
+              href="https://www.growsparkconsulting.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.creditLink}
+            >
+              Grow Spark Consulting
+            </a>
+          </p>
+        </div>
       </Container>
     </footer>
   );

@@ -9,10 +9,12 @@
 
 .marquee {
   /* Space between marks, and the multiplier every mark is drawn at. */
-  --gap: clamp(48px, 5vw, 76px);
-  --scale: 1;
-  /* ~34 px/s across the desktop group — slow enough to read each mark. */
-  --duration: 90s;
+  --gap: clamp(56px, 5.5vw, 88px);
+  /* ~2x the marks' original size, per client request — see --row below. */
+  --scale: 2;
+  /* Duration scales with --scale so the strip keeps its original ~34 px/s
+     read speed instead of appearing to speed up as the marks grow. */
+  --duration: 140s;
   /* The tallest registered mark, so the row height never changes. */
   --row: 46px;
 
@@ -23,7 +25,7 @@
 
 .viewport {
   overflow: hidden;
-  padding-block: clamp(26px, 3vw, 38px);
+  padding-block: clamp(32px, 4vw, 48px);
   border-block: 1px solid var(--border);
   /* The strip cannot affect layout or paint outside itself. */
   contain: layout paint;
@@ -154,9 +156,9 @@
 
 @media (max-width: 767px) {
   .marquee {
-    --scale: 0.8;
+    --scale: 1.6;
     /* The group is shorter here, so the same speed needs less time. */
-    --duration: 70s;
+    --duration: 110s;
   }
 
   .viewport {

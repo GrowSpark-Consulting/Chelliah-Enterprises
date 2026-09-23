@@ -28,6 +28,11 @@
   gap: var(--space-4);
   padding-bottom: var(--space-5);
   border-bottom: 1px solid var(--border-light);
+  transition: border-color var(--t-card) var(--ease);
+}
+
+.card:hover .top {
+  border-bottom-color: var(--accent);
 }
 
 .number {
@@ -35,6 +40,11 @@
   font-weight: 700;
   letter-spacing: 0.18em;
   color: var(--accent-text);
+  transition: color var(--t-card) var(--ease);
+}
+
+.card:hover .number {
+  color: var(--accent);
 }
 
 .category {
@@ -85,4 +95,18 @@
 
 .card:hover .footer svg {
   transform: translateX(4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .top,
+  .number,
+  .title,
+  .footer svg {
+    transition: none;
+  }
+
+  .card:hover {
+    transform: none;
+  }
 }

@@ -51,42 +51,6 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    id: 'wp-terrace-guduvancheri',
-    title: 'Residential terrace',
-    location: 'Guduvancheri',
-    sector: 'Residential',
-    category: 'waterproofing',
-    scope: '3,200 sq.ft · Brickbats Coba',
-    service: 'Waterproofing',
-    description:
-      'Chronic slab leakage stopped, and dry through two monsoons since handover.',
-    imageHint: 'Terrace finished with red waterproof coating',
-  },
-  {
-    id: 'wp-basement-chengalpattu',
-    title: 'Industrial basement',
-    location: 'Chengalpattu',
-    sector: 'Industrial',
-    category: 'waterproofing',
-    scope: 'HDPE membrane · Below-grade',
-    service: 'Waterproofing',
-    description:
-      'Basement plant room kept dry through a full seasonal water-table rise.',
-    imageHint: 'Basement membrane waterproofing being laid',
-  },
-  {
-    id: 'wp-apartment-tambaram',
-    title: 'Apartment block',
-    location: 'Tambaram',
-    sector: 'Residential',
-    category: 'waterproofing',
-    scope: '18 bathrooms · Sunken slab treatment',
-    service: 'Waterproofing',
-    description:
-      'Seepage into the ceilings below eliminated without breaking up tiled floors.',
-    imageHint: 'Bathroom sunken slab waterproofing',
-  },
-  {
     id: 'ep-machining-oragadam',
     title: 'Machining plant',
     location: 'Oragadam',
@@ -194,4 +158,52 @@ export const projects: Project[] = [
       'Multi-sport marking set out to regulation dimensions in a single pass.',
     imageHint: 'Indoor sports court coating with line marking',
   },
+  {
+    id: 'wp-terrace-guduvancheri',
+    title: 'Residential terrace',
+    location: 'Guduvancheri',
+    sector: 'Residential',
+    category: 'waterproofing',
+    scope: '3,200 sq.ft · Brickbats Coba',
+    service: 'Waterproofing',
+    description:
+      'Chronic slab leakage stopped, and dry through two monsoons since handover.',
+    imageHint: 'Terrace finished with red waterproof coating',
+  },
+  {
+    id: 'wp-basement-chengalpattu',
+    title: 'Industrial basement',
+    location: 'Chengalpattu',
+    sector: 'Industrial',
+    category: 'waterproofing',
+    scope: 'HDPE membrane · Below-grade',
+    service: 'Waterproofing',
+    description:
+      'Basement plant room kept dry through a full seasonal water-table rise.',
+    imageHint: 'Basement membrane waterproofing being laid',
+  },
+  {
+    id: 'wp-apartment-tambaram',
+    title: 'Apartment block',
+    location: 'Tambaram',
+    sector: 'Residential',
+    category: 'waterproofing',
+    scope: '18 bathrooms · Sunken slab treatment',
+    service: 'Waterproofing',
+    description:
+      'Seepage into the ceilings below eliminated without breaking up tiled floors.',
+    imageHint: 'Bathroom sunken slab waterproofing',
+  },
 ];
+
+/**
+ * Curated for the homepage "Recent work" strip, which only has room for
+ * three cards. Picked for the strongest-looking finished thumbnails rather
+ * than array order, so it stays independent of where a project sits in the
+ * full Projects-page list above.
+ */
+export const homeFeaturedProjectIds = [
+  'ep-warehouse-sriperumbudur',
+  'cp-park-tambaram',
+  'sp-court-guduvancheri',
+] as const satisfies readonly Project['id'][];

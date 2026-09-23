@@ -11,10 +11,13 @@
 
 .wrap {
   display: block;
+  /* ~2x the marks' original size, per client request — mirrors the
+     client-logo strip's own --scale treatment. */
+  --scale: 2;
 }
 
 .heading {
-  margin-bottom: clamp(24px, 3vw, 36px);
+  margin-bottom: clamp(28px, 3.5vw, 44px);
   font-size: 0.6875rem;
   font-weight: 600;
   letter-spacing: 0.18em;
@@ -29,8 +32,8 @@
   align-items: center;
   justify-content: center;
   /* Wide enough that the marks read as a set of separate credentials rather
-     than one run-on graphic. */
-  gap: clamp(28px, 4.5vw, 60px);
+     than one run-on graphic — widened to keep pace with the larger marks. */
+  gap: clamp(36px, 5.5vw, 76px);
 }
 
 .item {
@@ -45,7 +48,7 @@
    mark, so a pending logo reads as intentional rather than broken. */
 .name {
   min-width: 0;
-  font-size: 0.75rem;
+  font-size: calc(0.75rem * var(--scale));
   font-weight: 600;
   line-height: 1.45;
   letter-spacing: 0.1em;
@@ -58,9 +61,10 @@
   width: auto;
   max-width: 100%;
   height: auto;
-  /* Set per logo from its own measured ink — see `renderHeight` in data/site.
-     The fallback covers a file registered without one. */
-  max-height: var(--logo-h, 60px);
+  /* Set per logo from its own measured ink — see `renderHeight` in data/site
+     — then multiplied by --scale, the same 2x treatment the client-logo
+     strip uses. The fallback covers a file registered without one. */
+  max-height: calc(var(--logo-h, 60px) * var(--scale));
   object-fit: contain;
 }
 
@@ -91,7 +95,7 @@
 
 .ink .item {
   display: flex;
-  min-height: 100px;
+  min-height: 172px;
   padding: var(--space-4) var(--space-3);
   border: 1px solid var(--chip-border);
   border-radius: var(--radius-sm);
@@ -111,8 +115,12 @@
 }
 
 @media (max-width: 767px) {
+  .wrap {
+    --scale: 1.6;
+  }
+
   .list {
-    gap: clamp(24px, 6vw, 40px) clamp(24px, 7vw, 44px);
+    gap: clamp(28px, 7vw, 48px) clamp(28px, 8vw, 52px);
   }
 }
 
@@ -123,12 +131,12 @@
   }
 
   .ink .item {
-    min-height: 88px;
+    min-height: 148px;
     padding-inline: var(--space-2);
   }
 
   .name {
-    font-size: 0.6875rem;
+    font-size: calc(0.6875rem * var(--scale));
     letter-spacing: 0.08em;
   }
 }

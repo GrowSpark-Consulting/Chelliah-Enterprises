@@ -13,12 +13,11 @@ export const site = {
   foundedYear: 2009,
   /*
    * Drives canonical URLs, Open Graph URLs, sitemap.xml and robots.txt, so it
-   * must be the address that actually serves the site. Switch this to the
-   * custom domain only once that domain is connected and serving, or search
-   * engines will be pointed at a canonical that does not respond.
+   * must be the address that actually serves the site. The bare domain
+   * redirects to www, so www is the canonical host. No trailing slash.
    */
-  url: 'https://chelliah-enterprises.vercel.app',
-  displayUrl: 'chelliah-enterprises.vercel.app',
+  url: 'https://www.chelliahenterprises.in',
+  displayUrl: 'www.chelliahenterprises.in',
   gstin: '33AJUPC6761F1Z3',
   tagline: 'Waterproofing & flooring solutions built to last',
   shortDescription:

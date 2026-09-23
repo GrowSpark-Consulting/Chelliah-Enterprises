@@ -2,9 +2,12 @@ import type { MetadataRoute } from 'next';
 import { servicePages } from '@/data/services';
 import { site } from '@/data/site';
 
+/*
+ * No lastModified: there is no per-page content date to draw on, and stamping
+ * every URL with the build time tells crawlers everything changed on every
+ * deploy, which teaches them to ignore the field.
+ */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date();
-
   const staticRoutes = [
     { path: '', priority: 1 },
     { path: '/services', priority: 0.9 },
@@ -16,13 +19,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...staticRoutes.map((route) => ({
       url: `${site.url}${route.path}`,
-      lastModified,
       changeFrequency: 'monthly' as const,
       priority: route.priority,
     })),
     ...servicePages.map((service) => ({
       url: `${site.url}/services/${service.slug}`,
-      lastModified,
       changeFrequency: 'monthly' as const,
       priority: 0.7,
     })),

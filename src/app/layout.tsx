@@ -100,6 +100,19 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en-IN" className={`${inter.variable} ${libreBaskerville.variable}`}>
       <head>
+        {/* Google Analytics — loads on every page via the root layout */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-J55BC8PGEP"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-J55BC8PGEP');
+          `}
+        </Script>
         {/*
           .reveal starts hidden unconditionally in CSS (see globals.css), so
           server and client markup match exactly and hydration never has a
@@ -125,19 +138,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           // Static, author-controlled data assembled above — no user input.
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organisationJsonLd) }}
         />
-        {/* Google Analytics — loads on every page via the root layout */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-J55BC8PGEP"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-J55BC8PGEP');
-          `}
-        </Script>
       </body>
     </html>
   );

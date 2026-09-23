@@ -164,7 +164,7 @@ const library = [
   },
   {
     id: 'company-team-and-sports-floor-composite',
-    src: '/about.png',
+    src: '/about-team.jpg',
     alt: 'Three panels: three men standing together on a covered sports court finished in green and red coating; two men rolling red sports floor coating across a hall; and a man rolling green floor coating across a room in a bare building.',
     categories: ['general', 'wip', 'finished'],
     label: 'Sports floor coating projects',

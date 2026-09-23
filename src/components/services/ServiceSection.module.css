@@ -34,13 +34,13 @@
 }
 
 /*
- * The gallery carries its own hover scale, guarded so a tap on a touch screen
- * doesn't leave it stuck on. Stand the band's rule down for it rather than
- * having two hover effects on one photograph.
+ * A comparison is handled, not just looked at: scaling its photographs on
+ * hover would slide them under the clip and break the join at the divider.
  */
 .figureInteractive img,
 .figureInteractive:hover img {
   transform: none;
+  transition: none;
 }
 
 .marker {

@@ -61,7 +61,19 @@ export const contact = {
     country: 'IN',
   },
   serviceArea: 'Guduvanchery, Chengalpattu, Tambaram, Vandalur & Greater Chennai',
-  mapQuery: 'Nandivaram Guduvancheri Chengalpattu 603202 Tamil Nadu',
+  /*
+   * What the map embed is asked for.
+   *
+   * The business name with its street is what makes the embed resolve to the
+   * real Google listing — the place card with the name, address and rating —
+   * rather than dropping an unlabelled pin on an area. The listing is at
+   * 12.8604657, 80.0633757 (feature id 0x3a52f71cacbafa3f:0x55991015436e7f06),
+   * but the keyless embed accepts none of `cid`, `ftid` or `ll`: given any of
+   * them it renders the whole world, or nothing at all. So the query is the
+   * only handle it takes, and it is deliberately specific enough to be
+   * unambiguous.
+   */
+  mapQuery: 'Chelliah Enterprises, Arul Nagar Main Road, Nandivaram Guduvancheri',
 } as const;
 
 export const groupCompanies = [

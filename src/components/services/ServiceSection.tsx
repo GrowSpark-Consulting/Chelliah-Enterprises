@@ -1,8 +1,9 @@
 import { Check } from 'lucide-react';
+import { BeforeAfterGallery } from '@/components/ui/BeforeAfterGallery';
 import { Button } from '@/components/ui/Button';
 import { ImageFrame } from '@/components/ui/ImageFrame';
 import { WhatsAppIcon } from '@/components/ui/WhatsAppIcon';
-import { serviceImage } from '@/data/images';
+import { serviceComparison, serviceImage } from '@/data/images';
 import type { Service } from '@/data/services';
 import { cx } from '@/lib/cx';
 import { serviceEnquiry } from '@/lib/whatsapp';
@@ -41,6 +42,10 @@ export function ServiceSection({
   reversed = false,
   showHeading = true,
 }: ServiceSectionProps) {
+  // A service with a registered before/after pair gets the gallery; every
+  // other one keeps its single photograph.
+  const comparison = serviceComparison(service.slug);
+
   return (
     <section
       id={service.slug}
@@ -48,13 +53,23 @@ export function ServiceSection({
       aria-labelledby={showHeading ? `${service.slug}-heading` : undefined}
       aria-label={showHeading ? undefined : service.title}
     >
-      <figure className={styles.figure}>
-        <ImageFrame
-          image={serviceImage(service.slug)}
-          hint={service.imageHint}
-          ratio="4/3"
-          sizes="(max-width: 899px) 100vw, 600px"
-        />
+      <figure className={cx(styles.figure, comparison && styles.figureInteractive)}>
+        {comparison ? (
+          <BeforeAfterGallery
+            before={comparison.before}
+            after={comparison.after}
+            subject={service.category.toLowerCase()}
+            ratio="1/1"
+            sizes="(max-width: 899px) 100vw, 600px"
+          />
+        ) : (
+          <ImageFrame
+            image={serviceImage(service.slug)}
+            hint={service.imageHint}
+            ratio="4/3"
+            sizes="(max-width: 899px) 100vw, 600px"
+          />
+        )}
       </figure>
 
       <div className={styles.content}>

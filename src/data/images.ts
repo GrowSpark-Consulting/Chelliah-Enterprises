@@ -241,6 +241,36 @@ const library = [
     focusMobile: '92% 40%',
   },
   {
+    /*
+     * The two halves of `waterproofing-terrace-before-after` as separate
+     * photographs, which is what the before/after gallery needs. The collage
+     * stays registered: it is still the fallback if the pair is ever
+     * unassigned, and it carries the layer diagram the gallery cannot.
+     *
+     * They were shot differently — this one landscape (1600x1200), the
+     * finished one portrait (1200x1600) — which is why the gallery frames
+     * them square. In a 4:3 frame `cover` scales the portrait file 1.33x
+     * larger than the landscape one and the same walkway appears at two
+     * sizes; at 1:1 both are scaled identically, so the swap reads as one
+     * place changing. Each then carries the `focus` that brings the green
+     * gate at the end of the walkway to the same point in the frame.
+     */
+    id: 'smj-walkway-before-waterproofing',
+    src: '/slider1.jpeg',
+    alt: 'A palm-lined walkway before waterproofing: bare concrete, stained and patchy, running between brick planters towards a green gate.',
+    categories: ['waterproofing', 'general'],
+    label: 'Before waterproofing',
+    focus: '65% 50%',
+  },
+  {
+    id: 'smj-walkway-after-waterproofing',
+    src: '/Slider2.jpeg',
+    alt: 'The same palm-lined walkway after waterproofing, the floor finished in a glossy blue coating from the brick planters to the green gate.',
+    categories: ['waterproofing', 'finished'],
+    label: 'After waterproofing',
+    focus: '50% 9%',
+  },
+  {
     id: 'waterproofing-terrace-before-after',
     src: '/images/projects/waterproofing-terrace-before-after.jpeg',
     alt: 'A palm-lined terrace walkway shown before and after waterproofing, the finished half coated in blue waterproof paint, alongside a diagram of the waterproof coating, cement screed, brickbats coba and RCC slab layers.',
@@ -429,6 +459,48 @@ export const serviceImages: Partial<Record<string, ImageId>> = {
 
 export function serviceImage(slug: string): SiteImage | undefined {
   return getImage(serviceImages[slug] ?? null);
+}
+
+/* ── Before / after pairs ─────────────────────────────────────────────── */
+
+/** Two photographs of one place, for the before/after gallery. */
+export type ImageComparison = { before: ImageId; after: ImageId };
+
+/** The same pair with both records resolved. */
+export type ResolvedComparison = { before: SiteImage; after: SiteImage };
+
+/**
+ * Service slug → the pair its section compares.
+ *
+ * A service with no pair keeps the single photograph from `serviceImages`,
+ * so this grows one entry at a time as real before/after shots arrive. Both
+ * frames must be the same place from roughly the same position; two
+ * different sites wiped together would misrepresent the work.
+ */
+export const serviceComparisons: Partial<Record<string, ImageComparison>> = {
+  waterproofing: {
+    before: 'smj-walkway-before-waterproofing',
+    after: 'smj-walkway-after-waterproofing',
+  },
+};
+
+/** The pair the home page leads its work section with. */
+export const featuredComparison: ImageComparison = {
+  before: 'smj-walkway-before-waterproofing',
+  after: 'smj-walkway-after-waterproofing',
+};
+
+export function resolveComparison(
+  pair: ImageComparison | undefined,
+): ResolvedComparison | undefined {
+  if (!pair) return undefined;
+  const before = getImage(pair.before);
+  const after = getImage(pair.after);
+  return before && after ? { before, after } : undefined;
+}
+
+export function serviceComparison(slug: string): ResolvedComparison | undefined {
+  return resolveComparison(serviceComparisons[slug]);
 }
 
 /** Project record id → photograph, keyed by the `id` in data/projects.ts. */

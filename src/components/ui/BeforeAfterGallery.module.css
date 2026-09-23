@@ -1,0 +1,167 @@
+/*
+ * Before/after gallery.
+ *
+ * Both photographs sit in the frame from the start; only opacity changes, so
+ * the swap costs a compositor pass and never reflows. The frame holds its
+ * aspect ratio whichever one is showing, so nothing below it moves.
+ */
+
+.frame {
+  position: relative;
+  aspect-ratio: var(--ratio, 1 / 1);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  isolation: isolate;
+}
+
+/*
+ * The outgoing photograph fades out from where the incoming one starts: a
+ * 1.5% scale, enough to read as a settling rather than a cut, not enough to
+ * notice as movement.
+ */
+.layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: scale(1.015);
+  transition:
+    opacity var(--t-image, 500ms) var(--ease),
+    transform var(--t-image, 500ms) var(--ease);
+  pointer-events: none;
+}
+
+.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/*
+ * The two photographs are framed differently — one landscape, one portrait —
+ * so each carries its own object-position, set from the registry, to bring
+ * the same point of the site to the same place in the frame.
+ */
+.image {
+  object-fit: cover;
+  transition: transform var(--t-image, 500ms) var(--ease);
+}
+
+/* — Label ————————————————————————————————————————————————————————
+   Navy for the original, bronze for the finished work: the state is legible
+   at a glance without the label growing. */
+
+.label {
+  position: absolute;
+  bottom: clamp(10px, 2%, 16px);
+  left: clamp(10px, 2%, 16px);
+  z-index: 2;
+  margin: 0;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  background: rgba(11, 20, 30, 0.82);
+  color: #fff;
+  font-size: 0.625rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: background var(--t-card, 300ms) var(--ease);
+  pointer-events: none;
+}
+
+.labelAfter {
+  background: var(--accent);
+  color: #16202b;
+}
+
+/* — The button ——————————————————————————————————————————————————— */
+
+.control {
+  position: absolute;
+  right: clamp(10px, 2%, 16px);
+  bottom: clamp(10px, 2%, 16px);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* The minimum comfortable touch target, and no larger — it sits over the
+     photograph, so weight here reads as clutter. */
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(11, 20, 30, 0.08);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--primary);
+  box-shadow: 0 1px 6px rgba(11, 20, 30, 0.18);
+  cursor: pointer;
+  transition:
+    background var(--t-card, 300ms) var(--ease),
+    box-shadow var(--t-card, 300ms) var(--ease),
+    transform var(--t-card, 300ms) var(--ease);
+}
+
+.control svg {
+  transition: transform var(--t-card, 300ms) var(--ease);
+}
+
+/*
+ * Hover moves the arrow, not the photograph — the image changes on click
+ * alone. Guarded so a tap on a touch screen doesn't leave the hover state
+ * stuck on afterwards.
+ */
+@media (hover: hover) {
+  .control:hover {
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(11, 20, 30, 0.22);
+  }
+
+  .control:hover svg {
+    transform: translateX(2px);
+  }
+
+  .controlBack:hover svg {
+    transform: translateX(-2px);
+  }
+
+  .frame:hover .image {
+    transform: scale(1.02);
+  }
+}
+
+.control:active {
+  transform: scale(0.94);
+  background: #fff;
+}
+
+/*
+ * A white ring under the navy one, so the focus mark holds up over a dark
+ * photograph as well as a light one.
+ */
+.control:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.95);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .layer,
+  .image,
+  .label,
+  .control,
+  .control svg {
+    transition: none;
+  }
+
+  .layer {
+    transform: none;
+  }
+
+  .frame:hover .image,
+  .control:hover svg,
+  .controlBack:hover svg,
+  .control:active {
+    transform: none;
+  }
+}

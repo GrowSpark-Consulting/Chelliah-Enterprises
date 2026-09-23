@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useId, useRef, useState } from 'react';
 import type { CSSProperties, ChangeEvent, FormEvent } from 'react';
@@ -8,6 +8,7 @@ import { WhatsAppIcon } from '@/components/ui/WhatsAppIcon';
 import { enquiryServices } from '@/data/site';
 import { cx } from '@/lib/cx';
 import { enquiryWhatsAppLink, submitEnquiry, type Enquiry } from '@/lib/enquiry';
+import { enquirySchema, type EnquiryFormErrors } from '@/lib/enquiry-schema';
 import type { GlassTheme } from '@/lib/glass';
 import styles from './ContactForm.module.css';
 
@@ -28,7 +29,7 @@ type ContactFormProps = {
 };
 
 type FieldName = keyof Enquiry;
-type Errors = Partial<Record<FieldName, string>>;
+type Errors = EnquiryFormErrors;
 
 /** Visual order of the fields, used to pick which one to focus on error. */
 const fieldOrder: FieldName[] = [
@@ -83,27 +84,16 @@ const placeholderSets = {
 } as const;
 
 function validate(values: Enquiry): Errors {
+  const result = enquirySchema.safeParse(values);
+  if (result.success) return {};
+
   const errors: Errors = {};
-
-  if (!values.name.trim()) {
-    errors.name = 'Please enter your name.';
+  for (const issue of result.error.issues) {
+    const field = issue.path[0] as FieldName | undefined;
+    if (field && !errors[field]) {
+      errors[field] = issue.message;
+    }
   }
-
-  const digits = values.phone.replace(/\D/g, '');
-  if (!values.phone.trim()) {
-    errors.phone = 'Please enter a phone number we can reach you on.';
-  } else if (digits.length < 10) {
-    errors.phone = 'Please enter a valid phone number with at least 10 digits.';
-  }
-
-  if (values.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(values.email.trim())) {
-    errors.email = 'Please check this email address.';
-  }
-
-  if (!values.service) {
-    errors.service = 'Please choose the service you need.';
-  }
-
   return errors;
 }
 

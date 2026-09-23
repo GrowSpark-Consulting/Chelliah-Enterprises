@@ -51,6 +51,17 @@
    */
 }
 
+/*
+ * The before frame, phones only.
+ *
+ * Off everywhere by default: display:none on a lazily-loaded image means the
+ * browser never requests the file at all, so desktop carries none of this.
+ * It is turned on, and only then fetched, under the phone breakpoint below.
+ */
+.before {
+  display: none;
+}
+
 .scrim {
   position: absolute;
   inset: 0;
@@ -348,6 +359,75 @@
 
   .lede {
     max-width: 62ch;
+  }
+}
+
+/*
+ * Phones: the hero states the case instead of just showing the result.
+ *
+ * The hero photograph is the SMJ walkway finished; this lays the same walkway
+ * before the work over it and takes it away every two seconds, so the floor
+ * underneath is the reveal. Two seconds on each, half a second between, on a
+ * five-second loop.
+ *
+ * It animates opacity alone, on a layer of its own, so it stays on the
+ * compositor and never touches the headline or the enquiry card above it.
+ */
+@media (max-width: 767px) {
+  /*
+   * First, give the photograph a crop worth looking at.
+   *
+   * Stretched down the whole stacked hero — 1565px on a 390px screen — a
+   * 16:9 file is upscaled to 2787px wide and only 14% of its width survives
+   * `cover`: a dark vertical strip of foliage, with the floor, which is the
+   * entire subject, mapped below the fold. Held to the height of the screen
+   * instead, the same file is cropped to 26% and its full height is in view,
+   * so the walkway runs from the gate at the top to the floor across the
+   * lower half — where the change from bare concrete to finished coating is
+   * plainly visible. Below it the hero carries on over its own navy.
+   */
+  .media {
+    bottom: auto;
+    height: 100svh;
+    -webkit-mask-image: linear-gradient(to bottom, #000 86%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 86%, transparent 100%);
+  }
+
+  .before {
+    display: block;
+    position: absolute;
+    inset: 0;
+    animation: heroReveal 5s var(--ease) infinite;
+    will-change: opacity;
+  }
+}
+
+@keyframes heroReveal {
+  /* Before: held for two seconds. */
+  0%,
+  40% {
+    opacity: 1;
+  }
+  /* Faded off to show the finished floor, held for two more. */
+  50%,
+  90% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/*
+ * Nothing that moves by itself without being asked. The site-wide rule cuts
+ * every animation to a single 0.01ms pass, which would leave this frame
+ * wherever that pass happened to land, so it is taken out of the page
+ * entirely instead: the hero is then the finished floor, still, as before.
+ * Lazy and display:none, the before frame is not downloaded either.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .before {
+    display: none;
   }
 }
 

@@ -261,6 +261,10 @@ const library = [
     categories: ['waterproofing', 'general'],
     label: 'Before waterproofing',
     focus: '65% 50%',
+    // The phone hero crops this landscape file hard from the sides. Bias
+    // right, as the hero photograph does, to hold the far green gate — the
+    // one landmark both frames share.
+    focusMobile: '62% 50%',
   },
   {
     id: 'smj-walkway-after-waterproofing',
@@ -416,6 +420,14 @@ export const imageSlots = {
    * resolves to, measured at build time, so nothing else needs changing.
    */
   homeHero: 'blue-coated-driveway',
+  /**
+   * Home page, phones only — the same walkway before the work, laid over the
+   * hero photograph and cycled every two seconds. The hero above is the SMJ
+   * walkway finished, so this slot has to stay the same site before it, or
+   * the cycle stops being a before and after and becomes two unrelated jobs.
+   * Set it to null to leave the hero still.
+   */
+  homeHeroBefore: 'smj-walkway-before-waterproofing',
   /** Services page masthead. */
   servicesHero: 'green-epoxy-roller-application',
   /** About page masthead. */

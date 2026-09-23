@@ -26,6 +26,8 @@ const trustIndicators = [
 
 export async function Hero() {
   const photo = slotImage('homeHero');
+  // Phones only: the same walkway before the work, cycled over the hero.
+  const before = slotImage('homeHeroBefore');
   // The enquiry card's tint is measured from this photograph, so a new hero
   // image brings a matching card with it.
   const glass = photo ? await glassThemeFor(photo.src) : undefined;
@@ -52,6 +54,27 @@ export async function Hero() {
             quality={82}
             className={styles.image}
           />
+
+          {/*
+            The before frame. Decorative and phone-only: above 767px it is
+            display:none and, being lazy, is never fetched, so the desktop
+            hero costs exactly what it did. It sits over the finished floor
+            and fades away every two seconds to show it.
+          */}
+          {before && (
+            <div
+              className={styles.before}
+              aria-hidden
+              style={
+                {
+                  '--focus-mobile': before.focusMobile ?? before.focus ?? 'center center',
+                } as CSSProperties
+              }
+            >
+              <Image src={before.src} alt="" fill sizes="100vw" quality={78} className={styles.image} />
+            </div>
+          )}
+
           {/* Two layers: a left-to-right navy wash that carries the text, and
               a soft floor-level gradient that seats the enquiry card. The
               right third of the photograph stays largely uncovered. */}

@@ -18,6 +18,72 @@
   border-top: 1px solid var(--border-light);
 }
 
+/*
+ * Featured before/after.
+ *
+ * Named areas rather than source order: the gallery reads between the heading
+ * and the body copy when the section stacks, and sits beside both of them
+ * when there is room, without the markup changing.
+ */
+.compare {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-areas:
+    'head media'
+    'body media';
+  align-content: start;
+  gap: var(--space-6) clamp(32px, 5vw, 72px);
+}
+
+.compareHead {
+  grid-area: head;
+  align-self: end;
+}
+
+.compareTitle {
+  margin-top: var(--space-5);
+}
+
+.compareMedia {
+  grid-area: media;
+  align-self: center;
+  min-width: 0;
+}
+
+.compareBody {
+  grid-area: body;
+  align-self: start;
+}
+
+.compareAction {
+  margin-top: var(--space-8);
+}
+
+@media (max-width: 899px) {
+  .compare {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'head'
+      'media'
+      'body';
+    gap: var(--space-8);
+  }
+
+  .compareHead {
+    align-self: start;
+  }
+
+  .compareAction {
+    margin-top: var(--space-6);
+  }
+}
+
+@media (max-width: 599px) {
+  .compareAction > * {
+    width: 100%;
+  }
+}
+
 .whyGrid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));

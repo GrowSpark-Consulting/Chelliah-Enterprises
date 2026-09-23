@@ -6,12 +6,15 @@ import { ClientMarquee } from '@/components/sections/ClientMarquee';
 import { CTASection } from '@/components/sections/CTASection';
 import { Process } from '@/components/sections/Process';
 import { StatStrip } from '@/components/sections/StatStrip';
+import { BeforeAfterGallery } from '@/components/ui/BeforeAfterGallery';
 import { ProjectCard } from '@/components/projects/ProjectCard';
 import { ServiceGrid } from '@/components/services/ServiceGrid';
 import { Button } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
 import { Reveal } from '@/components/ui/Reveal';
 import { SectionHeading } from '@/components/ui/SectionHeading';
+import { SectionLabel } from '@/components/ui/SectionLabel';
+import { featuredComparison, resolveComparison } from '@/data/images';
 import { featuredServices } from '@/data/services';
 import { projects } from '@/data/projects';
 import { site, stats } from '@/data/site';
@@ -47,6 +50,9 @@ const whyUs = [
 ];
 
 const recentWork = projects.slice(0, 3);
+
+/** The before/after the work section leads with. */
+const featured = resolveComparison(featuredComparison);
 
 export default function HomePage() {
   return (
@@ -95,6 +101,48 @@ export default function HomePage() {
           <ServiceGrid services={featuredServices} />
         </Container>
       </section>
+
+      {/* Featured work — the same comparison the waterproofing section carries.
+          The grid areas put the gallery between the heading and the body copy
+          when it stacks, and beside both when there is room. */}
+      {featured && (
+        <section className="section section--flush-top" aria-labelledby="compare-heading">
+          <Container>
+            <div className={styles.compare}>
+              <div className={styles.compareHead}>
+                <SectionLabel>Our work</SectionLabel>
+                <h2 id="compare-heading" className={styles.compareTitle}>
+                  From stained concrete to a sealed floor
+                </h2>
+              </div>
+
+              <Reveal className={styles.compareMedia}>
+                <BeforeAfterGallery
+                  before={featured.before}
+                  after={featured.after}
+                  subject="waterproofing"
+                  ratio="1/1"
+                  sizes="(max-width: 899px) 100vw, 600px"
+                />
+              </Reveal>
+
+              <div className={styles.compareBody}>
+                <p className="lede">
+                  One walkway, before and after. Bare concrete, stained and holding water, finished
+                  with a brickbats coba system, a cement screed and a waterproof coating. Tap the
+                  arrow to see it finished.
+                </p>
+                <div className={styles.compareAction}>
+                  <Button href="/services" variant="secondary">
+                    View all services
+                    <ArrowRight size={16} strokeWidth={1.75} aria-hidden />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </Container>
+        </section>
+      )}
 
       {/* Why us */}
       <section className="section section--flush-top" aria-labelledby="why-heading">

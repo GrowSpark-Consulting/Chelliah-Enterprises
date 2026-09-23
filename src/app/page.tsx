@@ -6,7 +6,7 @@ import { ClientMarquee } from '@/components/sections/ClientMarquee';
 import { CTASection } from '@/components/sections/CTASection';
 import { Process } from '@/components/sections/Process';
 import { StatStrip } from '@/components/sections/StatStrip';
-import { BeforeAfterGallery } from '@/components/ui/BeforeAfterGallery';
+import { BeforeAfterSlider } from '@/components/ui/BeforeAfterSlider';
 import { ProjectCard } from '@/components/projects/ProjectCard';
 import { ServiceGrid } from '@/components/services/ServiceGrid';
 import { Button } from '@/components/ui/Button';
@@ -104,9 +104,10 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* Featured work — the same comparison the waterproofing section carries.
-          The grid areas put the gallery between the heading and the body copy
-          when it stacks, and beside both when there is room. */}
+      {/* Featured work — the same comparison, in the same slider, the
+          waterproofing section carries. The grid areas put it between the
+          heading and the body copy when it stacks, and beside both when
+          there is room. */}
       {featured && (
         <section className="section section--flush-top" aria-labelledby="compare-heading">
           <Container>
@@ -119,10 +120,10 @@ export default function HomePage() {
               </div>
 
               <Reveal className={styles.compareMedia}>
-                <BeforeAfterGallery
+                <BeforeAfterSlider
                   before={featured.before}
                   after={featured.after}
-                  subject="waterproofing"
+                  label="Drag to compare this walkway before and after waterproofing"
                   ratio="1/1"
                   sizes="(max-width: 899px) 100vw, 600px"
                 />
@@ -131,8 +132,8 @@ export default function HomePage() {
               <div className={styles.compareBody}>
                 <p className="lede">
                   One walkway, before and after. Bare concrete, stained and holding water, finished
-                  with a brickbats coba system, a cement screed and a waterproof coating. Tap the
-                  arrow to see it finished.
+                  with a brickbats coba system, a cement screed and a waterproof coating. Drag the
+                  handle to compare.
                 </p>
                 <div className={styles.compareAction}>
                   <Button href="/services" variant="secondary">

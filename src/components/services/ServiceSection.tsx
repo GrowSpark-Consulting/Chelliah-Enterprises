@@ -1,5 +1,5 @@
 import { Check } from 'lucide-react';
-import { BeforeAfterGallery } from '@/components/ui/BeforeAfterGallery';
+import { BeforeAfterSlider } from '@/components/ui/BeforeAfterSlider';
 import { Button } from '@/components/ui/Button';
 import { ImageFrame } from '@/components/ui/ImageFrame';
 import { WhatsAppIcon } from '@/components/ui/WhatsAppIcon';
@@ -42,7 +42,7 @@ export function ServiceSection({
   reversed = false,
   showHeading = true,
 }: ServiceSectionProps) {
-  // A service with a registered before/after pair gets the gallery; every
+  // A service with a registered before/after pair gets the slider; every
   // other one keeps its single photograph.
   const comparison = serviceComparison(service.slug);
 
@@ -55,10 +55,10 @@ export function ServiceSection({
     >
       <figure className={cx(styles.figure, comparison && styles.figureInteractive)}>
         {comparison ? (
-          <BeforeAfterGallery
+          <BeforeAfterSlider
             before={comparison.before}
             after={comparison.after}
-            subject={service.category.toLowerCase()}
+            label={`Drag to compare this site before and after ${service.category.toLowerCase()}`}
             ratio="1/1"
             sizes="(max-width: 899px) 100vw, 600px"
           />

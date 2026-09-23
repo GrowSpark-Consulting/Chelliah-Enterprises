@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 import { Inter, Libre_Baskerville } from 'next/font/google';
+import Script from 'next/script';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { WhatsAppFab } from '@/components/layout/WhatsAppFab';
@@ -124,6 +125,19 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           // Static, author-controlled data assembled above — no user input.
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organisationJsonLd) }}
         />
+        {/* Google Analytics — loads on every page via the root layout */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-J55BC8PGEP"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-J55BC8PGEP');
+          `}
+        </Script>
       </body>
     </html>
   );

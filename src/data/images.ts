@@ -458,7 +458,7 @@ export function slotImage(slot: ImageSlot): SiteImage | undefined {
 export const serviceImages: Partial<Record<string, ImageId>> = {
   waterproofing: 'waterproofing-terrace-before-after',
   'weathering-course': 'cooling-tiles-terrace-laying',
-  'structural-repair': 'structural-repair-collage',
+  'structural-repair': 'commercial-block-crack-repair',
   'epoxy-flooring': 'epoxy-projects-composite',
   'membrane-waterproofing': 'app-membrane-torch-applied-roof',
   'pu-flooring': 'resin-floor-processing-hall',

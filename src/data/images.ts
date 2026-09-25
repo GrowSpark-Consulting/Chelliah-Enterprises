@@ -242,18 +242,33 @@ const library = [
   },
   {
     /*
-     * The two halves of `waterproofing-terrace-before-after` as separate
-     * photographs, which is what the before/after gallery needs. The collage
-     * stays registered: it is still the fallback if the pair is ever
-     * unassigned, and it carries the layer diagram the gallery cannot.
+     * The before/after pair the slider carries.
      *
-     * They were shot differently — this one landscape (1600x1200), the
-     * finished one portrait (1200x1600) — which is why the gallery frames
-     * them square. In a 4:3 frame `cover` scales the portrait file 1.33x
-     * larger than the landscape one and the same walkway appears at two
-     * sizes; at 1:1 both are scaled identically, so the swap reads as one
-     * place changing. Each then carries the `focus` that brings the green
-     * gate at the end of the walkway to the same point in the frame.
+     * Both files are 1280x853 and shot from one position on the same lens, so
+     * any frame crops them identically and the two halves meet exactly at the
+     * divider. That is why neither carries a `focus`: centre is already the
+     * same point in both, and the parapet, the stair block and the tank frame
+     * hold their places as the divider moves across them.
+     */
+    id: 'terrace-roof-before-waterproofing',
+    src: '/slider1.1.jpeg',
+    alt: 'A flat concrete terrace roof before waterproofing: the slab crazed and cracked across its whole surface, shallow water standing in the hollows, and the parapet walls and stair block dark with staining.',
+    categories: ['waterproofing', 'general'],
+    label: 'Before waterproofing',
+  },
+  {
+    id: 'terrace-roof-after-waterproofing',
+    src: '/slider1.2.jpeg',
+    alt: 'The same terrace roof after waterproofing, the slab finished in a smooth grey membrane coating carried up into a skirting at the parapet, with the parapet walls and stair block repainted.',
+    categories: ['waterproofing', 'finished'],
+    label: 'After waterproofing',
+  },
+  {
+    /*
+     * The SMJ walkway before the work. Its finished state is the hero
+     * photograph itself, `blue-coated-driveway`, which is why only the before
+     * frame is registered here: the phone hero lays this over that one and
+     * fades it away. The slider above uses the terrace pair instead.
      */
     id: 'smj-walkway-before-waterproofing',
     src: '/slider1.jpeg',
@@ -265,14 +280,6 @@ const library = [
     // right, as the hero photograph does, to hold the far green gate — the
     // one landmark both frames share.
     focusMobile: '62% 50%',
-  },
-  {
-    id: 'smj-walkway-after-waterproofing',
-    src: '/Slider2.jpeg',
-    alt: 'The same palm-lined walkway after waterproofing, the floor finished in a glossy blue coating from the brick planters to the green gate.',
-    categories: ['waterproofing', 'finished'],
-    label: 'After waterproofing',
-    focus: '50% 9%',
   },
   {
     id: 'waterproofing-terrace-before-after',
@@ -491,15 +498,15 @@ export type ResolvedComparison = { before: SiteImage; after: SiteImage };
  */
 export const serviceComparisons: Partial<Record<string, ImageComparison>> = {
   waterproofing: {
-    before: 'smj-walkway-before-waterproofing',
-    after: 'smj-walkway-after-waterproofing',
+    before: 'terrace-roof-before-waterproofing',
+    after: 'terrace-roof-after-waterproofing',
   },
 };
 
 /** The pair the home page leads its work section with. */
 export const featuredComparison: ImageComparison = {
-  before: 'smj-walkway-before-waterproofing',
-  after: 'smj-walkway-after-waterproofing',
+  before: 'terrace-roof-before-waterproofing',
+  after: 'terrace-roof-after-waterproofing',
 };
 
 export function resolveComparison(

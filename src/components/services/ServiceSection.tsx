@@ -59,7 +59,7 @@ export function ServiceSection({
             before={comparison.before}
             after={comparison.after}
             label={`Drag to compare this site before and after ${service.category.toLowerCase()}`}
-            ratio="1/1"
+            ratio="4/3"
             sizes="(max-width: 899px) 100vw, 600px"
           />
         ) : (

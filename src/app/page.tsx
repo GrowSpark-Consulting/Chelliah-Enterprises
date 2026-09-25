@@ -123,17 +123,17 @@ export default function HomePage() {
                 <BeforeAfterSlider
                   before={featured.before}
                   after={featured.after}
-                  label="Drag to compare this walkway before and after waterproofing"
-                  ratio="1/1"
+                  label="Drag to compare this terrace roof before and after waterproofing"
+                  ratio="4/3"
                   sizes="(max-width: 899px) 100vw, 600px"
                 />
               </Reveal>
 
               <div className={styles.compareBody}>
                 <p className="lede">
-                  One walkway, before and after. Bare concrete, stained and holding water, finished
-                  with a brickbats coba system, a cement screed and a waterproof coating. Drag the
-                  handle to compare.
+                  One terrace roof, before and after. A crazed slab with water standing on it after
+                  every shower, finished in a waterproof coating carried up into a skirting at the
+                  parapet. Drag the handle to compare.
                 </p>
                 <div className={styles.compareAction}>
                   <Button href="/services" variant="secondary">

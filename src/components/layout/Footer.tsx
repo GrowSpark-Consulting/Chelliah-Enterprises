@@ -1,12 +1,20 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Mail, MapPin, Phone } from 'lucide-react';
+import { Facebook, Instagram, Linkedin, Mail, MapPin, Phone, Youtube } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
-import { contact, groupCompanies, nav, site } from '@/data/site';
+import { contact, groupCompanies, nav, site, socialLinks } from '@/data/site';
 import { services } from '@/data/services';
 import styles from './Footer.module.css';
 
 const footerServices = services.filter((service) => service.featured).slice(0, 6);
+
+/** The registry's icon names, resolved to the components that draw them. */
+const socialIcons = {
+  instagram: Instagram,
+  facebook: Facebook,
+  youtube: Youtube,
+  linkedin: Linkedin,
+} as const;
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -39,6 +47,25 @@ export function Footer() {
               ))}
             </address>
             <p className={styles.gstin}>GSTIN: {site.gstin}</p>
+
+            <ul className={styles.social}>
+              {socialLinks.map((link) => {
+                const Icon = socialIcons[link.icon];
+                return (
+                  <li key={link.name}>
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.socialLink}
+                      aria-label={`${site.name} on ${link.name}`}
+                    >
+                      <Icon size={18} strokeWidth={1.75} aria-hidden />
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
 
           <div>
@@ -110,7 +137,7 @@ export function Footer() {
           <p>
             © {year} {site.legalName}. All rights reserved.
           </p>
-          <p>Serving {contact.serviceArea}</p>
+          <p>Serving all over {contact.serviceArea}</p>
         </div>
 
         <div className={styles.credit}>

@@ -48,7 +48,7 @@ export default function ContactPage() {
       <section className={`onInk ${styles.hours}`} aria-labelledby="coverage-heading">
         <Container>
           <h2 id="coverage-heading" className={styles.hoursHeading}>
-            Serving {contact.serviceArea}
+            Serving all over {contact.serviceArea}
           </h2>
           <p className={`lede ${styles.hoursBody}`}>
             An authorised applicator for industry-leading branded systems.

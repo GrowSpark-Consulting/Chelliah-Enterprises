@@ -59,7 +59,13 @@ export const contact = {
     postalCode: '603202',
     country: 'IN',
   },
-  serviceArea: 'All Over Tamilnadu',
+  /*
+   * The place itself, not a sentence about it. The pages that announce it
+   * supply their own wording ("Serving all over …"), and it goes into the
+   * organisation's `areaServed` as structured data, where a clean place name
+   * is what search engines expect.
+   */
+  serviceArea: 'South India',
   /*
    * What the map embed is asked for.
    *
@@ -74,6 +80,38 @@ export const contact = {
    */
   mapQuery: 'Chelliah Enterprises, Arul Nagar Main Road, Nandivaram Guduvancheri',
 } as const;
+
+/**
+ * The company's own profiles, in the order they appear in the footer.
+ *
+ * `icon` names the lucide export the footer draws, so a new profile needs
+ * nothing but a line here. Share links are stored without the tracking
+ * parameters the apps append when a profile is shared from a phone.
+ */
+export const socialLinks = [
+  {
+    name: 'Instagram',
+    icon: 'instagram',
+    href: 'https://www.instagram.com/chelliahenterprises',
+  },
+  {
+    name: 'Facebook',
+    icon: 'facebook',
+    href: 'https://www.facebook.com/profile.php?id=61573818052667',
+  },
+  {
+    name: 'YouTube',
+    icon: 'youtube',
+    href: 'https://www.youtube.com/@chelliahEnterprises',
+  },
+  {
+    name: 'LinkedIn',
+    icon: 'linkedin',
+    href: 'https://www.linkedin.com/in/chellaiah-muthuselvaraj-058a89211',
+  },
+] as const;
+
+export type SocialLink = (typeof socialLinks)[number];
 
 export const groupCompanies = [
   {

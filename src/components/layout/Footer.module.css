@@ -1,6 +1,13 @@
+/*
+ * The footer reads at 1rem — the same size as body copy elsewhere, rather
+ * than the 0.875rem it was set in. The uppercase label rows keep their own
+ * smaller sizes: they are labels, and at 1rem with this letter-spacing they
+ * would outweigh the text they introduce and wrap on a phone.
+ */
 .footer {
   background: var(--ink);
   color: var(--on-dark-muted);
+  font-size: 1rem;
 }
 
 .top {
@@ -46,7 +53,7 @@
 }
 
 .address {
-  font-size: 0.875rem;
+  font-size: 1rem;
   line-height: 1.7;
   font-style: normal;
   color: var(--on-dark-muted);
@@ -54,14 +61,14 @@
 
 .gstin {
   margin-top: var(--space-4);
-  font-size: 0.8125rem;
+  font-size: 1rem;
   letter-spacing: 0.04em;
   color: var(--on-dark-faint);
 }
 
 .heading {
   margin: 0 0 var(--space-4);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -79,7 +86,7 @@
   display: inline-flex;
   align-items: center;
   min-height: 36px;
-  font-size: 0.875rem;
+  font-size: 1rem;
   line-height: 1.5;
   text-decoration: none;
   color: var(--on-dark-muted);
@@ -114,6 +121,51 @@
   }
 }
 
+/* — Social profiles ———————————————————————————————————————————————
+   Under the address block, sized as touch targets rather than as icons: a
+   bordered square each, so the row reads as a set on the dark ground
+   without any of them shouting. */
+
+.social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+.socialLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--on-dark-border);
+  border-radius: var(--radius-sm);
+  color: var(--on-dark-muted);
+  transition:
+    color var(--t-link) var(--ease),
+    border-color var(--t-link) var(--ease),
+    background-color var(--t-link) var(--ease);
+}
+
+.socialLink:hover {
+  background-color: rgba(247, 247, 245, 0.06);
+  border-color: var(--on-dark-accent);
+  color: #fff;
+}
+
+.socialLink:focus-visible {
+  outline: 2px solid var(--on-dark-accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 767px) {
+  .socialLink {
+    width: 44px;
+    height: 44px;
+  }
+}
+
 .group {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -128,7 +180,7 @@
 }
 
 .groupItem {
-  font-size: 0.8125rem;
+  font-size: 1rem;
   line-height: 1.6;
 }
 
@@ -150,20 +202,20 @@
   gap: var(--space-4);
   padding-block: var(--space-5) var(--space-4);
   border-top: 1px solid var(--on-dark-border);
-  font-size: 0.6875rem;
+  font-size: 0.8125rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--on-dark-faint);
 }
 
 /* The agency credit, set apart as its own centred row — the way an
-   agency-built site typically signs its footer — but still a size step
-   below the Chelliah copyright above it, and in the accent rather than
-   white, so it reads as a credit line rather than a second brand. */
+   agency-built site typically signs its footer. It sits at the footer's body
+   size, and is held back by colour rather than by scale: the accent rather
+   than white, so it reads as a credit line and not as a second brand. */
 .credit {
   padding-block: var(--space-5) var(--space-8);
   border-top: 1px solid var(--on-dark-border);
-  font-size: 0.8125rem;
+  font-size: 1rem;
   letter-spacing: 0.02em;
   color: var(--on-dark-muted);
   text-align: center;

@@ -300,6 +300,18 @@ const library = [
     categories: ['wip', 'finished', 'general'],
   },
   {
+    /*
+     * The residential terrace project. The file is 1360x1020 — 4:3 exactly,
+     * which is the project card's own frame — so it is shown whole, with
+     * nothing cropped and no `focus` to set.
+     */
+    id: 'residential-terrace-white-coating',
+    src: '/p3.jpeg',
+    alt: 'An applicator brushing white waterproof coating along the parapet skirting of a residential terrace, the tiled roof already coated white under a clear blue sky.',
+    categories: ['waterproofing', 'wip', 'finished'],
+    label: 'Terrace waterproofing',
+  },
+  {
     id: 'residential-terrace-epoxy-floor',
     src: '/images/projects/residential-terrace-epoxy-floor.jpeg',
     alt: 'A finished hall with a glossy beige epoxy floor reflecting the ceiling fans and windows.',
@@ -524,7 +536,7 @@ export function serviceComparison(slug: string): ResolvedComparison | undefined 
 
 /** Project record id → photograph, keyed by the `id` in data/projects.ts. */
 export const projectImages: Partial<Record<string, ImageId>> = {
-  'wp-terrace-guduvancheri': 'residential-terrace-epoxy-floor',
+  'wp-terrace-guduvancheri': 'residential-terrace-white-coating',
   'wp-basement-chengalpattu': 'industrial-basement-red-epoxy-floor',
   'wp-apartment-tambaram': 'office-institute-grey-epoxy-floor',
   'ep-machining-oragadam': 'machining-plant-epoxy-floor',

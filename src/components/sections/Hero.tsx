@@ -97,7 +97,7 @@ export async function Hero() {
               <p className={styles.lede}>
                 Epoxy, PU and ESD flooring, terrace and basement waterproofing, and structural
                 repair for factories, commercial buildings and homes — delivered by an authorised
-                applicator for six manufacturer systems across Chennai and Chengalpattu.
+                applicator for six manufacturer systems across South India.
               </p>
 
               <div className={styles.actions}>

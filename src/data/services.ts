@@ -59,7 +59,7 @@ export const services: Service[] = [
     enquiryTopic: 'waterproofing & Brickbats Coba works',
     metaTitle: 'Waterproofing Contractors in Chennai | Terrace, Basement & Bathroom',
     metaDescription:
-      'Terrace, basement, bathroom and wall waterproofing including Brickbats Coba systems, for industrial, commercial and residential properties across Chennai.',
+      'Terrace, basement, bathroom and wall waterproofing including Brickbats Coba systems, for industrial, commercial and residential properties across South India.',
   },
   {
     slug: 'weathering-course',

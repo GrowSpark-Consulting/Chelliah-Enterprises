@@ -14,12 +14,12 @@ import styles from './page.module.css';
 export const metadata: Metadata = {
   title: 'Projects',
   description:
-    'Waterproofing, epoxy, PU and ESD flooring, structural repair and deck coating projects delivered for industrial, commercial and residential clients across Chennai and Chengalpattu.',
+    'Waterproofing, epoxy, PU and ESD flooring, structural repair and deck coating projects delivered for industrial, commercial and residential clients across South India.',
   alternates: { canonical: '/projects' },
   openGraph: {
     title: 'Projects | Chelliah Enterprises',
     description:
-      'A record of waterproofing, resin flooring and structural repair work across Tamilnadu.',
+      'A record of waterproofing, resin flooring and structural repair work across South India.',
     url: '/projects',
     images: [ogImage],
   },
@@ -29,7 +29,7 @@ export default function ProjectsPage() {
   return (
     <>
       <PageHero
-        label="Project record · Tamilnadu"
+        label="Project record · South India"
         title="Our work speaks for itself"
         lede="Trusted by industrial operators including L&T Energy Hydrocarbon, Murugappa Group, ESAB and CUMI — alongside 150+ commercial and residential projects."
         breadcrumbs={[{ href: '/', label: 'Home' }, { label: 'Projects' }]}

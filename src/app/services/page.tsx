@@ -16,7 +16,7 @@ import styles from './page.module.css';
 export const metadata: Metadata = {
   title: 'Services',
   description:
-    'Waterproofing, Brickbats Coba, membrane systems, epoxy, PU and ESD flooring, structural repair, car park deck coatings and vacuum dewatering flooring across Chennai.',
+    'Waterproofing, Brickbats Coba, membrane systems, epoxy, PU and ESD flooring, structural repair, car park deck coatings and vacuum dewatering flooring across South India.',
   alternates: { canonical: '/services' },
   openGraph: {
     title: 'Services | Chelliah Enterprises',

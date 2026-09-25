@@ -76,8 +76,8 @@ export default function AboutPage() {
     <>
       <PageHero
         label={`Since ${site.foundedYear} · GST registered`}
-        title={`Protecting structures across Chennai since ${site.foundedYear}`}
-        lede={`${site.name} carries out waterproofing, resin flooring and structural repair work across Chennai and Chengalpattu — for factories, commercial buildings and homes.`}
+        title={`Protecting structures across South India since ${site.foundedYear}`}
+        lede={`${site.name} carries out waterproofing, resin flooring and structural repair work across South India — for factories, commercial buildings and homes.`}
         breadcrumbs={[{ href: '/', label: 'Home' }, { label: 'About' }]}
         image="aboutHero"
       />

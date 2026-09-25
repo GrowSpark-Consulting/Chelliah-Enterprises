@@ -172,7 +172,7 @@ export const projects: Project[] = [
   },
   {
     id: 'wp-basement-chengalpattu',
-    title: 'Industrial basement',
+    title: 'Industrial Flooring',
     location: 'Chengalpattu',
     sector: 'Industrial',
     category: 'waterproofing',
@@ -184,15 +184,15 @@ export const projects: Project[] = [
   },
   {
     id: 'wp-apartment-tambaram',
-    title: 'Apartment block',
+    title: 'Podium Waterproofing',
     location: 'Tambaram',
     sector: 'Residential',
     category: 'waterproofing',
-    scope: '18 bathrooms · Sunken slab treatment',
+    scope: 'Podium slab · Membrane waterproofing',
     service: 'Waterproofing',
     description:
-      'Seepage into the ceilings below eliminated without breaking up tiled floors.',
-    imageHint: 'Bathroom sunken slab waterproofing',
+      'Podium deck sealed against seepage into the parking and service areas below.',
+    imageHint: 'Podium slab waterproofing',
   },
 ];
 

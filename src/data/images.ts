@@ -480,7 +480,7 @@ export const serviceImages: Partial<Record<string, ImageId>> = {
   'structural-repair': 'commercial-block-crack-repair',
   'epoxy-flooring': 'epoxy-projects-composite',
   'membrane-waterproofing': 'app-membrane-torch-applied-roof',
-  'pu-flooring': 'resin-floor-processing-hall',
+  'pu-flooring': 'industrial-basement-red-epoxy-floor',
   'esd-flooring': 'esd-floor-electronics-assembly',
   'vacuum-dewatering-flooring': 'vacuum-dewatering-concrete-slab',
   'car-park-deck-coating': 'car-park-deck-coating',

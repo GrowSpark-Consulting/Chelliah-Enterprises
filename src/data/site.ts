@@ -21,7 +21,7 @@ export const site = {
   gstin: '33AJUPC6761F1Z3',
   tagline: 'Waterproofing & flooring solutions built to last',
   shortDescription:
-    'Waterproofing, epoxy, PU and ESD flooring and structural repair contractors serving industrial, commercial and residential properties across Chennai.',
+    'Waterproofing, epoxy, PU and ESD flooring and structural repair contractors serving industrial, commercial and residential properties across South India.',
 } as const;
 
 /**

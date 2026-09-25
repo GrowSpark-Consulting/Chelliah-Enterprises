@@ -5,9 +5,21 @@
  * would outweigh the text they introduce and wrap on a phone.
  */
 .footer {
-  background: var(--ink);
+  background: #484d88;
   color: var(--on-dark-muted);
   font-size: 1rem;
+
+  /*
+   * The indigo ground is far lighter than the charcoal it replaces, so the
+   * two muted inks are lifted here — and only here, since the rest of the
+   * site's dark sections keep their own ground. Measured against #484d88:
+   * white 7.8:1, muted 5.5:1, faint 4.7:1, all clear of AA. At the site-wide
+   * 0.5 the faint ink would sit at 3.1:1 on this colour, which is where the
+   * GSTIN line, the copyright bar and the contact icons are set.
+   */
+  --on-dark-muted: rgba(247, 247, 245, 0.82);
+  --on-dark-faint: rgba(247, 247, 245, 0.72);
+  --on-dark-border: rgba(247, 247, 245, 0.28);
 }
 
 .top {

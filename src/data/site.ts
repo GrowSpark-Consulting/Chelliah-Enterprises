@@ -10,7 +10,7 @@ export const site = {
   name: 'Chelliah Enterprises',
   legalName: 'Chelliah Enterprises',
   descriptor: 'Waterproofing & Epoxy Works',
-  foundedYear: 2009,
+  foundedYear: 2022,
   /*
    * Drives canonical URLs, Open Graph URLs, sitemap.xml and robots.txt, so it
    * must be the address that actually serves the site. The bare domain
@@ -59,7 +59,7 @@ export const contact = {
     postalCode: '603202',
     country: 'IN',
   },
-  serviceArea: 'Guduvanchery, Chengalpattu, Tambaram, Vandalur & Greater Chennai',
+  serviceArea: 'All Over Tamilnadu',
   /*
    * What the map embed is asked for.
    *

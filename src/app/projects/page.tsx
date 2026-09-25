@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Projects | Chelliah Enterprises',
     description:
-      'A record of waterproofing, resin flooring and structural repair work across Chennai and Chengalpattu.',
+      'A record of waterproofing, resin flooring and structural repair work across Tamilnadu.',
     url: '/projects',
     images: [ogImage],
   },
@@ -29,7 +29,7 @@ export default function ProjectsPage() {
   return (
     <>
       <PageHero
-        label="Project record · Chennai & Chengalpattu"
+        label="Project record · Tamilnadu"
         title="Our work speaks for itself"
         lede="Trusted by industrial operators including L&T Energy Hydrocarbon, Murugappa Group, ESAB and CUMI — alongside 150+ commercial and residential projects."
         breadcrumbs={[{ href: '/', label: 'Home' }, { label: 'Projects' }]}

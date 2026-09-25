@@ -262,7 +262,7 @@ export const stats: Stat[] = [
   { value: '150+', label: 'Projects completed' },
   { value: '6', label: 'Authorised brand systems' },
   { value: '18', label: 'Industrial & commercial clients' },
-  { value: 'Since 2009', label: 'Operating from Chennai' },
+  { value: 'Since 2022', label: 'Operating from Chennai' },
 ];
 
 export const nav = [

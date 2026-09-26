@@ -330,6 +330,30 @@ const library = [
     categories: ['epoxy', 'finished'],
   },
   {
+    /*
+     * The Chengalpattu basement project. 3:2 into the card's 4:3 frame, so a
+     * little of each side is cropped; the centre keeps the membrane-wrapped
+     * columns and the full run of the floor.
+     */
+    id: 'basement-membrane-waterproofing',
+    src: '/images/projects/basement-membrane-waterproofing.jpeg',
+    alt: 'An underground basement with a glossy black waterproofing membrane across the whole floor and carried up the lower walls and columns, under bare concrete and red fire-service pipes.',
+    categories: ['waterproofing', 'industrial', 'finished'],
+    label: 'Basement waterproofing',
+  },
+  {
+    /*
+     * The Tambaram podium project. 16:9 into the card's 4:3 frame, so the
+     * sides are cropped; the centre keeps the planter, lawn and paving that
+     * sit on the waterproofed deck.
+     */
+    id: 'podium-deck-waterproofing',
+    src: '/images/projects/podium-deck-waterproofing.jpeg',
+    alt: 'A landscaped podium deck between residential towers, with granite planters, a lawn, timber decking and stone paving laid over the waterproofed slab.',
+    categories: ['waterproofing', 'finished'],
+    label: 'Podium waterproofing',
+  },
+  {
     id: 'car-park-deck-coating',
     src: '/images/projects/car-park-deck-coating.jpeg',
     alt: 'A finished car park deck with grey epoxy coating, yellow and blue directional markings, hazard-striped columns and parked cars.',
@@ -537,8 +561,8 @@ export function serviceComparison(slug: string): ResolvedComparison | undefined 
 /** Project record id → photograph, keyed by the `id` in data/projects.ts. */
 export const projectImages: Partial<Record<string, ImageId>> = {
   'wp-terrace-guduvancheri': 'residential-terrace-white-coating',
-  'wp-basement-chengalpattu': 'industrial-basement-red-epoxy-floor',
-  'wp-apartment-tambaram': 'office-institute-grey-epoxy-floor',
+  'wp-basement-chengalpattu': 'basement-membrane-waterproofing',
+  'wp-apartment-tambaram': 'podium-deck-waterproofing',
   'ep-machining-oragadam': 'machining-plant-epoxy-floor',
   'ep-warehouse-sriperumbudur': 'distribution-warehouse-epoxy-floor',
   'ep-welding-ambattur': 'welding-unit-epoxy-coating',

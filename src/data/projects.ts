@@ -172,7 +172,7 @@ export const projects: Project[] = [
   },
   {
     id: 'wp-basement-chengalpattu',
-    title: 'Industrial Flooring',
+    title: 'Industrial Basement',
     location: 'Chengalpattu',
     sector: 'Industrial',
     category: 'waterproofing',
